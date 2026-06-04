@@ -64,7 +64,9 @@ room_area = calculate_area(12, 15)
 print(f"The room is {room_area} square feet.")
 ```
 
-The first major difference is the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated.
+Not all Python code works in Pylem, and this document will go through the differences.
+
+The first major difference is the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated. *See [Assignment](#assignmemt).*
 
 ```py
 secret_word = "pylem"
