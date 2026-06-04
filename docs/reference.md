@@ -88,7 +88,7 @@ class BankAccount:
         self.owner = owner
         self.balance = balance
         
-    def deposit(self, amount):
+    def deposit(mut self, amount):
         self.balance += amount
         return f"${amount} deposited. New balance: ${self.balance}"
 
