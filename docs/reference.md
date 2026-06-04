@@ -169,6 +169,44 @@ calculate_and_report(
 
 ## Types
 
+### Custom Types
+
+#### `struct`
+
+#### `enum`
+
+#### `union`
+
+#### `class`
+
+```py
+# 1. Define the raw, flat memory layout (no overhead)
+struct BankAccount:
+    owner: str
+    balance: int
+
+# 2. Add methods to that layout (Works like Rust's `impl BankAccount`)
+class BankAccount:
+    def deposit(mut self, amount: int):
+        self.balance += amount
+```
+
+__Creating Virtual Interfaces__
+
+```py
+# Defines a contract (Works like Rust's `trait Renderable`)
+class Renderable:
+    def render(self) -> str:
+        pass
+```
+
+```py
+# Implement the 'Renderable' behavior specifically for 'BankAccount'
+class BankAccount(Renderable):
+    def render(self) -> str:
+        return f"Account owner: {self.owner}, Balance: {self.balance}"
+```
+
 [TOC](#table-of-contents)
 
 ---
