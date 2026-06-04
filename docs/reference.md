@@ -37,16 +37,6 @@ for fruit in fruits:
 ```
 
 ```py
-secret_word = "pylem"
-guess = ""
-
-while guess != secret_word:
-    guess = input("Enter the secret word: ").lower()
-
-print("Access granted!")
-```
-
-```py
 # Standard list
 numbers = [1, 2, 3, 4, 5]
 
@@ -74,7 +64,19 @@ room_area = calculate_area(12, 15)
 print(f"The room is {room_area} square feet.")
 ```
 
-One key difference will be the inclusion of custom data types like in C: `struct`, `enum`, and `union`.
+The first major difference is the keyword `mut`. Variables are immutable by default. Use `mut` to all a variable to mutate.
+
+```py
+secret_word = "pylem"
+mut guess = ""
+
+while guess != secret_word:
+    guess = input("Enter the secret word: ").lower()
+
+print("Access granted!")
+```
+
+Another key difference will be the inclusion of custom data types like in C: `struct`, `enum`, and `union`.
 
 ```py
 struct BankAccount:
