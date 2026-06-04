@@ -97,7 +97,7 @@ my_account = BankAccount("Alex", 100)
 print(my_account.deposit(50))
 ```
 
-Lambda functions can have multiple lines with the addition of the `endlambda` keyword.
+Lambda functions can have multiple lines. Pylem has special rules using a mix of indentation and commas/closing brackets to know when a lambda function ends.
 
 ```py
 # The main function accepting the callback
@@ -108,11 +108,16 @@ def calculate_and_report(num1, num2, callback_func):
 # Testing the code with different callbacks
 calculate_and_report(5, 7, lambda result:
     print(f"The answer is: {result}")
-endlambda)  # Output: The answer is: 12
+)
+# Output: The answer is: 12
 
-calculate_and_report(5, 7, lambda result:
-    print(f"✨ SUCCESS! The calculated total is: {result} ✨")
-endlambda)   # Output: ✨ SUCCESS! The calculated total is: 12 ✨
+calculate_and_report(
+    5,
+    7,
+    lambda result:
+        print(f"✨ SUCCESS! The calculated total is: {result} ✨")
+)
+# Output: ✨ SUCCESS! The calculated total is: 12 ✨
 ```
 
 ---
