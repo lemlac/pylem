@@ -129,4 +129,4 @@ There are also new reserved words unique to Pylem:
 
 ---
 
-*This document captures the current state of the Mulem design. The language is still evolving.*
+*This document captures the current state of the Pylem design. The language is still evolving.*
