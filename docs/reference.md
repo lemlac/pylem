@@ -97,7 +97,36 @@ my_account = BankAccount("Alex", 100)
 print(my_account.deposit(50))
 ```
 
+Lambda functions can have multiple lines with the addition of the `endlambda` keyword.
+
+```py
+# The main function accepting the callback
+def calculate_and_report(num1, num2, callback_func):
+    total = num1 + num2
+    callback_func(total)  # Executing the callback here
+
+# Testing the code with different callbacks
+calculate_and_report(5, 7, lambda result:
+    print(f"The answer is: {result}")
+endlambda)  # Output: The answer is: 12
+
+calculate_and_report(5, 7, lambda result:
+    print(f"✨ SUCCESS! The calculated total is: {result} ✨")
+endlambda)   # Output: ✨ SUCCESS! The calculated total is: 12 ✨
+```
+
 ---
 
-*This document captures the current state of the Mulem design. The language is still evolving.
-*
+## Reserved Words
+
+The 35 reserved words in Python are also reserved in Pylem:
+
+- `False`, `None`, `True`, `and`, `as`, `assert`, `async`, `await`, `break`, `class`, `continue`, `def`, `del`, `elif`, `else`, `except`, `finally`, `for`, `from`, `global`, `if`, `import`, `in`, `is`, `lambda`, `nonlocal`, `not`, `or`, `pass`, `raise`, `return`, `try`, `while`, `with`, `yield`
+
+There are also new reserved words unique to Pylem:
+
+- `endlambda`, `enum`, `mut`, `struct`, `union`
+
+---
+
+*This document captures the current state of the Mulem design. The language is still evolving.*
