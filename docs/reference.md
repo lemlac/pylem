@@ -84,7 +84,7 @@ struct BankAccount:
     balance: int
 
 class BankAccount:
-    def __init__(self, owner, balance=0):
+    def __init__(mut self, owner, balance=0):
         self.owner = owner
         self.balance = balance
         
