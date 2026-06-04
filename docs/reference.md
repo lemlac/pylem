@@ -122,6 +122,75 @@ calculate_and_report(
 
 ---
 
+## Table of Contents
+
+1. __[Basics](#basics)__
+2. __[Assignment](#assignment)__
+3. __[Functions](#functions)__
+4. __[Constants](#constants)__
+5. __[Control Flow](#control-flow)__
+6. __[Types](#types)__
+7. __[Generics](#generics)__
+8. __[Operators](#operators)__
+9. __[Advanced](#advanced)__
+10. __[Reserved Words](#reserved-words)__
+
+---
+
+## Basics
+
+[TOC](#table-of-contents)
+
+---
+
+## Assignment
+
+[TOC](#table-of-contents)
+
+---
+
+## Functions
+
+[TOC](#table-of-contents)
+
+---
+
+## Constants
+
+[TOC](#table-of-contents)
+
+---
+
+## Control Flow
+
+[TOC](#table-of-contents)
+
+---
+
+## Types
+
+[TOC](#table-of-contents)
+
+---
+
+## Generics
+
+[TOC](#table-of-contents)
+
+---
+
+## Operators
+
+[TOC](#table-of-contents)
+
+---
+
+## Advanced
+
+[TOC](#table-of-contents)
+
+---
+
 ## Reserved Words
 
 The 35 reserved words in Python are also reserved in Pylem:
@@ -130,7 +199,7 @@ The 35 reserved words in Python are also reserved in Pylem:
 
 There are also new reserved words unique to Pylem:
 
-- `endlambda`, `enum`, `mut`, `struct`, `union`
+- `enum`, `mut`, `struct`, `union`
 
 ---
 
