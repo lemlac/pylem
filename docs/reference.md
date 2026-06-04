@@ -64,7 +64,7 @@ room_area = calculate_area(12, 15)
 print(f"The room is {room_area} square feet.")
 ```
 
-The first major difference is the keyword `mut`. Variables are immutable by default. Use `mut` to all a variable to mutate.
+The first major difference is the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated.
 
 ```py
 secret_word = "pylem"
@@ -76,7 +76,7 @@ while guess != secret_word:
 print("Access granted!")
 ```
 
-Another key difference will be the inclusion of custom data types like in C: `struct`, `enum`, and `union`.
+Another key difference is the inclusion of custom data types like in C: `struct`, `enum`, and `union`.
 
 ```py
 struct BankAccount:
