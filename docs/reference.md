@@ -76,7 +76,7 @@ while guess != secret_word:
 print("Access granted!")
 ```
 
-Another key difference is the inclusion of custom data types like in C: `struct`, `enum`, and `union`.
+Another key difference is the inclusion of custom data types like in C: `struct`, `enum`, and `union`. *See [Custom Types](#custom-types).*
 
 ```py
 struct BankAccount:
@@ -97,7 +97,7 @@ my_account = BankAccount("Alex", 100)
 print(my_account.deposit(50))
 ```
 
-Lambda functions can have multiple lines. Pylem has special rules using a mix of indentation and commas/closing brackets to know when a lambda function ends.
+Lambda functions can have multiple lines. Pylem has special rules using a mix of indentation and commas/closing brackets to know when a lambda function ends. *See [Lambda Functions](#lambda-functions).*
 
 ```py
 # The main function accepting the callback
@@ -150,6 +150,8 @@ calculate_and_report(
 ---
 
 ## Functions
+
+### Lambda Functions
 
 [TOC](#table-of-contents)
 
