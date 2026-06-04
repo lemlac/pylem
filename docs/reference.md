@@ -155,6 +155,15 @@ calculate_and_report(
 
 ### Lambda Functions
 
+```py
+def apply_operation(value, operation_callback):
+    return operation_callback(value)
+
+# Passing a quick square operation as a callback
+result = apply_operation(4, lambda x: x ** 2)
+print(result)  # Output: 16
+```
+
 [TOC](#table-of-contents)
 
 ---
