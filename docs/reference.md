@@ -429,21 +429,23 @@ for x in range(0, 100):
             break outer
 ```
 
-When the colon is omitted, the label goes to the next non-empty line below `block` which needs to be another block type. Optionally, you can also put it on the same line like `block loop for ....`.
+When the colon is omitted, the label goes to the next non-empty line below `block` which needs to be another block type. Optionally, you can also put it on the same line like `block outer for ....`.
 
 _[Control Flow](#control-flow)_
 
 ### `if` / `elif` / `else`
 
 ```py
-expr if cond else expr if cond else expr
-
 if cond:
     body
 elif cond:
     body
 else:
     body
+
+expr if cond else expr
+
+expr if cond else expr if cond else expr
 ```
 
 Basic Boolean branching.
