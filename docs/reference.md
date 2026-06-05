@@ -197,9 +197,90 @@ Lambdas work in Pylem like they do in Python. In addition to the usual syntax of
 
 #### `struct`
 
+Structs are product types—or in other words—plain data containers. They cannot extend other structs. Define a struct with the keyword `struct` and then list each member of it in the block.
+
+```py
+struct MyStruct:
+    name: str
+    value: int
+```
+
+Instantiate a struct by calling it like a function. Each member is treated like a named argument.
+
+```py
+myObject = MyStruct(name="Foobar", value=1)
+```
+
+Structs are transparent. They can be destructured like named tuples. 
+
+```py
+struct TransparentThing
+    a: int
+    b: int
+
+{a, b} = TransparentThing(a=1, b=2)
+print(f"a: {a}, b: {b}")
+```
+
 #### `enum`
 
+Enums are sum types. They define a closed set of variants. Variants may carry data turning them into a tagged union. Use the keyword `enum` to define one.
+
+```py
+enum MyEnum:
+    First
+    Second(int)
+    Third{val: int}
+```
+
+Like structs, instantiate by calling the member like a function unless it doesn't carry any data.
+
+```py
+a = MyEnum.First
+b = MyEnum.Second(2)
+c = MyEnum.Third(val=3)
+```
+
+When pattern matching, you only need to name the member of the type in each case, not the full path. Use `_` while destructuring to discard the members data.
+
+```py
+match a:
+    case First:
+        print("first!")
+    case Second(_):
+        print("second!")
+    case Third{_}:
+        print("third!")
+```
+
 #### `union`
+
+Untagged unions – also called *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is ommited, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Each member can be used as a type when declaring a variable to indicate which one it's starting with.
+
+```py
+union sumUnion:
+    int
+    float
+    char
+
+u: sumUnion.int = 1
+
+u.int     # Value is 1
+u.float   # Read binary representation of int 1 as if it were a float
+u.char    # Read binary representation of int 1 as if it were a, value is '\1'
+```
+
+This is similar to C unions where it doesn't do any conversion; it only reads whatever data is there with a different type. Unions will set overflow data to 0 so that if you set a small member and then read from a big member, you won't get undefined behavior. The zero-padding interacts with endianness in a way that's deterministic but platform-dependent. The behavior is always defined, just not always portable. 
+
+```py
+u: sumUnion.char = '\1'   # char (1 byte), remaining bytes zeroed
+
+# Little-endian: memory is [0x01, 0x00, 0x00, 0x00]
+u.int          # Value: 1
+
+# Big-endian: memory is [0x01, 0x00, 0x00, 0x00]  (same bytes)
+u.int          # Value: 0x01000000 = 16777216
+```
 
 #### `class`
 
@@ -265,7 +346,7 @@ The 35 reserved words in Python are also reserved in Pylem:
 
 There are also new reserved words unique to Pylem:
 
-- `enum`, `mut`, `struct`, `union`
+- `case`, `enum`, `match`, `mut`, `struct`, `union`
 
 ---
 
