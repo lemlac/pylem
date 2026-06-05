@@ -478,6 +478,7 @@ enum PayloadTag:
     Integer
     Float
     Text
+    Tuple
     Empty
 
 union Payload(PayloadTag):
