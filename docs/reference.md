@@ -66,7 +66,7 @@ print(f"The room is {room_area} square feet.")
 
 Not all Python code works in Pylem, and this document will go through the major differences.
 
-The first major difference is in the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated. *See [Assignment](#assignmemt).*
+The first major difference is in the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated, and mutate it with the `:=` operator. *See [Assignment](#assignmemt).*
 
 ```py
 secret_word = "pylem"
@@ -197,7 +197,7 @@ b = 3      # New `b`
 
 Shadowing works like `let` in other languages. It's just that Pylem drops the `let` all together for the simpler `=` notation like in Python.
 
-Functions are declared wuth `def`. The return type can be inferred based on the return value, and the types of parameters may be inferred based on usage. This combines the simplicity of dynamically typed languages with the power and optimization of a statically typed language.
+Functions are declared with `def`. The return type can be inferred based on the return value, and the types of parameters may be inferred based on usage. This combines the simplicity of dynamic typing with the power and optimization of static typing.
 
 ```py
 def f(x: int) -> int:
@@ -213,6 +213,40 @@ g(2)   # Result: 8
 ---
 
 ## Assignment
+
+Variables can be declared with the equals sign `=`. Type notation uses `: T =` but can be inferred.
+
+```py
+a = 0
+b: int = 2
+```
+
+These are immutable variables. Although it might look like it, setting the variable again does not mutate the variable. Each `=` operation is a new variable being declared, a concept known as**shadowing.**
+
+```py
+a = 1
+a = 2
+a = 'a'
+```
+
+Mutable variables are declared with the keyword `mut` before the name. Any `=` operation or any compound assignment operators such as `+=` or `-=` will mutate the variable.
+
+```py
+mut i: int = 0
+i = 1
+i += 1
+i -= 1
+```
+
+There is a chance that instead of mutating, you accidentally declare a mew variable since you typo'd the name of it, creating a silent bug. This issue isn't new to Python developers, and so it carries over into Pylem as well. 
+
+```py
+mut number = 4
+
+nubmer = 5   # Oops!
+
+print(f"{number}")  # It's still 4!
+```
 
 [TOC](#table-of-contents)
 
