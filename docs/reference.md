@@ -387,6 +387,73 @@ MAX(7, 3)     # Result: 7
 
 ## Control Flow
 
+1. __[`block`](#block)__
+2. __[`if`/`elif`/`else`](#if--elif--else)__
+3. __[`for`/`in`](#for--in)__
+4. __[`while`](#while)__
+6. __[`match`/`case`](#match--case)__
+7. __[`try`/`except`](#try--except)__
+8. __[`return`](#return)__
+9. __[`raise`](#raise)__
+
+### `block`
+
+A block of code that runs only once, creating a new scope.
+
+```mulem
+block:
+    x = 1
+    print(f"x = {x}")
+```
+
+### `if` / `elif` / `else`
+
+```mulem
+expr if cond else expr if cond else expr
+
+if cond:
+    body
+elif cond:
+    body
+else:
+    body
+```
+
+Basic Boolean branching.
+
+```mulem
+x = x if x > 0 else -x
+
+if x > 0:
+    print("positive")
+else:
+    print("non-positive")
+```
+
+Use `and`/`or` to compare multiple booleans at once.
+
+```mulem
+a = True
+b = False
+
+if a and b:           # True and False == False
+    print("This will not print")
+elif a or b:          # True or False == True
+    print("This will print")
+```
+
+### `for` / `in`
+
+### `while`
+
+### `match` / `case`
+
+### `try` / `except`
+
+### `return`
+
+### `raise`
+
 [TOC](#table-of-contents)
 
 ---
@@ -639,7 +706,7 @@ The 35 reserved words in Python are also reserved in Pylem:
 
 There are also new reserved words unique to Pylem:
 
-- `case`, [`const`](#constants), [`enum`](#emum), `match`, [`mut`](#mutability), [`struct`](#struct), [`union`](#union)
+- [`block`](#block), [`case`](#match--case), [`const`](#constants), [`enum`](#emum), [`match`](#match--case), [`mut`](#mutability), [`struct`](#struct), [`union`](#union)
 
 ---
 
