@@ -505,18 +505,18 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 
 ### Built-in Types
 
-1. __[Booleans](#booleans)__
+1. __[Booleans](#booleans--bool)__
 2. __[Numbers](#numbers)__
-3. __[Characters](#characters)__
-4. __[Strings](#strings)__
-5. __[Lists](#lists)__
-6. __[Dictionaries](#dictionaries)__
+3. __[Characters](#characters--chr)__
+4. __[Strings](#strings--str)__
+5. __[Lists](#lists--list)__
+6. __[Dictionaries](#dictionaries--dict)__
 7. __[None-ables](#none-ables-)__
 8. __[Pointers](#pointers-)__
 
 _[Types](#types)_
 
-#### Booleans
+#### Booleans (`bool`)
 
 `bool` is a built-in enum type with its only variants being `False` and `True`. 
 
@@ -541,19 +541,43 @@ _[Built-in Types](#built-in-types)_
 
 _[Built-in Types](#built-in-types)_
 
-#### Characters
+#### Characters (`chr`)
+
+Python doesn't have a built-in character type like `char` in C. By default, both single (`'`) and double (`"`) quotes will make strings in Pylem just like they do in Python. You can declare a variable as `chr` and it will expect a string literal of one character or an expression that returns a `chr`. If you set it to a string that isn't 1 character, you will get a compile-time error.
+
+```py
+a: chr = 'a'
+b: chr = "b"
+c = chr(99)  # ASCII value of 'c'
+
+def print_chr(c: chr):
+    print(str(c))
+
+print_chr("c")   # OK
+print_chr("cd")  # Error!
+```
+
+Some expressions will return a `chr` like indexing or looping a string.
+
+```py
+s = "hello"
+print(isinstance(s[0], chr))
+
+for c in s:
+    print(f"'{c}' is a chr? {isinstance(c, chr)}")
+```
 
 _[Built-in Types](#built-in-types)_
 
-#### Strings
+#### Strings (`str`)
 
 _[Built-in Types](#built-in-types)_
 
-#### Lists
+#### Lists (`list`)
 
 _[Built-in Types](#built-in-types)_
 
-#### Dictionaries
+#### Dictionaries (`dict`)
 
 _[Built-in Types](#built-in-types)_
 
