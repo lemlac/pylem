@@ -743,7 +743,7 @@ _[Custom Types](#custom-types)_
 
 #### `union`
 
-**Untagged unions** – sometimes known as *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is ommited, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Instantiate a union by naming one of its members in the function call as opposed to naming every member like with structs.
+**Untagged unions** – sometimes known as *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is omitted, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Instantiate a union by naming one of its members in the function call as opposed to naming every member like with structs.
 
 ```py
 union SumUnion:
@@ -812,7 +812,7 @@ match payload:
         print("Payload is empty")
 ```
 
-A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together to create a *true sum type* and will allow you to instantiate it with each member as a variant. Varients without types are empty and set to `void`.
+A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together to create a *true sum type* and will allow you to instantiate it with each member as a variant. Varients without data are empty and set to `void`.
 
 ```py
 enum union MyTaggedUnion:
