@@ -359,7 +359,7 @@ const NAMESPACE = "development"
 Constants can have arguments like functions to make compile-time functions. These functions are like `def` ones but run at compile time. It uses an explicit return like with `def` functions. 
 
 ```py
-const MAX(a: int, b: int):
+const MAX(a: int, b: int) -> int:
     if a > b:
         return a
     else:
