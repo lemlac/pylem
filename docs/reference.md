@@ -221,7 +221,7 @@ a = 0
 b: int = 2
 ```
 
-These are immutable variables. Although it might look like it, setting the variable again does not mutate the variable. Each `=` operation is a new variable being declared, a concept known as**shadowing.**
+These are immutable variables. Although it might look like it, setting the variable again does not mutate the variable. Each `=` operation is a new variable being declared, a concept known as *shadowing.*
 
 ```py
 a = 1
