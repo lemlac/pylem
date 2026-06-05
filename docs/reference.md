@@ -254,6 +254,7 @@ The walrus operator `:=` and any compound assignment operator require that the l
 mut number = 4
 
 nubmer := 5  # Error: "nubmer" is undefined
+number := 5  # Fixed!
 ```
 
 [TOC](#table-of-contents)
