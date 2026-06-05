@@ -229,6 +229,8 @@ a = 2
 a = 'a'
 ```
 
+### Mutability
+
 Mutable variables are declared with the keyword `mut` before the name. Any `=` operation or any compound assignment operators such as `+=` or `-=` will mutate the variable.
 
 ```py
@@ -637,7 +639,7 @@ The 35 reserved words in Python are also reserved in Pylem:
 
 There are also new reserved words unique to Pylem:
 
-- `case`, `const`, `enum`, `match`, `mut`, `struct`, `union`
+- `case`, [`const`](#constants), [`enum`](#emum), `match`, [`mut`](#mutability), [`struct`](#struct), [`union`](#union)
 
 ---
 
