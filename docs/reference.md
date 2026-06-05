@@ -505,12 +505,12 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 
 ### Built-in Types
 
-1. __[Booleans](#booleans--bool)__
+1. __[Booleans](#booleans-bool)__
 2. __[Numbers](#numbers)__
-3. __[Characters](#characters--chr)__
-4. __[Strings](#strings--str)__
-5. __[Lists](#lists--list)__
-6. __[Dictionaries](#dictionaries--dict)__
+3. __[Characters](#characters-chr)__
+4. __[Strings](#strings-str)__
+5. __[Lists](#lists-list)__
+6. __[Dictionaries](#dictionaries-dict)__
 7. __[None-ables](#none-ables-)__
 8. __[Pointers](#pointers-)__
 
