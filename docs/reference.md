@@ -201,6 +201,8 @@ print(result)  # Output: 16
 
 #### `class`
 
+Pylem separates data types from virtual classes. Much like `class` in Python, `class` in Pylem defines a set of methods for a type. The main difference is that the type has no data by default. Instead, you define the data structure first (for example with `struct`) and then implement the methods for that data structure under `class` with the same name. `class` in Pylem works like a combination of [`impl`](https://doc.rust-lang.org/std/keyword.impl.html) and [`trait`](https://doc.rust-lang.org/rust-by-example/trait.html) in Rust.
+
 ```py
 # 1. Define the raw, flat memory layout (no overhead)
 struct BankAccount:
@@ -213,7 +215,7 @@ class BankAccount:
         self.balance += amount
 ```
 
-__Creating Virtual Interfaces__
+__Creating virtual interfaces:__ an interface is a class without any data. It works like `interface` or `trait` in other languages.
 
 ```py
 # Defines a contract (Works like Rust's `trait Renderable`)
@@ -221,6 +223,8 @@ class Renderable:
     def render(self) -> str:
         pass
 ```
+
+Implement an interface into another class by extending it. Each `class` definition adds new methods to a type, much like how each `def` block of the same function overloads it.
 
 ```py
 # Implement the 'Renderable' behavior specifically for 'BankAccount'
