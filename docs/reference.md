@@ -485,6 +485,31 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 
 ### Built-in Types
 
+1. __[Numbers](#numbers)__
+2. __[Booleans](#booleans)__
+3. __[Characters](#characters)__
+4. __[Strings](#strings)__
+5. __[Lists](#lists)__
+6. __[Dictionaries](#dictionaries)__
+7. __[None-ables](#none-ables-)__
+8. __[Pointers](#pointers-)__
+
+#### Numbers
+
+#### Booleans
+
+#### Characters
+
+#### Strings
+
+#### Lists
+
+#### Dictionaries
+
+#### None-ables (`?`)
+
+#### Pointers (`*`)
+
 ### Custom Types
 
 1. __[`struct`](#struct)__ — *Structured Data*
