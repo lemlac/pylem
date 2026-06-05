@@ -66,7 +66,7 @@ print(f"The room is {room_area} square feet.")
 
 Not all Python code works in Pylem, and this document will go through the major differences.
 
-The first major difference is in the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated, and mutate it with the `:=` operator. *See [Assignment](#assignmemt).*
+The first major difference is in the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated, and mutate it with the `:=` operator. *See [Assignment](#assignment).*
 
 ```py
 secret_word = "pylem"
@@ -282,8 +282,8 @@ def divide(a: int, b: int) -> int:
 def divide(a: float, b: float) -> float:
     return a / b
 
-divide(5, 2)       -- Result: 2
-divide(5.0, 2.0)   -- Result: 2.5
+divide(5, 2)       # Result: 2
+divide(5.0, 2.0)   # Result: 2.5
 ```
 
 ### Lambda Functions
@@ -356,7 +356,7 @@ const PI: float = 3.14159265
 const NAMESPACE = "development"
 ```
 
-Constants can have arguments like functions to make compile-time functions. 
+Constants can have arguments like functions to make compile-time functions. These functions arw like `def` ones but run at compile time. It uses an explicit return like with `def` functions. 
 
 ```py
 const MAX(a: int, b: int):
