@@ -298,6 +298,7 @@ divide(5.0, 2.0)   # Result: 2.5
 ### Lambda Functions
 
 ```py
+# Function that takes another function as an argument
 def apply_operation(value, operation_callback):
     return operation_callback(value)
 
@@ -306,9 +307,9 @@ result = apply_operation(4, lambda x: x ** 2)
 print(result)  # Output: 16
 ```
 
-Lambdas work in Pylem like they do in Python. In addition to the usual syntax of `lambda a, b, c:`, they can also be defined with a name and types like `lambda f(a: T, b: T, c: T) -> T:` by adding parentheses around the parameter, similar to the format for `def` functions.
+Lambdas work in Pylem like they do in Python. In addition to the usual syntax of `lambda a, b, c:`, they can also be defined with a name and types like `lambda f(a: T, b: T, c: T) -> T:` by adding parentheses around the parameters, similar to the format for `def` functions.
 
-Lambda functions can be assigned to a variable. Unlike `def` functions, a function defined with `lambda` cannot be overloaded. It's a function pointer that holds a single function. The last expression in a lambda is its implied return value. Lambdas are the only function type with implicit returns because they can be inlined like `lambda x: x`.
+Lambda functions can be assigned to a variable. Unlike `def` functions, a function defined with `lambda` cannot be overloaded. It's a function pointer that holds a single function. The last expression in a lambda is its implied return value. Lambdas are the only function type with implicit returns since they can be inlined like for example `lambda x: x`.
 
 ```py
 addOne = lambda x: x + 1
@@ -358,14 +359,14 @@ apiCall(callback)
 
 ## Constants
 
-Constants are declared with `const`. This marks compile-time data, different from an immutable variable. The variable is treated as if it where a literal. The type can be inferred.
+**Constants** are declared with `const`. This marks compile-time data, different from an immutable variable. The variable is treated as if it where a literal. The type can be inferred.
 
 ```py
 const PI: float = 3.14159265
 const NAMESPACE = "development"
 ```
 
-Constants can have arguments like functions to make compile-time functions. These functions are like `def` ones but run at compile time. It uses an explicit return like with `def` functions. 
+Constants can have arguments like functions to make **compile-time functions.** These functions are like `def` ones but run at compile time. It uses an explicit return like with `def` functions. 
 
 ```py
 const MAX(a: int, b: int) -> int:
@@ -392,11 +393,11 @@ MAX(7, 3)     # Result: 7
 
 ### Custom Types
 
-1. [`struct`](#struct) — Structured Data
-2. [`enum`](#enum) — Enumerated Data
-3. [`union`](#union) — Untagged Unions
-4. [`union` + `enum`](#union--enum) — Tagged Unions
-5. [`class`](#class) — Virtual Interfaces
+1. __[`struct`](#struct)__ — *Structured Data*
+2. __[`enum`](#enum)__ — *Enumerated Data*
+3. __[`union`](#union)__ — *Untagged Unions*
+4. __[`union` + `enum`](#union--enum)__ — *Tagged Unions*
+5. __[`class`](#class)__ — *Virtual Interfaces*
 
 #### `struct`
 
