@@ -400,7 +400,7 @@ MAX(7, 3)     # Result: 7
 
 A block of code that runs only once, creating a new scope.
 
-```mulem
+```py
 block:
     x = 1
     print(f"x = {x}")
@@ -408,7 +408,7 @@ block:
 
 ### `if` / `elif` / `else`
 
-```mulem
+```py
 expr if cond else expr if cond else expr
 
 if cond:
@@ -421,7 +421,7 @@ else:
 
 Basic Boolean branching.
 
-```mulem
+```py
 x = x if x > 0 else -x
 
 if x > 0:
@@ -432,7 +432,7 @@ else:
 
 Use `and`/`or` to compare multiple booleans at once.
 
-```mulem
+```py
 a = True
 b = False
 
