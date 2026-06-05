@@ -391,6 +391,10 @@ MAX(7, 3)     # Result: 7
 
 ## Types
 
+__[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
+
+### Built-in Types
+
 ### Custom Types
 
 1. __[`struct`](#struct)__ — *Structured Data*
