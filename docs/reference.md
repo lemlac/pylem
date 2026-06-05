@@ -214,7 +214,7 @@ myObject = MyStruct(name="Foobar", value=1)
 Structs are transparent. They can be destructured like named tuples. 
 
 ```py
-struct TransparentThing
+struct TransparentThing:
     a: int
     b: int
 
