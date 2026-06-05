@@ -549,15 +549,17 @@ Python doesn't have a built-in character type like `char` in C. By default, both
 a: chr = 'a'
 b: chr = "b"
 c = chr(99)  # ASCII value of 'c'
+```
 
+Some expressions expect a character, like the input of a function with type `chr`. When a `chr` type is expected, a single-character string literal is automatically interpreted as a `chr`. A literal of more than one character in that context is a compile-time error.
+
+```py
 def print_chr(c: chr):
     print(str(c))
 
 print_chr("c")   # OK
 print_chr("cd")  # Error!
 ```
-
-If an expression expects a `chr` type, then writing a string literal of 1 characters makes a `chr` without the need to convert it.
 
 Some expressions will return a `chr` like indexing or looping a string.
 
