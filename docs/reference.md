@@ -406,6 +406,27 @@ block:
     print(f"x = {x}")
 ```
 
+`block` can have a label after it to call with `break`. If the colon is omitted, then there needs to be another block type after it (for example a `for` loop) and then `break` or `continue` can be applied to that specific block.
+
+```py
+block label:
+    if cond:
+        break label
+    print("Condition failed")
+```
+
+```py
+block outer
+for x in range(0, 100):
+    for y in range(0, 100):
+        if x * y >= 100:
+            print(f"{x} * {y} == {x * y}")
+            continue outer
+        if x * y == 77:
+            print("break")
+            break outer
+```
+
 ### `if` / `elif` / `else`
 
 ```py
