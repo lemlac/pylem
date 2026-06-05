@@ -238,12 +238,12 @@ i += 1
 i -= 1
 ```
 
-There is a chance that instead of mutating, you accidentally declare a mew variable since you typo'd the name of it, creating a silent bug. This issue isn't new to Python developers, and so it carries over into Pylem as well. 
+There is a chance that instead of mutating, you accidentally declare a new variable since you typo'd the name of it, creating a silent bug. This issue isn't new to Python developers, and so it carries over into Pylem as well. 
 
 ```py
 mut number = 4
 
-nubmer = 5   # Oops!
+nubmer = 5  # Oops!
 
 print(f"{number}")  # It's still 4!
 ```
@@ -253,6 +253,38 @@ print(f"{number}")  # It's still 4!
 ---
 
 ## Functions
+
+Functions are defined with `def` like in Python. Types are inferred if they're omitted.
+
+```py
+def isThirteen(x):
+    if x == 13:
+        return True
+    return False
+```
+
+```py
+def fib(n):
+    if n < 1:
+        return 0
+    elif n < 2:
+        return 1
+    else:
+        return fib(n - 1) + fib(n - 2)
+```
+
+Functions declared this way are visible to other functions in the scope no matter what order. They can be overloaded with new declarations of the same name. Overloaded functions are dispatched to the scope that they're defined in.
+
+```py
+def divide(a: int, b: int) -> int:
+    return a // b
+
+def divide(a: float, b: float) -> float:
+    return a / b
+
+divide(5, 2)       -- Result: 2
+divide(5.0, 2.0)   -- Result: 2.5
+```
 
 ### Lambda Functions
 
@@ -267,11 +299,75 @@ print(result)  # Output: 16
 
 Lambdas work in Pylem like they do in Python. In addition to the usual syntax of `lambda a, b, c:`, they can also be defined with a name and types like `lambda f(a: T, b: T, c: T) -> T:` by adding parentheses around the parameter, similar to the format for `def` functions.
 
+Lambda functions can be assigned to a variable. Unlike `def` functions, a function defined with `lambda` cannot be overloaded. It's a function pointer that holds a single function. The last expression in a lambda is its implied return value.
+
+```py
+addOne = lambda x: x + 1
+# Or
+lambda addOne(x):
+    x + 1
+```
+
+Even when inside an expression, a lambda function can start a block. If its inside brackets, then exiting the block will return to parsing the rest of the expression.
+
+```py
+apiCall(lambda result:
+    if result > 0:
+        print(f"Success! {result}")
+    else:
+        print(f"Failure! {result}")
+)
+```
+
+```py
+startCountdown(lambda count(n):
+    if n > 0:
+        print(f"{n}!")
+        count(n - 1)
+    else:
+        print(f"Go!")
+, 10)
+```
+
+When you define a lambda function in an expression by itself, the function will be assigned to a variable with its name in that scope. In other words, saying `lambda name(x): x` is the same as `name = lambda name(x): x`.
+
+```py
+lambda callback(result):
+    if result > 0:
+        print(f"Success! {result}")
+    else:
+        print(f"Failure! {result}")
+
+# `callback` is a function pointer in this scope.
+
+apiCall(callback)
+```
+
 [TOC](#table-of-contents)
 
 ---
 
 ## Constants
+
+Constants are declared with `const`. This marks compile-time data, different from an immutable variable. It treats the expression as if it where a literal. The type can be inferred.
+
+```py
+const PI: float = 3.14159265
+const NAMESPACE = "development"
+```
+
+Constants can have arguments like functions to make compile-time functions. 
+
+```py
+const MAX(a: int, b: int):
+    if a > b:
+        return a
+    else:
+        return b
+
+MAX(5, 10)    # Result: 10
+MAX(7, 3)     # Result: 7
+```
 
 [TOC](#table-of-contents)
 
@@ -438,7 +534,7 @@ The 35 reserved words in Python are also reserved in Pylem:
 
 There are also new reserved words unique to Pylem:
 
-- `case`, `enum`, `match`, `mut`, `struct`, `union`
+- `case`, `const`, `enum`, `match`, `mut`, `struct`, `union`
 
 ---
 
