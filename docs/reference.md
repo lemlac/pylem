@@ -396,6 +396,8 @@ MAX(7, 3)     # Result: 7
 8. __[`return`](#return)__
 9. __[`raise`](#raise)__
 
+[TOC](#table-of-contents)
+
 ### `block`
 
 A block of code that runs only once, creating a new scope.
@@ -426,6 +428,8 @@ for x in range(0, 100):
             print("break")
             break outer
 ```
+
+_[Control Flow](#control-flow)_
 
 ### `if` / `elif` / `else`
 
@@ -463,17 +467,31 @@ elif a or b:          # True or False == True
     print("This will print")
 ```
 
+_[Control Flow](#control-flow)_
+
 ### `for` / `in`
+
+_[Control Flow](#control-flow)_
 
 ### `while`
 
+_[Control Flow](#control-flow)_
+
 ### `match` / `case`
+
+_[Control Flow](#control-flow)_
 
 ### `try` / `except`
 
+_[Control Flow](#control-flow)_
+
 ### `return`
 
+_[Control Flow](#control-flow)_
+
 ### `raise`
+
+_[Control Flow](#control-flow)_
 
 [TOC](#table-of-contents)
 
@@ -482,6 +500,8 @@ elif a or b:          # True or False == True
 ## Types
 
 __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
+
+[TOC](#table-of-contents)
 
 ### Built-in Types
 
@@ -494,21 +514,39 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 7. __[None-ables](#none-ables-)__
 8. __[Pointers](#pointers-)__
 
+_[Types](#types)_
+
 #### Numbers
+
+_[Built-in Types](#built-in-types)_
 
 #### Booleans
 
+_[Built-in Types](#built-in-types)_
+
 #### Characters
+
+_[Built-in Types](#built-in-types)_
 
 #### Strings
 
+_[Built-in Types](#built-in-types)_
+
 #### Lists
+
+_[Built-in Types](#built-in-types)_
 
 #### Dictionaries
 
+_[Built-in Types](#built-in-types)_
+
 #### None-ables (`?`)
 
+_[Built-in Types](#built-in-types)_
+
 #### Pointers (`*`)
+
+_[Built-in Types](#built-in-types)_
 
 ### Custom Types
 
@@ -517,6 +555,8 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 3. __[`union`](#union)__ — *Untagged Unions*
 4. __[`enum union`](#enum-union)__ — *Tagged Unions*
 5. __[`class`](#class)__ — *Virtual Interfaces*
+
+_[Types](#types)_
 
 #### `struct`
 
@@ -533,6 +573,8 @@ Instantiate a struct by calling it like a function. Each member is treated like 
 ```py
 myObject = MyStruct(name="Foobar", value=1)
 ```
+
+_[Custom Types](#custom-types)_
 
 #### `enum`
 
@@ -583,6 +625,8 @@ c = MyTaggedUnion.Third(val=3)
 
 *See [`enum union`](#enum-union) for more information.*
 
+_[Custom Types](#custom-types)_
+
 #### `union`
 
 **Untagged unions** – also called *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is ommited, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Instantiate a union by naming one of its members in the function call as opposed to naming every member like with structs.
@@ -611,6 +655,8 @@ u.int          # Value: 1
 # Big-endian: memory is [0x01, 0x00, 0x00, 0x00]  (same bytes)
 u.int          # Value: 0x01000000 = 16777216
 ```
+
+_[Custom Types](#custom-types)_
 
 #### `enum union`
 
@@ -675,6 +721,8 @@ match a:
         print(f"third! {x.val}")
 ```
 
+_[Custom Types](#custom-types)_
+
 #### `class`
 
 Pylem separates data types from virtual classes. Much like `class` in Python, `class` in Pylem defines a set of methods for a type. The main difference is that the type has no data by default. Instead, you define the data structure first (for example with `struct`) and then implement the methods for that data structure under `class` with the same name. `class` in Pylem works like a combination of [`impl`](https://doc.rust-lang.org/std/keyword.impl.html) and [`trait`](https://doc.rust-lang.org/rust-by-example/trait.html) in Rust.
@@ -721,6 +769,8 @@ class BankAccount:
 my_account = BankAccount("Alex", 100)
 print(f"{my_account.owner} has ${my_account.balance}")
 ```
+
+_[Custom Types](#custom-types)_
 
 [TOC](#table-of-contents)
 
