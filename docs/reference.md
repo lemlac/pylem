@@ -176,7 +176,7 @@ block:
 Lambda functions can start a whitespace block when there's a line break after its colon (`:`). When indention is less than the first line in the block, the lambda function ends and parsing returns to expression mode. 
 
 ```py
-apiCall(lambda result:
+api_call(lambda result:
     if result > 0:
         print(f"Success! {result}")
     else:
@@ -268,7 +268,7 @@ number := 5  # Fixed!
 Functions are defined with `def` like in Python. Types are inferred if they're omitted.
 
 ```py
-def isThirteen(x):
+def is_thirteen(x):
     if x == 13:
         return True
     return False
@@ -314,16 +314,16 @@ Lambdas work in Pylem like they do in Python. In addition to the usual syntax of
 Lambda functions can be assigned to a variable. Unlike `def` functions, a function defined with `lambda` cannot be overloaded. It's a function pointer that holds a single function. The last expression in a lambda is its implied return value. Lambdas are the only function type with implicit returns since they can be inlined like for example `lambda x: x`.
 
 ```py
-addOne = lambda x: x + 1
+add_one = lambda x: x + 1
 # Or
-lambda addOne(x):
+lambda add_one(x):
     x + 1
 ```
 
 Even when inside an expression, a lambda function can start a block. If its inside brackets, then exiting the block will return to parsing the rest of the expression.
 
 ```py
-apiCall(lambda result:
+api_call(lambda result:
     if result > 0:
         print(f"Success! {result}")
     else:
@@ -332,7 +332,7 @@ apiCall(lambda result:
 ```
 
 ```py
-startCountdown(lambda count(n):
+start_countdown(lambda count(n):
     if n > 0:
         print(f"{n}!")
         count(n - 1)
@@ -352,7 +352,7 @@ lambda callback(result):
 
 # `callback` is a function pointer in this scope.
 
-apiCall(callback)
+api_call(callback)
 ```
 
 [TOC](#table-of-contents)
