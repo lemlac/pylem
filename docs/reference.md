@@ -2,7 +2,7 @@
 
 *Version 0.1 (Draft)*
 
-__The Pylem programming language__ is a dialect of Python but less abstract and more low-level like C. There's a gap in the coding landscape. Projects like [*Mojo*](https://mojolang.org/), [*Cython*](https://cython.org/), and Rust's [*PyO3*](https://pyo3.rs/v0.28.3/) prove there is a massive demand for solving the *two-language problem.* Python is a widely used programming language, but its slow and not meant for performance critical tasks. That's why many libraries use FFI with compiled code — often written in C — to overcome this limitation. But then you need to write a library in 2 or more languages. Pylem aims to fix that. Python developers won't have abandon a familiar syntax to write performance critical code. Pylem will be able to be interpreted and compiled, all within the same language.
+__The Pylem programming language__ is a dialect of Python but less abstract and more low-level like C. There's a gap in the coding landscape. Projects like [*Mojo*](https://mojolang.org/), [*Cython*](https://cython.org/), and Rust's [*PyO3*](https://pyo3.rs/v0.28.3/) prove there is a massive demand for solving the *two-language problem.* Python is a widely used programming language, but its slow and not meant for performance-critical tasks. That's why many libraries use FFI with compiled code — often written in C — to overcome this limitation. But then you need to write a library in 2 or more languages. Pylem aims to fix that. Python developers won't have to abandon a familiar syntax to write performance-critical code. Pylem will be able to be interpreted and compiled, all within the same language.
 
 Most things in Pylem will work just like in Python.
 
@@ -66,7 +66,7 @@ print(f"The room is {room_area} square feet.")
 
 Not all Python code works in Pylem, and this document will go through the major differences.
 
-The first major difference is in the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated, and mutate it with the `:=` operator. *See [Assignment](#assignment).*
+The first major difference is in the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated. *See [Assignment](#assignment).*
 
 ```py
 secret_word = "pylem"
@@ -383,6 +383,12 @@ MAX(7, 3)     # Result: 7
 
 ### Custom Types
 
+1. [`struct`](#struct) — Structured Data
+2. [`enum`](#enum) — Enumerated Data
+3. [`union`](#union) — Untagged Unions
+4. [`union` + `enum`](#union--enum) — Tagged Unions
+5. [`class`](#class) — Virtual Interfaces
+
 #### `struct`
 
 Structs are product types—or in other words—plain data containers. They cannot extend other structs. Define a struct with the keyword `struct` and then list each member of it in the block.
@@ -401,38 +407,42 @@ myObject = MyStruct(name="Foobar", value=1)
 
 #### `enum`
 
-Enums are sum types. They define a closed set of variants. Variants may carry data turning them into a tagged union. Use the keyword `enum` to define one.
+Enums contain a set of fixed values, typically 1 byte each. The size of an enum is the size of its largest variant. By default, this is a single byte if there are fewer than 256 variants, but they can also be assigned other values such as integers which can increase the size of the enum. When assigning a variant with a specific value, the variants that follow it will iterate from the previous one. Each variant must have a unique value.
 
 ```py
-enum MyEnum:
-    First
-    Second(int)
-    Third{val: int}
+enum Direction:
+    UP
+    DOWN
+    LEFT
+    RIGHT
+
+enum Color:
+    RED = 0xFF0000
+    BLUE = 0x00FF00
+    GREEN = 0x0000FF
 ```
 
-Like structs, instantiate by calling the member like a function unless it doesn't carry any data.
+Enums are often paired with `match` to switch to multiple branches based on its value. Each `case` only needs the name of each variant based on the type passed to `match`.
 
 ```py
-a = MyEnum.First
-b = MyEnum.Second(2)
-c = MyEnum.Third(val=3)
+dir = Direction.UP
+
+match dir:
+    case UP:
+        print("Go up!")
+    case DOWN:
+        print("Go down!")
+    case LEFT:
+        print("Go left!")
+    case RIGHT:
+        print("Go right!")
 ```
 
-When pattern matching, you only need to name the member of the type in each case, not the full path. Use `_` while destructuring to discard the members data.
-
-```py
-match a:
-    case First:
-        print("first!")
-    case Second(_):
-        print("second!")
-    case Third{_}:
-        print("third!")
-```
+*For attaching data to enums, see [`union` + `enum`](#union--enum).*
 
 #### `union`
 
-Untagged unions – also called *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is ommited, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Instantiate a union by naming one of its members in the function call as opposed to naming every member like with structs.
+**Untagged unions** – also called *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is ommited, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Instantiate a union by naming one of its members in the function call as opposed to naming every member like with structs.
 
 ```py
 union SumUnion:
@@ -457,6 +467,68 @@ u.int          # Value: 1
 
 # Big-endian: memory is [0x01, 0x00, 0x00, 0x00]  (same bytes)
 u.int          # Value: 0x01000000 = 16777216
+```
+
+#### `union` + `enum`
+
+Unions can be tagged with an enum to create **tagged unions.** To do this, create an enum and then extend it with a union. Each member name in the union must match with each varient of the enum. If a variant has no data, assign its type as `void` or leave with no type to automatically assign it as `void`. Instantiate it by giving its tag first and then assign the member for that tag if it has data.
+
+```py
+enum PayloadTag:
+    Integer
+    Float
+    Text
+    Empty
+
+union Payload(PayloadTag):
+    Integer: int
+    Float: float
+    Text: str
+    Tuple: {val: int}
+    Empty
+
+tu = Payload(PayloadTag.Integer, Integer=1)
+tu = Payload(PayloadTag.Tuple, Tuple={val: 1})
+tu = Payload(PayloadTag.Enpty)
+```
+
+Pattern matching works the same as enums. To get the data of a variant, put `as` after the variant name.
+
+```py
+match tu:
+    case Integer as val:
+        print(f"Got an integer: {val}")
+    case Float as val:
+        print(f"Got a float: {val}")
+    case Text as val:
+        print(f"Got text: {val}")
+    case Tuple as x:
+        print(f"Got a tuple: \{ val: {x.val} }")
+    case Empty:
+        print("Payload is empty")
+```
+
+A union can be tagged with an anonymous enum by adding `(enum)` after its name. This will allow you to instantiate it with each member as a variant. 
+
+```py
+union MyTaggedUnion(enum):
+    First
+    Second: int
+    Third: {val: int}
+
+a = MyTaggedUnion.First
+b = MyTaggedUnion.Second(2)
+c = MyTaggedUnion.Third(val=3)
+```
+
+```py
+match a:
+    case First:
+        print("first!")
+    case Second as val:
+        print(f"second! {val}")
+    case Third as x:
+        print(f"third! {x.val}")
 ```
 
 #### `class`
