@@ -66,7 +66,7 @@ print(f"The room is {room_area} square feet.")
 
 Not all Python code works in Pylem, and this document will go through the major differences.
 
-The first major difference is in the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated. *See [Assignment](#assignment).*
+The first major difference is in the keyword `mut`. Variables are immutable by default. Use `mut` to allow a variable to be mutated. *See [Mutability](#mutability).*
 
 ```py
 secret_word = "pylem"
