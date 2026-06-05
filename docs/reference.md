@@ -255,15 +255,15 @@ match a:
 
 #### `union`
 
-Untagged unions – also called *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is ommited, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Each member can be used as a type when declaring a variable to indicate which one it's starting with.
+Untagged unions – also called *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is ommited, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Instantiate a union by naming one of its members in the function call as opposed to naming every member like with structs.
 
 ```py
-union sumUnion:
+union SumUnion:
     int
     float
     char
 
-u: sumUnion.int = 1
+u = SumUnion(int=1)
 
 u.int     # Value is 1
 u.float   # Read binary representation of int 1 as if it were a float
@@ -273,7 +273,7 @@ u.char    # Read binary representation of int 1 as if it were a, value is '\1'
 This is similar to C unions where it doesn't do any conversion; it only reads whatever data is there with a different type. Unions will set overflow data to 0 so that if you set a small member and then read from a big member, you won't get undefined behavior. The zero-padding interacts with endianness in a way that's deterministic but platform-dependent. The behavior is always defined, just not always portable. 
 
 ```py
-u: sumUnion.char = '\1'   # char (1 byte), remaining bytes zeroed
+u = SomeUnion(char='\1')   # char (1 byte), remaining bytes zeroed
 
 # Little-endian: memory is [0x01, 0x00, 0x00, 0x00]
 u.int          # Value: 1
