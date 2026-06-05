@@ -501,7 +501,7 @@ u.int          # Value: 0x01000000 = 16777216
 
 #### `enum union`
 
-Unions can be tagged with an enum to create **tagged unions.** To do this, create an enum and then extend it with a union. Each member name in the union must match with each varient of the enum. If a variant has no data, assign its type as `void` or leave with no type to automatically assign it as `void`. Instantiate it by giving its tag first and then assign the member for that tag if it has data.
+Unions can be tagged with an enum to create **tagged unions.** To do this, create an enum and then extend it with a union. Each member name in the union must match with each varient of the enum. If a variant has no data, assign its type as `void` or leave with no type to automatically assign it as `void`. Instantiate it by giving its tag first and then assign the member for that tag if it has data. The size of a tagged union is the size of its enum component and the size of its union component combined.
 
 ```py
 enum PayloadTag:
