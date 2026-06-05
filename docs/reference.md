@@ -141,12 +141,13 @@ calculate_and_report(
 
 ## Basics
 
-Comments are done with `#`. There is also block comments with `/# #/`.
+Comments are done with `#`. There is also block comments with `### … ###`.
 
 ```py
 # Comment
-/# Block Comment #/
-/# /# Nested Comment #/ #/
+###
+Block Comment
+###
 ```
 
 [TOC](#table-of-contents)
