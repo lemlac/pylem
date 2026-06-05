@@ -791,15 +791,15 @@ union Payload(PayloadTag):
     Tuple: {val: int}
     Empty: void
 
-tu = Payload(PayloadTag.Integer, Integer=1)
-tu = Payload(PayloadTag.Tuple, Tuple={val: 1})
-tu = Payload(PayloadTag.Empty)
+payload = Payload(PayloadTag.Integer, Integer=1)
+payload = Payload(PayloadTag.Tuple, Tuple={val: 1})
+payload = Payload(PayloadTag.Empty)
 ```
 
 Pattern matching works the same as enums. To get the data of a variant, put `as` after the variant name.
 
 ```py
-match tu:
+match payload:
     case Integer as val:
         print(f"Got an integer: {val}")
     case Float as val:
