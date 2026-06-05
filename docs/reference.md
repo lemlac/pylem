@@ -565,6 +565,19 @@ class BankAccount(Renderable):
         return f"Account owner: {self.owner}, Balance: {self.balance}"
 ```
 
+__`__init__(mut self)`:__ When a type has one or more `__init__` methods defined, you can use that to create a type instead of the standard instantiation method. This can be overloaded to create multiple ways to initiate a type. The first argument `mut self` is an unset reference to the new object. If it's a struct, then all members need to be set. If it's an enum or union, then it must be set to one of its variants.
+
+```py
+class BankAccount:
+    def __init__(mut self, owner, balance=0):
+        self.owner = owner
+        self.balance = balance
+
+# Creating an object instance
+my_account = BankAccount("Alex", 100)
+print(f"{my_account.owner} has ${my_account.balance}")
+```
+
 [TOC](#table-of-contents)
 
 ---
