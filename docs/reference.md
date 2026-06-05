@@ -161,7 +161,7 @@ expr; expr
 
 ### Blocks
 
-Certain keywords can start *blocks* after a colon `:` and a line break. This starts a whitespace sequence with a child scope. Indentation determines when a block ends. The last expression evaluated in a block is its value — *only applies to lambda functions.* Use `pass` to leave a block empty.
+Certain keywords can start *blocks* after a colon `:` and a line break. This starts a whitespace sequence with a child scope. Indentation determines when a block ends. Use `pass` to leave a block empty. Lambda functions can have implicit returns from within blocks, with the last expression evaluated in a lambda body being its return value.
 
 ```py
 block:
@@ -608,7 +608,7 @@ union Payload(PayloadTag):
 
 tu = Payload(PayloadTag.Integer, Integer=1)
 tu = Payload(PayloadTag.Tuple, Tuple={val: 1})
-tu = Payload(PayloadTag.Enpty)
+tu = Payload(PayloadTag.Empty)
 ```
 
 Pattern matching works the same as enums. To get the data of a variant, put `as` after the variant name.
@@ -727,7 +727,7 @@ The 35 reserved words in Python are also reserved in Pylem:
 
 There are also new reserved words unique to Pylem:
 
-- [`block`](#block), [`case`](#match--case), [`const`](#constants), [`enum`](#emum), [`match`](#match--case), [`mut`](#mutability), [`struct`](#struct), [`union`](#union)
+- [`block`](#block), [`case`](#match--case), [`const`](#constants), [`enum`](#enum), [`match`](#match--case), [`mut`](#mutability), [`struct`](#struct), [`union`](#union)
 
 ---
 
