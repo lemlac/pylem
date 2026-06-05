@@ -173,6 +173,8 @@ result = apply_operation(4, lambda x: x ** 2)
 print(result)  # Output: 16
 ```
 
+Lambdas work in Pylem like they do in Python. In addition to the usual syntax of `lambda a, b, c:`, they can also be defined with a name and types like `lambda f(a: T, b: T, c: T) -> T:` by adding parentheses around the parameter, similar to the format for `def` functions.
+
 [TOC](#table-of-contents)
 
 ---
