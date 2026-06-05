@@ -430,13 +430,14 @@ enum Color:
     RED = 0xFF0000
     BLUE = 0x00FF00
     GREEN = 0x0000FF
+
+dir = Direction.UP
+color = Color.RED
 ```
 
 Enums are often paired with `match` to switch to multiple branches based on its value. Each `case` only needs the name of each variant based on the type passed to `match`.
 
 ```py
-dir = Direction.UP
-
 match dir:
     case UP:
         print("Go up!")
