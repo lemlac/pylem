@@ -396,7 +396,7 @@ MAX(7, 3)     # Result: 7
 1. __[`struct`](#struct)__ — *Structured Data*
 2. __[`enum`](#enum)__ — *Enumerated Data*
 3. __[`union`](#union)__ — *Untagged Unions*
-4. __[`union` + `enum`](#union--enum)__ — *Tagged Unions*
+4. __[`enum union`](#enum-union)__ — *Tagged Unions*
 5. __[`class`](#class)__ — *Virtual Interfaces*
 
 #### `struct`
@@ -479,7 +479,7 @@ u.int          # Value: 1
 u.int          # Value: 0x01000000 = 16777216
 ```
 
-#### `union` + `enum`
+#### `enum union`
 
 Unions can be tagged with an enum to create **tagged unions.** To do this, create an enum and then extend it with a union. Each member name in the union must match with each varient of the enum. If a variant has no data, assign its type as `void` or leave with no type to automatically assign it as `void`. Instantiate it by giving its tag first and then assign the member for that tag if it has data.
 
@@ -519,10 +519,10 @@ match tu:
         print("Payload is empty")
 ```
 
-A union can be tagged with an anonymous enum by adding `(enum)` after its name. This will allow you to instantiate it with each member as a variant. 
+A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together and will allow you to instantiate it with each member as a variant. 
 
 ```py
-union MyTaggedUnion(enum):
+enum union MyTaggedUnion:
     First
     Second: int
     Third: {val: int}
