@@ -576,7 +576,7 @@ for c in s:
     print(f"'{c}' is a chr? {isinstance(c, chr)}")
 ```
 
-Without a `chr` context, a single-character string literal is still a `str` as normal. So `x = 'a'` gives a `str`, but `x: chr = 'a'` or `x = chr('a')` gives a `chr`. That distinction is what makes `print_chr("c")` work while `s = "c"; print_chr(s)` would not — unless `s` was itself declared as `chr`.
+Without a `chr` context, a single-character string literal is still a `str` as normal. So `x = 'a'` gives a `str`, but `x: chr = 'a'` or `x = 'a'[0]` gives a `chr`. That distinction is what makes `print_chr("c")` work while `s = "c"; print_chr(s)` would not — unless `s` was itself declared as `chr`.
 
 _[Built-in Types](#built-in-types)_
 
