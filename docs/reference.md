@@ -571,6 +571,20 @@ else:
     print("No number")
 ```
 
+Internally, what's happening is that the value becomes a tagged union with 2 variants: some value or `None`. When you enter a block where it's guaranteed to be not `None`, then it's automatically unwrapped inside that block.
+
+You can kind of think of it doing something like this under the hood:
+
+```py
+x: Option[int] = get_number()
+
+match x:
+    case Some as x_val:
+        print(f"The number is {x_val}")
+    case None:
+        print("No number")
+```
+
 If an enum or tagged union is None-able, then `None` becomes one of its variants.
 
 ```py
