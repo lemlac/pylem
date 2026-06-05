@@ -349,14 +349,14 @@ apiCall(callback)
 
 ## Constants
 
-Constants are declared with `const`. This marks compile-time data, different from an immutable variable. It treats the expression as if it where a literal. The type can be inferred.
+Constants are declared with `const`. This marks compile-time data, different from an immutable variable. The variable is treated as if it where a literal. The type can be inferred.
 
 ```py
 const PI: float = 3.14159265
 const NAMESPACE = "development"
 ```
 
-Constants can have arguments like functions to make compile-time functions. These functions arw like `def` ones but run at compile time. It uses an explicit return like with `def` functions. 
+Constants can have arguments like functions to make compile-time functions. These functions are like `def` ones but run at compile time. It uses an explicit return like with `def` functions. 
 
 ```py
 const MAX(a: int, b: int):
@@ -397,17 +397,6 @@ Instantiate a struct by calling it like a function. Each member is treated like 
 
 ```py
 myObject = MyStruct(name="Foobar", value=1)
-```
-
-Structs are transparent. They can be destructured like named tuples. 
-
-```py
-struct TransparentThing:
-    a: int
-    b: int
-
-{a, b} = TransparentThing(a=1, b=2)
-print(f"a: {a}, b: {b}")
 ```
 
 #### `enum`
