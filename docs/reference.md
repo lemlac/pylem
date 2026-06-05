@@ -161,7 +161,7 @@ expr; expr
 
 ### Blocks
 
-Certain keywords can start *blocks* after a colon `:` and a line break. This starts a whitespace sequence with a child scope. Indentation determines when a block ends. The last expression evaluated in a block is its value. Use `pass` to leave a block empty.
+Certain keywords can start *blocks* after a colon `:` and a line break. This starts a whitespace sequence with a child scope. Indentation determines when a block ends. The last expression evaluated in a block is its value — *only applies to lambda functions.* Use `pass` to leave a block empty.
 
 ```py
 block:
@@ -299,7 +299,7 @@ print(result)  # Output: 16
 
 Lambdas work in Pylem like they do in Python. In addition to the usual syntax of `lambda a, b, c:`, they can also be defined with a name and types like `lambda f(a: T, b: T, c: T) -> T:` by adding parentheses around the parameter, similar to the format for `def` functions.
 
-Lambda functions can be assigned to a variable. Unlike `def` functions, a function defined with `lambda` cannot be overloaded. It's a function pointer that holds a single function. The last expression in a lambda is its implied return value.
+Lambda functions can be assigned to a variable. Unlike `def` functions, a function defined with `lambda` cannot be overloaded. It's a function pointer that holds a single function. The last expression in a lambda is its implied return value. Lambdas are the only function type with implicit returns because they can be inlined like `lambda x: x`.
 
 ```py
 addOne = lambda x: x + 1
