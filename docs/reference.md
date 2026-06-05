@@ -248,6 +248,14 @@ nubmer = 5  # Oops!
 print(f"{number}")  # It's still 4!
 ```
 
+The walrus operator `:=` and any compound assignment operator require that the left-hand side be a mutable reference. You can optionally use that instead of `=` to mitigate this issue.
+
+```py
+mut number = 4
+
+nubmer := 5  # Error: "nubmer" is undefined
+```
+
 [TOC](#table-of-contents)
 
 ---
