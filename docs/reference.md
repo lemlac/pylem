@@ -150,6 +150,64 @@ Block Comment
 """
 ```
 
+A program in Pylem is divided into expressions and sequences. Sequences can either be delimited with whitespace and semi-colons (`;`) or brackets and commas (`,`). The default is a whitespace sequence, where each line is an expression. Multiple expressions can be on one line separated by semi-colons (`;`).
+
+```py
+expr
+expr
+
+expr; expr
+```
+
+### Blocks
+
+Certain keywords can start *blocks* after a colon `:` and a line break. This starts a whitespace sequence with a child scope. Indentation determines when a block ends. The last expression evaluated in a block is its value. Use `pass` to leave a block empty.
+
+```py
+block:
+    body
+
+block:
+    pass
+```
+
+### Dual Whitespace-Bracket System
+
+Lambda functions can start a whitespace block when there's a line break after its colon (`:`). When indention is less than the first line in the block, the lambda function ends and parsing returns to expression mode. 
+
+```py
+apiCall(lambda result:
+    if result > 0:
+        print(f"Success! {result}")
+    else:
+        print(f"Failure! {result}")
+)
+```
+
+### Declarations
+
+Variables are declared with just the equals sign (`=`). A type may be optionally added with a colon (`:`) after the variable name or inferred without it. This type of variable is **immutable.** Additional *assignments* to a variable **shadow** that variable. 
+
+```py
+a = 0
+b: int = 1
+a = 2      # New `a`
+b = 3      # New `b`
+```
+
+Shadowing works like `let` in other languages. It's just that Pylem drops the `let` all together for the simpler `=` notation like in Python.
+
+Functions are declared wuth `def`. The return type can be inferred based on the return value, and the types of parameters may be inferred based on usage. This combines the simplicity of dynamically typed languages with the power and optimization of a statically typed language.
+
+```py
+def f(x: int) -> int:
+    return x*x
+def g(x):
+    return x*x*x
+f(2)   # Result: 4
+g(2)   # Result: 8
+```
+
 [TOC](#table-of-contents)
 
 ---
