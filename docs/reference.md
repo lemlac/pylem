@@ -513,8 +513,9 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 4. __[Strings](#strings-str)__
 5. __[Lists](#lists-list)__
 6. __[Dictionaries](#dictionaries-dict)__
-7. __[None-ables](#none-ables-)__
-8. __[Pointers](#pointers-)__
+7. __[Tuples](#tuples)__
+8. __[None-ables](#none-ables-)__
+9. __[Pointers](#pointers-)__
 
 _[Types](#types)_
 
@@ -589,9 +590,13 @@ _[Built-in Types](#built-in-types)_
 
 _[Built-in Types](#built-in-types)_
 
+#### Tuples
+
+_[Built-in Types](#built-in-types)_
+
 #### None-ables (`?`)
 
-In Python, it's common to set things to `None` if you haven't set it yet. This works in dynamically typed languages, but Pylem is statically typed. You can set a type to `None` if its type is declared with a question mark `T?`. This must be checked for `None` before using.
+In Python, it's common to set things to `None` if you haven't set it yet. This works in dynamically typed languages, but Pylem is statically typed. To make this work, some values can be set to `None` if its type is declared with a question mark `T?`. This must be checked for `None` before using.
 
 ```py
 x: int? = get_number()
@@ -605,7 +610,7 @@ else:
 
 Internally, what's happening is that the value becomes a tagged union with 2 variants: *`Some` value* or `None`. *(See [`enum union`](#enum-union).)* When you enter a block where it's guaranteed not to be `None`, then it's automatically unwrapped inside that block.
 
-You can kind of think of it doing something like this under the hood:
+You can kind of think of it as doing something like this under the hood:
 
 ```py
 enum union OptionInt:
@@ -769,7 +774,7 @@ _[Custom Types](#custom-types)_
 
 #### `enum union`
 
-Unions can be tagged with an enum to create **tagged unions.** To do this, create an `enum` and then extend it with a `union`. Each member name in the union must match with each varient of the enum. If a variant has no data, assign its type as `void` or leave it with no type to automatically assign it as `void`. Instantiate it by passing in its tag first and then assign the member for that tag if it has data. The size of a tagged union is the size of its enum component and the size of its union component combined.
+Unions can be tagged with an enum to create **tagged unions.** To do this, create an `enum` and then extend it with a `union`. Each member name in the union must match with each varient of the enum. If a variant has no data, assign its type as `void`. Instantiate it by passing in its tag first and then assign the member for that tag if it has data. The size of a tagged union is the size of its enum component and the size of its union component combined.
 
 ```py
 enum PayloadTag:
@@ -784,7 +789,7 @@ union Payload(PayloadTag):
     Float: float
     Text: str
     Tuple: {val: int}
-    Empty
+    Empty: void
 
 tu = Payload(PayloadTag.Integer, Integer=1)
 tu = Payload(PayloadTag.Tuple, Tuple={val: 1})
@@ -807,7 +812,7 @@ match tu:
         print("Payload is empty")
 ```
 
-A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together to create a *true sum type* and will allow you to instantiate it with each member as a variant. 
+A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together to create a *true sum type* and will allow you to instantiate it with each member as a variant. Varients without types are empty and set to `void`.
 
 ```py
 enum union MyTaggedUnion:
