@@ -548,7 +548,7 @@ class BankAccount:
         self.balance += amount
 ```
 
-__Creating virtual interfaces:__ an interface is a class without any data. It works like `interface` or `trait` in other languages.
+__Interfaces:__ an interface is a class without any data. It works like `interface` or `trait` in other languages.
 
 ```py
 # Defines a contract (Works like Rust's `trait Renderable`)
@@ -566,7 +566,7 @@ class BankAccount(Renderable):
         return f"Account owner: {self.owner}, Balance: {self.balance}"
 ```
 
-__`__init__(mut self)`:__ When a type has one or more `__init__` methods defined, you can use that to create a type instead of the standard instantiation method. This can be overloaded to create multiple ways to initiate a type. The first argument `mut self` is an unset reference to the new object. If it's a struct, then all members need to be set. If it's an enum or union, then it must be set to one of its variants.
+__Constructors:__ When a type has one or more `__init__(mut self)` methods defined, you can use that to create the type instead of the standard instantiation method. This can be overloaded to create multiple ways to initiate a type. The first argument `mut self` is an unset reference to the new object. If it's a struct, then all members need to be set. If it's an enum or union, then it must be set to one of its variants.
 
 ```py
 class BankAccount:
