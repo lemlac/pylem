@@ -505,8 +505,8 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 
 ### Built-in Types
 
-1. __[Numbers](#numbers)__
-2. __[Booleans](#booleans)__
+1. __[Booleans](#booleans)__
+2. __[Numbers](#numbers)__
 3. __[Characters](#characters)__
 4. __[Strings](#strings)__
 5. __[Lists](#lists)__
@@ -516,11 +516,28 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 
 _[Types](#types)_
 
-#### Numbers
+#### Booleans
+
+`bool` is a built-in enum type with its only variants being `False` and `True`. 
+
+```py
+match value:
+    case True:
+        print("It's true!")
+    case False:
+        print("It's false!")
+```
+
+```py
+if value:
+    print("It's true!")
+else:
+    print("It's false!")
+```
 
 _[Built-in Types](#built-in-types)_
 
-#### Booleans
+#### Numbers
 
 _[Built-in Types](#built-in-types)_
 
@@ -541,6 +558,48 @@ _[Built-in Types](#built-in-types)_
 _[Built-in Types](#built-in-types)_
 
 #### None-ables (`?`)
+
+In Python, it's common to set things to `None` if you haven't set it yet. This works in dynamically typed languages, but Pylem is statically typed. You can set a type to `None` if its type is declared with a question mark `T?`. This must be checked for `None` before using.
+
+```py
+mut x: int? = get_number()
+
+if x != None:
+    # x is safe here
+    print(f"The number is {x}"
+else:
+    print("No number")
+```
+
+If an enum or tagged union is None-able, then `None` becomes one of its variants.
+
+```py
+answer: bool? = get_answer()
+
+match answer:
+    case True:
+        print("Yes")
+    case False:
+        print("No")
+    case None:
+        print("Maybe")
+```
+
+```py
+enum union Payload:
+    Integer: int
+    Float: float
+
+payload: Payload? = get_payload()
+
+match payload:
+    case Integer as val:
+        print(f"Got an integer: {val}")
+    case Float as val:
+        print(f"Got a float: {val}")
+    case None:
+        print("Payload is empty")
+```
 
 _[Built-in Types](#built-in-types)_
 
