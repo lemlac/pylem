@@ -562,11 +562,11 @@ _[Built-in Types](#built-in-types)_
 In Python, it's common to set things to `None` if you haven't set it yet. This works in dynamically typed languages, but Pylem is statically typed. You can set a type to `None` if its type is declared with a question mark `T?`. This must be checked for `None` before using.
 
 ```py
-mut x: int? = get_number()
+x: int? = get_number()
 
 if x != None:
     # x is safe here
-    print(f"The number is {x}"
+    print(f"The number is {x}")
 else:
     print("No number")
 ```
