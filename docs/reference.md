@@ -601,12 +601,16 @@ else:
     print("No number")
 ```
 
-Internally, what's happening is that the value becomes a tagged union with 2 variants: some value or `None`. When you enter a block where it's guaranteed to be not `None`, then it's automatically unwrapped inside that block.
+Internally, what's happening is that the value becomes a tagged union with 2 variants: *`Some` value* or `None`. *(See [`enum union`](#enum-union).)* When you enter a block where it's guaranteed not to be `None`, then it's automatically unwrapped inside that block.
 
 You can kind of think of it doing something like this under the hood:
 
 ```py
-x: Option[int] = get_number()
+enum union OptionInt:
+    Some: int
+    None
+
+x: OptionInt = get_number()
 
 match x:
     case Some as x_val:
@@ -732,7 +736,7 @@ _[Custom Types](#custom-types)_
 
 #### `union`
 
-**Untagged unions** – also called *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is ommited, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Instantiate a union by naming one of its members in the function call as opposed to naming every member like with structs.
+**Untagged unions** – sometimes known as *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is ommited, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Instantiate a union by naming one of its members in the function call as opposed to naming every member like with structs.
 
 ```py
 union SumUnion:
@@ -801,7 +805,7 @@ match tu:
         print("Payload is empty")
 ```
 
-A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together and will allow you to instantiate it with each member as a variant. 
+A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together to create a *true sum type* and will allow you to instantiate it with each member as a variant. 
 
 ```py
 enum union MyTaggedUnion:
