@@ -557,6 +557,8 @@ print_chr("c")   # OK
 print_chr("cd")  # Error!
 ```
 
+If an expression expects a `chr` type, then writing a string literal of 1 characters makes a `chr` without the need to convert it.
+
 Some expressions will return a `chr` like indexing or looping a string.
 
 ```py
