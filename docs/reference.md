@@ -448,7 +448,20 @@ match dir:
         print("Go right!")
 ```
 
-*For attaching data to enums, see [`union` + `enum`](#union--enum).*
+To attach data to an enum, use `enum union`:
+
+```py
+enum union MyTaggedUnion:
+    First
+    Second: int
+    Third: {val: int}
+
+a = MyTaggedUnion.First
+b = MyTaggedUnion.Second(2)
+c = MyTaggedUnion.Third(val=3)
+```
+
+*See [`enum union`](#enum-union) for more information.*
 
 #### `union`
 
