@@ -1020,7 +1020,7 @@ b = int(9.99)  # Result: 9
 c = complex(3)  # Result: (3+0j)
 ```
 
-__New Number Types__
+##### Sized Number Types
 
 In addition to Python's number types, Pylem includes size specific variants of integers (signed or unsigned) and floating-point numbers to give you more control.
 
@@ -1150,7 +1150,7 @@ _[Built-in Types](#built-in-types)_
 
 #### Arrays (`arr` / `list`)
 
-Array types are split between the familiar and dynamic lists from Python `list[T]` and the more low-level, static C-style arrays `arr[T, N]`. *(Skip to [Arrays](#static-arrays-arr) if you want to see the `arr` type unique to Pylem.)*
+Array types are split between the familiar and dynamic lists from Python `list[T]` and the more low-level, static C-style arrays `arr[T, N]`. *(Skip to [Static Arrays](#static-arrays-arr) if you want to see the `arr` type unique to Pylem.)*
 
 By default, arrays in Pylem are static `arr` type. To make a dynamic array, you must eplicitly declare a `list` type.
 
