@@ -661,6 +661,19 @@ _[Control Flow](#control-flow)_
 
 ### `try` / `except`
 
+```py
+try:
+    body
+except exc as var:
+    body
+except exc:
+    body
+except _:
+    body
+finally:
+    body
+```
+
 A `try`/`except` block is used to handle runtime errors so that your program does not crash when it encounters an issue.
 
 The `try` block contains the risky code, and the `except` block handles a specific error if it occurs.
