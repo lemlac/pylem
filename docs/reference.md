@@ -1707,7 +1707,7 @@ match payload:
         print("Payload is empty")
 ```
 
-A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together to create a *true sum type* and will allow you to instantiate it with each member as a variant. Varients without data are empty and set to `void`.
+A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together to create a **true sum type** and will allow you to instantiate it with each member as a variant. Varients without data are empty and set to `void`.
 
 ```py
 enum union MyTaggedUnion:
