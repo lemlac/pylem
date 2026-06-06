@@ -713,9 +713,90 @@ finally:
 
 #### `raise`
 
+The `raise` keyword manually triggers an exception to stop program execution when a specific condition occurs. You can use raise alongside standard built-in exceptions (like `ValueError` or `TypeError`) and include a descriptive error message.
+
+```py
+def set_age(age):
+    if age < 0:
+        # Trigger an error for invalid data
+        raise ValueError("Age cannot be negative!")
+    print(f"Age successfully set to {age}")
+# This will trigger the exception
+set_age(-5)
+```
+
+Output:
+
+```
+Traceback (most recent call last):
+  File "script.pyl", line 7, in <module>
+    set_age(-5)
+  File "script.pyl", line 4, in <module>
+    raise ValueError("Age cannot be negative!")
+ValueError: Age cannot be negative!
+```
+
+Sometimes you want to catch an error to log it or run clean-up code, but still let the error pass up to the main program. Calling `raise` without arguments re-throws the current active exception.
+
+```py
+def calculate_payout(amount, people):
+    try:
+        return amount / people
+    except ZeroDivisionError:
+        print("Log: Attempted to divide by zero group members.")
+        raise # Re-raises the ZeroDivisionError
+try:
+    calculate_payout(100, 0)
+except ZeroDivisionError:
+    print("Main Program: Cannot split money among 0 people.")
+```
+
+You can define your own specialized error types by creating a class that inherits from the base `Exception` class.
+
+```py
+# Define the custom exceptionclass InsufficientFundsError(Exception):
+    pass
+def withdraw_money(balance, amount):
+    if amount > balance:
+        raise InsufficientFundsError(f"You tried to withdraw ${amount} but only have ${balance}.")
+    return balance - amount
+# Test the custom exceptiontry:
+    withdraw_money(50, 100)
+except InsufficientFundsError as error:
+    print(f"Transaction Denied: {error}")
+```
+
 _[Control Flow](#control-flow)_
 
 ### `return`
+
+The `return` statement is used inside a function to exit it and pass a value back to the place where the function was called.
+
+```py
+def add_numbers(a, b):
+    return a + b  # Sends the sum back to the caller
+# Call the function and store the result in a variabletotal = add_numbers(5, 3)
+
+print(total)  # Output: 8
+```
+
+__Key Rules of `return`:__
+
+* __Exits immediately:__ Any code written after the return statement inside the same block is completely ignored.
+* __Returns `void` by default:__ Unlike Python, void functions in Pylem do not return `None` by default and cannot be used in an expression.
+
+You can return more than one value by separating them with commas. They'll be grouped into a tuple, which you can easily unpack:
+
+```py
+def get_user_profile():
+    name = "Alice"
+    age = 30
+    return name, age  # Returns a tuple: ("Alice", 30)
+# Unpack the two returned values into separate variablesuser_name, user_age = get_user_profile()
+
+print(user_name)  # Output: Alice
+print(user_age)   # Output: 30
+```
 
 _[Control Flow](#control-flow)_
 
@@ -1324,5 +1405,6 @@ There are also new reserved words unique to Pylem:
 *This document captures the current state of the Pylem design. The language is still evolving.*
 
 _[Top](#pylem-reference)_
+
 
 
