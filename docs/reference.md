@@ -735,7 +735,7 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 2. __[Numbers](#numbers)__
 3. __[Characters](#characters-chr)__
 4. __[Strings](#strings-str)__
-5. __[Lists](#lists-list)__
+5. __[Arrays / Lists](#arrays-arr--lists-list)__
 6. __[Dictionaries](#dictionaries-dict)__
 7. __[Tuples](#tuples)__
 8. __[None-ables](#none-ables-)__
@@ -804,9 +804,150 @@ _[Built-in Types](#built-in-types)_
 
 #### Strings (`str`)
 
+A string is a sequence of characters enclosed in single (`'`), double (`"`), or triple quotes (`"""`).
+
+You can use single or double quotes interchangeably to define a standard text string.
+
+* Single quotes: `message = 'Hello, World!'`
+* Double quotes: `name = "Pylem programming"`
+* Quotes inside quotes: Use double quotes if you need a literal single quote inside, or vice versa.
+
+```
+quote = "It's a beautiful day"  # No escaping needed
+```
+
+Python offers specialized string types for multiline layouts, formatting, or working with file paths.
+
+* Multiline strings: Created using three single or double quotes, preserving line breaks.
+
+```py
+multiline = """This is a string
+that spans multiple
+lines."""
+```
+
+* F-Strings (Formatted strings): Prefixed with `f` to embed variables directly inside the text.
+
+```py
+age = 25status = f"I am {age} years old."
+```
+
+* Raw strings: Prefixed with `r` to treat backslashes as literal characters instead of escape characters (great for Windows file paths).
+
+```py
+path = r"C:\Users\Name\Documents"
+```
+
+Strings are immutable, meaning you cannot change them in place, but you can build new ones through operations.
+
+* Concatenation: Combining strings using the `+` operator.
+
+```py
+full_name = "Guido" + " " + "van Rossum"
+```
+
+* Slicing: Extracting specific parts of a string using index brackets [start:end].
+
+```py
+word = "Anaconda"
+print(word[0:3])  # Outputs: Ana
+```
+
 _[Built-in Types](#built-in-types)_
 
-#### Lists (`list`)
+#### Arrays (`arr`) / Lists (`list`)
+
+Array types are split between the familiar and dynamic lists from Python `list[T]` and the more low-level, static C-style arrays `arr[T, N]`. *(Skip to [Arrays](#arrays-arr) if you want to see the `arr` type unique to Pylem.)*
+
+##### Lists (`list`)
+
+Lists are created by placing items inside square brackets `[]`, separated by commas.
+
+* String List: Stores a collection of text values.
+
+```py
+fruits = ["apple", "banana", "cherry"]
+```
+
+* Integer List: Stores a series of whole numbers.
+
+```py
+numbers = [10, 20, 30, 40]
+```
+
+* Empty List: An initialized list with no elements inside yet.
+
+```py
+empty_list = []
+```
+
+* Nested List (2D List): A list that contains other lists inside it, often used for grids or tables.
+
+```py
+matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+```
+
+* List of Dictionaries: Frequently used to store structured data or API responses.
+
+```py
+users = [
+    {"name": "Bob", "age": 30},
+    {"name": "Charlie", "age": 25}
+]
+```
+
+There are several built-in methods to change list content dynamically like in Python:
+
+```py
+# Start with a listinventory = ["laptop", "mouse"]
+# Add an item to the end
+inventory.append("keyboard")  # ['laptop', 'mouse', 'keyboard']
+# Insert an item at a specific index
+inventory.insert(1, "monitor")  # ['laptop', 'monitor', 'mouse', 'keyboard']
+# Remove an item by its name
+inventory.remove("mouse")  # ['laptop', 'monitor', 'keyboard']
+# Remove and return the last itemlast_item = inventory.pop()  # 'keyboard' (inventory is now ['laptop', 'monitor'])
+```
+
+##### Arrays (`arr`)
+
+Arrays don't have as many bells and whistles as lists. They're designed to be a static and low-level data type for where performance is critical.
+
+Arrays are declared like lists but in contexts where an `arr` type is expected, similar to `chr`. You can also use the constructor `arr()` on an array literal which will compile to a static array with no overhead or casting.
+
+```py
+chr_arr: arr[chr, 5] = ['h',"e",'l',"l",'o']
+int_arr = arr[int, 4]([1, 2, 3, 4])
+float_arr = arr([5.0, 5.1, 5.2])
+unallocated_arr = arr[int, 5]()
+```
+
+Casting between an array and a list is also possible, although it'll come with overhead cost at run-time. If the list is smaller than the array, then the rest will be allocated with the type's default value.
+
+```py
+l: list[int] = [1, 2, 3, 4, 5]
+a: arr[int, 5] = arr(list)
+```
+
+Items are accessed using zero-based indexing (the first item is 0). Indexing an array or list will return a None-able type `T?`. *(See [None-ables](#none-ables-).)* It needs to be checked before using. Indexing out of bounds won't crash immediately, but it will crash if you try to unwrap something that's `None`. 
+
+```py
+colors = ["red", "green", "blue"]
+
+mut item: string?
+
+item = colors[0]
+if item != None:
+    print(item)   # Outputs: red
+
+item = colors[-1]
+if item != None:
+    print(item)  # Outputs: blue (negative indexing counts from the back)
+```
 
 _[Built-in Types](#built-in-types)_
 
@@ -848,6 +989,16 @@ match x:
         print(f"The number is {x_val}")
     case None:
         print("No number")
+```
+
+When you use a type `T?` where a type `T` is expected, it will be unwrapped automatically which can raise an exception. This mimics trying to use `None` in Python on something that doesn't accept `None`.
+
+```py
+try:
+    i: int = get_number() + 1  # Might raise if None.
+    print(f"Result: {i)}")
+except TypeError as e:
+    print(f"Error: {e}"))
 ```
 
 If an enum or tagged union is None-able, then `None` becomes one of its variants.
@@ -1147,4 +1298,5 @@ There are also new reserved words unique to Pylem:
 *This document captures the current state of the Pylem design. The language is still evolving.*
 
 _[Top](#pylem-reference)_
+
 
