@@ -50,7 +50,7 @@ class Stack[T]:
         self.items.append(item)
     
     def pop(mut self) -> T?:
-        if self.items:
+        if len(self.items) > 0:
             return self.items.pop()
         return None
 
