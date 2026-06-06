@@ -1539,6 +1539,8 @@ def print_dyn(d: dyn, prefix=""):
             print(f"{prefix}None")
 ```
 
+Since `dyn` already has `None` as one of its variants, its question type is redundant. If you type something as `dyn?`, the question mark gets absorbed and ignored.
+
 _[Built-in Types](#built-in-types)_
 
 ### Custom Types
