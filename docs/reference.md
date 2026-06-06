@@ -477,9 +477,78 @@ _[Control Flow](#control-flow)_
 
 ### `for` / `in`
 
+Iterates through a list of items:
+
+```py
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit)
+```
+
+*Output:*
+
+```
+apple
+banana
+cherry
+```
+
+* The Iterable Sequence: `fruits` is the list containing the items you want to step through.
+* The Loop Variable: `fruit` acts as a placeholder that automatically takes the value of the current item during each iteration.
+* The Colon (`:`): Signifies the start of the loop body.
+* Indentation: The indented code under the for statement defines what actions execute on every item.
+
+If you need to repeat an action a specific number of times, pair the loop with the built-in Python `range()` function: 
+
+```py
+# Generates numbers from 0 to 4
+for i in range(5):
+    print("Iteration:", i)
+```
+
+Strings (`str`) are iterable collections of single characters (`chr`):
+
+```py
+for letter in "Pylem":
+    print(str(letter))
+```
+
+Use `enumerate()` if you need to track the position index of each item as you loop:
+
+```py
+colors = ["red", "green", "blue"]
+for index, color in enumerate(colors):
+    print(f"Index {index} is {color}")
+```
+
 _[Control Flow](#control-flow)_
 
 ### `while`
+
+A `while` loop repeats a block of code as long as a specific condition remains true.
+
+```py
+# Initialize the counter variable
+mut count = 1
+# The loop runs as long as count is less than or equal to 5
+while count <= 5:
+    print(f"The count is: {count}")
+    # Increment the counter to eventually end the loop
+    count += 1
+
+print("Loop finished!")
+```
+
+*Output:*
+
+```
+The count is: 1
+The count is: 2
+The count is: 3
+The count is: 4
+The count is: 5
+Loop finished!
+```
 
 _[Control Flow](#control-flow)_
 
@@ -783,7 +852,7 @@ print(total)  # Output: 8
 __Key Rules of `return`:__
 
 * __Exits immediately:__ Any code written after the return statement inside the same block is completely ignored.
-* __Returns `void` by default:__ Unlike Python, void functions in Pylem do not return `None` by default and cannot be used in an expression.
+* __Returns `void` by default:__ Unlike Python, void functions in Pylem do not return `None` by default and cannot be used within an expression. They must be in their own expression by themselves.
 
 You can return more than one value by separating them with commas. They'll be grouped into a tuple, which you can easily unpack:
 
@@ -940,32 +1009,29 @@ _[Built-in Types](#built-in-types)_
 
 Array types are split between the familiar and dynamic lists from Python `list[T]` and the more low-level, static C-style arrays `arr[T, N]`. *(Skip to [Arrays](#static-arrays-arr) if you want to see the `arr` type unique to Pylem.)*
 
+By default, arrays in Pylem are static `arr` type. To make a dynamic array, you must eplicitly declare a `list` type.
+
 ##### Lists (`list`)
 
-Lists are created by placing items inside square brackets `[]`, separated by commas.
-
-* String List: Stores a collection of text values.
+Lists are created by placing items inside square brackets `[]` in a context where a `list` is expected, separated by commas. This is similar to how `chr` characters are differentiated from `str` strings. You can either declare a type as `list` or cast an array with the `list()` constructor.
 
 ```py
-fruits = ["apple", "banana", "cherry"]
-```
-
-* Integer List: Stores a series of whole numbers.
-
-```py
-numbers = [10, 20, 30, 40]
+fruits: list[str] = ["apple", "banana", "cherry"]
+prices = list[float]([1.99, 0.98, 1.45])
+numbers = list([10, 20, 30, 40])
 ```
 
 * Empty List: An initialized list with no elements inside yet.
 
 ```py
-empty_list = []
+empty_list: list = []
+empty_list = list()
 ```
 
 * Nested List (2D List): A list that contains other lists inside it, often used for grids or tables.
 
 ```py
-matrix = [
+matrix: list[list[int]] = [
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, 9]
@@ -975,9 +1041,9 @@ matrix = [
 * List of Dictionaries: Frequently used to store structured data or API responses.
 
 ```py
-users = [
-    {"name": "Bob", "age": 30},
-    {"name": "Charlie", "age": 25}
+users: list[dict[str, str]] = [
+    {"name": "Bob", "age": "30"},
+    {"name": "Charlie", "age": "25"}
 ]
 ```
 
@@ -994,17 +1060,29 @@ inventory.remove("mouse")  # ['laptop', 'monitor', 'keyboard']
 # Remove and return the last itemlast_item = inventory.pop()  # 'keyboard' (inventory is now ['laptop', 'monitor'])
 ```
 
+Items are accessed using zero-based indexing (the first item is 0). Indexing a `list` out of bounds will still throw an `IndexError` like in Python, 
+
+```py
+colors: list = ["red", "green", "blue"]
+
+print(colors[0])   # Outputs: red
+print(colors[-1])  # Outputs: blue (negative indexing counts from the back)
+print(colors[3])   # IndexError
+print(colors[-4])  # IndexError
+```
+
 ##### Static Arrays (`arr`)
 
 Static arrays don't have as many bells and whistles as lists. They're designed to be a low-level data type for where performance is critical.
 
-Static arrays are declared like lists but in contexts where an `arr` type is expected, similar to `chr`. You can also use the constructor `arr()` on an array literal which will compile to a static array with no overhead or casting.
+Static arrays are declared like lists but in contexts where an `arr` type is expected, similar to `chr`. You can also use the constructor `arr()` on an array literal which will compile to a static array with no overhead or casting. By default, an array literal `[]` will be compiled as a static array if there is no context.
 
 ```py
 chr_arr: arr[chr, 5] = ['h',"e",'l',"l",'o']
 int_arr = arr[int, 4]([1, 2, 3, 4])
 float_arr = arr([5.0, 5.1, 5.2])
 unallocated_arr = arr[int, 5]()
+int_arr = [1, 2, 3, 4]    # `arr` by default
 ```
 
 Casting between an array and a list is also possible, although it'll come with overhead cost at run-time. If the list is smaller than the array, then the rest will be allocated with the type's default value.
@@ -1014,7 +1092,7 @@ l: list[int] = [1, 2, 3, 4, 5]
 a: arr[int, 5] = arr(list)
 ```
 
-Items are accessed using zero-based indexing (the first item is 0). Indexing a `list` out of bounds will still throw an `IndexError`, but `arr` arrays won't. Indexing an `arr` will return a None-able type `T?`. *(See [None-ables](#none-ables-).)* It needs to be checked before using. Indexing an `arr` out of bounds won't crash immediately, but it will crash if you try to unwrap something that's `None`. The reason is that `arr` arrays are pointers, so they use the same mechanic as dereferencing a pointer. *(See [Pointers](#pointers-ptr).)*
+Items are accessed using zero-based indexing (the first item is 0). Unlike lists, indexing an `arr` out of bounds won't crash immediately. Instead, it will return a None-able type `T?`. *(See [None-ables](#none-ables-).)* It needs to be checked before using because it will throw an error if you try to unwrap something that's `None`. 
 
 ```py
 colors = ["red", "green", "blue"]
@@ -1027,8 +1105,14 @@ if item != None:
 
 item = colors[-1]
 if item != None:
+    print(item)  # Won't print because arrays can't be reversed index with negative numbers.
+
+item = colors[len(colors)-1]  # Do this instead
+if item != None:
     print(item)  # Outputs: blue (negative indexing counts from the back)
 ```
+
+`arr` arrays are pointers, so they use the same mechanic as dereferencing a pointer. *(See [Pointers](#pointers-ptr).)*
 
 _[Built-in Types](#built-in-types)_
 
@@ -1530,6 +1614,8 @@ There are also new reserved words unique to Pylem:
 *This document captures the current state of the Pylem design. The language is still evolving.*
 
 _[Top](#pylem-reference)_
+
+
 
 
 
