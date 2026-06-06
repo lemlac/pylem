@@ -897,7 +897,7 @@ You can use single or double quotes interchangeably to define a standard text st
 quote = "It's a beautiful day"  # No escaping needed
 ```
 
-Python offers specialized string types for multiline layouts, formatting, or working with file paths.
+There's also a specialized string types for multiline layouts, formatting, or working with file paths.
 
 * Multiline strings: Created using three single or double quotes, preserving line breaks.
 
@@ -1034,9 +1034,134 @@ _[Built-in Types](#built-in-types)_
 
 #### Dictionaries (`dict`)
 
+A dictionary `dict[T, U]` is a built-in data structure used to store data in `key:value` pairs, where each unique key maps to a specific value. You can define a dictionary by placing your `key:value` pairs inside curly braces `{}` and separating them with commas.
+
+```py
+# A dictionary representing user profile data
+user_profile: dict[str, str] = {
+    "username": "coder123",
+    "email": "coder123@example.com",
+    "login_count": "5",
+    "is_active": "True"
+}
+
+print(user_profile)
+# Output: {'username': 'coder123', 'email': 'coder123@example.com', 'login_count': '5', 'is_active': 'True'}
+```
+
+You can look up a value by passing its matching key inside square brackets `[]`, or by safely using the `.get()` method to avoid errors if the key does not exist.
+
+```py
+# 1. Standard square bracket look-up
+print(user_profile["username"])  # Output: coder123
+# 2. Safe look-up using .get()
+print(user_profile.get("is_active"))  # Output: True
+# Using .get() with a fallback default value for missing keys
+print(user_profile.get("theme", "Dark Mode"))  # Output: Dark Mode
+```
+
+Dictionaries are mutable when declared with `mut`, meaning you can update existing values or add completely new pairs on the fly.
+
+```py
+mut user_profile = {
+    "username": "coder123",
+    "email": "coder123@example.com",
+    "login_count": "5",
+    "is_active": "True"
+}
+
+# Updating an existing value
+user_profile["login_count"] = "6"
+# Adding a brand new key-value pair
+user_profile["country"] = "Canada"
+
+print(user_profile)
+# Output: {'username': 'coder123', 'email': 'coder123@example.com', 'login_count': '6', 'is_active': 'True', 'country': 'Canada'}
+```
+
+You can remove specific items on mutable dictionaries using the `del` keyword or the `.pop()` method (which also returns the removed value).
+
+```py
+# Using del to remove an itemdel user_profile["is_active"]
+# Using .pop() to remove an item and save its value
+removed_email = user_profile.pop("email")
+
+print(user_profile)
+# Output: {'username': 'coder123', 'login_count': '6', 'country': 'Canada'}
+```
+
+You can loop through just the keys, just the values, or both simultaneously using `.items()`.
+
+```py
+inventory: dict[str, int] = {"apples": 10, "bananas": 4, "oranges": 7}
+# Looping through keys and values together
+for fruit, quantity in inventory.items():
+    print(f"We have {quantity} {fruit}.")
+# Output:
+# We have 10 apples.
+# We have 4 bananas.
+# We have 7 oranges.
+```
+
 _[Built-in Types](#built-in-types)_
 
 #### Tuples
+
+A tuple is an ordered collection of items written with parentheses `()`. You can store multiple data types together, or even create a tuple with just a single item (which requires a trailing comma).
+
+```py
+# A standard tuple of strings
+fruits = ("apple", "banana", "cherry")
+# A mixed data type tuple (integer, string, float, boolean)
+mixed_tuple = (10, "Pylem", 3.14, True)
+# A single-item tuple (requires a trailing comma)
+single_item = ("solo",)
+```
+
+Tuples are indexed starting at `[0]`. You can extract specific items or sections using slicing:
+
+```py
+coordinates = (4, 10, 18)
+
+print(coordinates[0])   # Output: 4
+print(coordinates[-1])  # Output: 18 (gets the last item)
+print(coordinates[0:2]) # Output: (4, 10)
+```
+
+Tuples are immutable by default like they are in Python. However, they can be made mutable with `mut`, but their length can't change. They're like a `struct` but accessed with array indexing `[0]`. The number passed to the square brackets must be known at compile time, such as a constant or number literal.
+
+```py
+colors = ("red", "green", "blue")
+# Trying to change an item will throw an error
+colors[0] = "yellow" # TypeError: 'tuple' object does not support item assignment
+```
+
+```py
+mut colors = ("red", "green", "blue")
+colors[0] = "yellow" # OK
+```
+
+Because immutable tuples cannot be altered, developers use them for data that must remain constant throughout a program.
+
+* Fixed Coordinates / Points: Keeping X and Y values locked together.
+
+```py
+location = (40.7128, -74.0060) # Latitude and Longitude
+```
+
+* Returning Multiple Values from Functions:
+
+```py
+def get_user():
+    return ("Alice", 25) # Returns a tuple
+name, age = get_user() # Unpacks the tuple into variables
+```
+
+* Dictionary Keys: Unlike lists, tuples can be used as keys in a dictionary because they are hashable.
+
+```py
+connections = {("New York", "London"): 5500}
+```
 
 _[Built-in Types](#built-in-types)_
 
@@ -1405,6 +1530,8 @@ There are also new reserved words unique to Pylem:
 *This document captures the current state of the Pylem design. The language is still evolving.*
 
 _[Top](#pylem-reference)_
+
+
 
 
 
