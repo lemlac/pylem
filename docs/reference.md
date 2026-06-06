@@ -946,6 +946,7 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 7. __[Tuples](#tuples)__
 8. __[None-ables](#none-ables-)__
 9. __[Pointers](#pointers-ptr)__
+10. __[Dynamic Type](#dynamic-type-dyn)__
 
 _[Types](#types)_
 
@@ -1412,15 +1413,76 @@ check_ptr(ref(i))
 
 _[Built-in Types](#built-in-types)_
 
+#### Dynamic Type (`dyn`)
+
+Pylem is statically typed, but Python is famous for being dynamically typed. Sometimes, it's hard to go from dynamic to static.
+
+The dynamic type `dyn` is an API to access Python's dynamic typing from within Pylem. This works as a tagged union where each tag is a basic type: `bool`, `int`, `float`, `long`, `chr`, `str`, `list`, `dict`, `tuple`, and `None`. If the type has a subtype, then it's also set to `dyn`. 
+
+```py
+def print_dyn(d: dyn, prefix=""):
+    match d:
+        case bool as x if x:
+            print(f"{prefix}bool: True")
+        case bool:
+            print("f"{prefix}bool: False")
+        case int as i:
+            print(f"{prefix}int: {i}")
+        case float as f:
+            print(f"{prefix}float: {f}")
+        case long as l:
+            print(f"{prefix}long: {l}")
+        case chr as c:
+            print(f"{prefix}chr: {c}")
+        case str as s:
+            print(f"{prefix}str: {s}")
+        case list as l:
+            print("{prefix}list:")
+            next_prefix = "* " if len(prefix) == 0 else "  " + prefix
+            for item in l:
+                print_dyn(item, next_prefix)
+        cass dict as d:
+            print("{prefix}dict:")
+            next_prefix = "* " if len(prefix) == 0 else "  " + prefix
+            key_prefix = next_prefix + "(key) "
+            val_prefix = next_prefix + "(val) "
+            for key, val in d.items():
+                print_dyn(key, key_prefix)
+                print_dyn(val, val_prefix)
+        case tuple as t:
+            print("{prefix}tup:")
+            next_prefix = "* " if len(prefix) == 0 else "  " + prefix
+            for item in t:
+                print_dyn(item, next_prefix)
+        case None:
+            print(f"{prefix}None")
+```
+
+_[Built-in Types](#built-in-types)_
+
 ### Custom Types
 
-1. __[`struct`](#struct)__ — *Structured Data*
-2. __[`enum`](#enum)__ — *Enumerated Data*
-3. __[`union`](#union)__ — *Untagged Unions*
-4. __[`enum union`](#enum-union)__ — *Tagged Unions*
-5. __[`class`](#class)__ — *Virtual Interfaces*
+1. __[`type`](#type)__ — *Aliases*
+2. __[`struct`](#struct)__ — *Structured Data*
+3. __[`enum`](#enum)__ — *Enumerated Data*
+4. __[`union`](#union)__ — *Untagged Unions*
+5. __[`enum union`](#enum-union)__ — *Tagged Unions*
+6. __[`class`](#class)__ — *Virtual Interfaces*
 
 _[Types](#types)_
+
+#### `type`
+
+Creates an alias to another type.
+
+```
+# Creating a type alias
+type Point2D = tuple[float, float]
+
+# Using it in a function signature
+def move_point(point: Point2D) -> Point2D:
+    return (point[0] + 1.0, point[1] + 1.0)
+```
 
 #### `struct`
 
@@ -1666,7 +1728,7 @@ The 35 reserved words in Python are also reserved in Pylem:
 
 There are also new reserved words unique to Pylem:
 
-- [`block`](#block), [`case`](#match--case), [`const`](#constants), [`enum`](#enum), [`fallthrough`](#fallthrough), [`match`](#match--case), [`mut`](#mutability), [`struct`](#struct), [`union`](#union)
+- [`block`](#block), [`case`](#match--case), [`const`](#constants), [`enum`](#enum), [`fallthrough`](#fallthrough), [`match`](#match--case), [`mut`](#mutability), [`struct`](#struct), [`type`](#type), [`union`](#union)
 
 ---
 
