@@ -973,6 +973,87 @@ _[Built-in Types](#built-in-types)_
 
 #### Numbers
 
+The three basic numbers in Python are also available in Pylem: integers (`int`), floating-point numbers (`float`), and complex numbers (`complex`). Variables automatically take on these types when you assign a numeric value to them. 
+
+| Type | Description | Code Example |
+|:---|:---|:---|
+| `int` | Positive or negative whole numbers without decimals. | `x = 42` |
+| `float` | Real numbers containing one or more decimals or exponential scientific notation. | `y = -3.14` |
+| `complex` | Numbers written with a real part and an imaginary part denoted by a `j`. | `z = 2 + 3j` |
+
+You can use the built-in `type()` function to verify the data type of any variable:
+
+```py
+# --- Integers (int) ---
+positive_int = 105
+negative_int = -23
+large_int = 1_000_000  # You can use underscores for readability
+
+print(type(positive_int))  # Output: <class 'int'>
+
+# --- Floating-point numbers (float) ---
+simple_float = 3.14
+negative_float = -0.005
+scientific_float = 2.5e3  # Equivalent to 2500.0 (2.5 * 10^3)
+
+print(type(simple_float))  # Output: <class 'float'>
+
+# --- Complex Numbers (complex) ---
+complex_num = 4 + 5j
+pure_imaginary = 2j
+
+print(type(complex_num))  # Output: <class 'complex'>
+print(complex_num.real)  # Output: 4.0
+print(complex_num.imag)  # Output: 5.0
+```
+
+You can convert from one number type to another using the `int()`, `float()`, and `complex()` constructor functions:
+
+```py
+# Convert int to float
+a = float(5)  # Result: 5.0
+# Convert float to int (this rounds down toward zero)
+b = int(9.99)  # Result: 9
+# Convert int to complex
+c = complex(3)  # Result: (3+0j)
+```
+
+__New Number Types__
+
+In addition to Python's number types, Pylem includes size specific variants of integers (signed or unsigned) and floating-point numbers to give you more control.
+
+| Category | Available Types | Description |
+|:---|:---|:---|
+| Signed Integers | `i8`, `i16`, `i32`, `i64`, `i128`, `isize` | Can be positive or negative |
+| Unsigned Integers | `u8`, `u16`, `u32`, `u64`, `u128`, `usize` | Only positive values or zero |
+| Floating-Point | `f32`, `f64` | Numbers with decimal parts |
+
+The `isize` and `usize` types depend entirely on your computer's architecture (e.g., 64-bit on a 64-bit system) and are primarily used to index collections.
+
+You can strictly declare your variable type using a colon (`:`).
+
+```py
+small_pos_number: u8 = 255        # 8-bit unsigned integer
+negative_number: i16 = -32000     # 16-bit signed integer
+high_precision: f32 = 2.71828     # 32-bit single-precision float
+```
+
+The type can be appended directly to the literal value as a suffix. You can also inject underscores `_` into long numbers to improve scannability without breaking your code.
+
+```py
+byte_value = 57u8                 # Explicitly a u8 literal
+big_million = 1_000_000_i64       # Separated for clarity, type i64
+float_suffix = 4.5f32             # Explicitly an f32 literal
+```
+
+You can represent integers using binary, octal, or hexadecimal notation via distinct prefixes. 
+
+```py
+hex_val = 0xff                    # Hexadecimal (Base 16) = 255
+octal_val = 0o77                  # Octal (Base 8) = 63
+binary_val = 0b1111_0000          # Binary (Base 2) = 240
+```
+
 _[Built-in Types](#built-in-types)_
 
 #### Characters (`chr`)
@@ -1475,7 +1556,7 @@ _[Types](#types)_
 
 Creates an alias to another type.
 
-```
+```py
 # Creating a type alias
 type Point2D = tuple[float, float]
 
