@@ -41,7 +41,8 @@ print(counter)  # 1
 ```py
 struct Stack[T]:
     items: list[T]
-    
+
+class Stack[T]:
     def __init__(mut self):
         self.items = []
     
