@@ -1150,11 +1150,11 @@ _[Built-in Types](#built-in-types)_
 
 #### Arrays (`arr` / `list`)
 
-Array types are split between the familiar and dynamic lists from Python `list[T]` and the more low-level, static C-style arrays `arr[T, N]`. *(Skip to [Static Arrays](#static-arrays-arr) if you want to see the `arr` type unique to Pylem.)*
+Array types are split between the familiar and dynamic lists from Python `list[T]` and the more low-level, static C-style arrays `arr[T, N]`. *(Skip to [`arr`](#arr) if you want to see the type unique to Pylem.)*
 
 By default, arrays in Pylem are static `arr` type. To make a dynamic array, you must eplicitly declare a `list` type.
 
-##### Lists (`list`)
+##### `list`
 
 Lists are created by placing items inside square brackets `[]` in a context where a `list` is expected, separated by commas. This is similar to how `chr` characters are differentiated from `str` strings. You can either declare a type as `list` or cast an array with the `list()` constructor.
 
@@ -1214,7 +1214,7 @@ print(colors[3])   # IndexError
 print(colors[-4])  # IndexError
 ```
 
-##### Static Arrays (`arr`)
+##### `arr`
 
 Static arrays don't have as many bells and whistles as lists. They're designed to be a low-level data type for where performance is critical.
 
