@@ -137,6 +137,8 @@ calculate_and_report(
 9. __[Advanced](#advanced)__
 10. __[Reserved Words](#reserved-words)__
 
+_[Top](#pylem-reference)_
+
 ---
 
 ## Basics
@@ -1144,4 +1146,5 @@ There are also new reserved words unique to Pylem:
 
 *This document captures the current state of the Pylem design. The language is still evolving.*
 
+_[Top](#pylem-reference)_
 
