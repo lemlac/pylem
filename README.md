@@ -1,6 +1,6 @@
 # Pylem
 
-**The primordial Python** — A Python-like programming language that bridges rapid development and high-performance systems code.
+**The primordial Python** — A Python-like programming language that bridges rapid development and high-performance systems code. See the [reference](docs/reference.md) doc for details.
 
 ## Why Pylem?
 
