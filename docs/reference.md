@@ -670,6 +670,8 @@ except exc:
     body
 except _:
     body
+else:
+    body
 finally:
     body
 ```
