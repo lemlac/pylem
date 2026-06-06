@@ -391,10 +391,10 @@ MAX(7, 3)     # Result: 7
 2. __[`if`/`elif`/`else`](#if--elif--else)__
 3. __[`for`/`in`](#for--in)__
 4. __[`while`](#while)__
+5. __[`break`/`continue`](#break--continue)__
 6. __[`match`/`case`](#match--case)__
 7. __[`try`/`except`](#try--except)__
 8. __[`return`](#return)__
-9. __[`raise`](#raise)__
 
 [TOC](#table-of-contents)
 
@@ -445,7 +445,7 @@ else:
 
 expr if cond else expr
 
-expr if cond else expr if cond else expr
+expr if cond else expr if cond else ...
 ```
 
 Basic Boolean branching.
@@ -481,19 +481,224 @@ _[Control Flow](#control-flow)_
 
 _[Control Flow](#control-flow)_
 
+#### `break` / `continue`
+
+Control the iteration of a loop
+
+```py
+# Stopping a search when an item is found
+fruits = ["apple", "banana", "cherry", "date"]
+
+for fruit in fruits:
+    if fruit == "cherry":
+        print("Found it!")
+        break  # Completely stops the loop
+    print(f"Checking {fruit}...")
+
+print("Loop finished.")
+```
+
+```py
+# Skipping specific numbers in a sequence
+for num in range(1, 6):
+    if num == 3:
+        continue  # Skips the rest of this iteration
+    print(f"Processing number {num}")
+
+print("Loop finished.")
+```
+
+```py
+# Simulating a user login or command prompt
+while True:
+    user_input = input("Enter 'quit' to exit: ")
+    if user_input.lower() == 'quit':
+        print("Exiting program.")
+        break  # Stops the infinite loop immediately
+    print(f"You typed: {user_input}")
+
+print("Loop finished.")
+```
+
+```py
+# Printing odd numbers only
+mut count = 0
+
+while count < 5:
+    count += 1  # Increment happens BEFORE continue
+    if count == 3:
+        continue  # Skips printing the number 3
+    print(f"Count is: {count}")
+
+print("Loop finished.")
+```
+
+_Output:_
+
+```
+Count is: 1
+Count is: 2
+Count is: 4
+Count is: 5
+Loop finished.
+```
+
+
+Both accept an optional label to target an outer block
+
+```py
+block loop1
+for i in range(0, 3):
+    for j in range(0, 3):
+        if i == 1 and j == 1:
+            # Skip the rest of the inner loop and jump to the next iteration of loop1
+            continue loop1
+        print(f"i = {i}, j = {j}")
+```
+
+```py
+mut x: int
+block label:
+    if cond then
+        x = 5
+        break block
+    x = 4
+
+print("{x}")     # Prints either "4" or "5"
+```
+
+_[Control Flow](#control-flow)_
+
 ### `match` / `case`
+
+```py
+match expr:
+    case ptrn as var:
+        body
+    case ptrn:
+        body
+    case _:
+        body
+```
+
+The `match`/`case` statement acts like a more powerful version of a traditional `switch`/`case` statement found in other languages. It allows you to match values, unpack structures, and filter patterns cleanly without writing long `if`/`elif`/`else` blocks.
+
+This example checks the value of `status_code` and executes the code block under the first matching case. The underscore (`_`) acts as a wildcard *(or else)* to handle any unmatched cases.
+
+```py
+def check_status(status_code):
+    match status_code:
+        case 200:
+            return "Success"
+        case 404:
+            return "Not Found"
+        case 500:
+            return "Server Error"
+        case _:  # Wildcard / Default fallback
+            return "Unknown Status"
+
+print(check_status(200))  # Output: Success
+print(check_status(999))  # Output: Unknown Status
+```
+
+You can use the pipe symbol (`|`) to match multiple conditions inside a single case statement.
+
+```py
+enum Role:
+    Admin
+    Manager
+    Guest
+    User
+    Subscriber
+    Billing
+    Support
+
+def get_user_role(role: Role):
+    match role:
+        case Admin | Manager:  # Matches either admin OR manager
+            return "Full Access Granted"
+        case Support:
+            return "Limited Access Granted"
+        case _:
+            return "Access Denied"
+```
+
+You can append an if statement to a case pattern. This is called a **guard,** and it will only enter the case if the pattern matches and the if condition evaluates to `True`.
+
+```py
+def process_login(user_info):
+    match user_info:
+        # Matches a 2-item list/tuple and assigns variables
+        case (username, status) if status == "banned":
+            return f"Access Denied. {username} is suspended."
+        case (username, "active"):
+            return f"Welcome back, {username}!"
+        case _:
+            return "Invalid login format."
+
+print(process_login(("Alice", "banned")))  # Output: Access Denied. Alice is suspended.
+print(process_login(("Bob", "active")))    # Output: Welcome back, Bob!
+```
+
+`match`/`case` is highly useful for structural pattern matching, such as verifying and extracting specific keys from a dictionary.
+
+```py
+def handle_api_response(response):
+    match response:
+        # Matches if 'error' key exists, extracts its value into 'msg'
+        case {"status": "fail", "error": msg}:
+            return f"Error occurred: {msg}"
+        # Matches if 'data' key exists, extracts its value into 'payload'
+        case {"status": "success", "data": payload}:
+            return f"Data received: {payload}"
+        case _:
+            return "Malformed data structure."
+
+print(handle_api_response({"status": "fail", "error": "Timeout"})) # Output: Error occurred: Timeout
+```
 
 _[Control Flow](#control-flow)_
 
 ### `try` / `except`
 
+A `try`/`except` block is used to handle runtime errors so that your program does not crash when it encounters an issue.
+
+The `try` block contains the risky code, and the `except` block handles a specific error if it occurs.
+
+```py
+try:
+    result = 10 / 0  # This raises a ZeroDivisionError
+except ZeroDivisionError:
+    print("Error: You cannot divide a number by zero!")
+```
+
+```py
+try:
+    # 1. Ask the user for a number
+    user_input = input("Enter a number to divide 100 by: ")
+    number = int(user_input)  # Might raise ValueError if input is text
+    
+    # 2. Perform the division
+    result = 100 / number     # Might raise ZeroDivisionError if input is 0
+except ValueError:
+    # Runs if the user types something like "hello"
+    print("Error: That is not a valid integer!")
+except ZeroDivisionError:
+    # Runs if the user types "0"
+    print("Error: You cannot divide by zero!")
+else:
+    # Runs ONLY if the code in the 'try' block succeeds perfectly
+    print(f"Success! The result is: {result}")
+finally:
+    # ALWAYS runs, regardless of whether an error occurred or not
+    print("Thank you for using the calculator.")
+```
+
+#### `raise`
+
 _[Control Flow](#control-flow)_
 
 ### `return`
-
-_[Control Flow](#control-flow)_
-
-### `raise`
 
 _[Control Flow](#control-flow)_
 
@@ -923,3 +1128,5 @@ There are also new reserved words unique to Pylem:
 ---
 
 *This document captures the current state of the Pylem design. The language is still evolving.*
+
+
