@@ -1498,7 +1498,7 @@ _[Built-in Types](#built-in-types)_
 
 #### Dynamic Type (`dyn`)
 
-Pylem is statically typed, but Python is famous for being dynamically typed. Sometimes, it's hard to go from dynamic to static.
+Pylem is statically typed, but Python is famous for being dynamically typed. Sometimes, it's hard to go from dynamic to static. To help with that, Pylem comes with a special type to handle dynamically typed data.
 
 The dynamic type `dyn` is an API to access Python's dynamic typing from within Pylem. This works as a tagged union where each tag is a basic type: `Bool`, `Int`, `Float`, `Complex`, `Str`, `List`, `Dict`, `Tuple`, and `None`. Each of these are variants of `dyn` like `dyn.Bool`, `dyn.None`, etc. If the type has a subtype, then it's also set to `dyn`. 
 
@@ -1514,7 +1514,7 @@ def print_dyn(d: dyn, prefix=""):
         case Float as f:
             print(f"{prefix}float: {f}")
         case Complex as c:
-            print(f"{prefix}long: {c}")
+            print(f"{prefix}complex: {c}")
         case Str as s:
             print(f"{prefix}str: {s}")
         case List as l:
