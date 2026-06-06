@@ -1531,7 +1531,7 @@ def print_dyn(d: dyn, prefix=""):
                 print_dyn(key, key_prefix)
                 print_dyn(val, val_prefix)
         case Tuple as t:
-            print(f"{prefix}tup:")
+            print(f"{prefix}tuple:")
             next_prefix = "* " if len(prefix) == 0 else "  " + prefix
             for item in t:
                 print_dyn(item, next_prefix)
