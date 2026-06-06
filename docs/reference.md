@@ -630,12 +630,12 @@ for i in range(0, 3):
 ```py
 mut x: int
 block label:
-    if cond then
+    if cond:
         x = 5
-        break block
+        break label
     x = 4
 
-print("{x}")     # Prints either "4" or "5"
+print(f"{x}")     # Prints either "4" or "5"
 ```
 
 _[Control Flow](#control-flow)_
@@ -737,7 +737,7 @@ If a pattern can't be **guaranteed** for any reason, then you must have a **fall
 You can have multiple patterns match to one case. If any of the patterns destructure with a variable, the same variable name and type must be in all patterns. If not, omit `as` or use a wildcard `(_)` in each pattern.
 
 ```py
-match choice;
+match choice:
     case First:
         print("First")
     case Second as val | Third as {val}:  # `val` must be in all patterns
@@ -879,13 +879,15 @@ except ZeroDivisionError:
 You can define your own specialized error types by creating a class that inherits from the base `Exception` class.
 
 ```py
-# Define the custom exceptionclass InsufficientFundsError(Exception):
+# Define the custom exception
+class InsufficientFundsError(Exception):
     pass
 def withdraw_money(balance, amount):
     if amount > balance:
         raise InsufficientFundsError(f"You tried to withdraw ${amount} but only have ${balance}.")
     return balance - amount
-# Test the custom exceptiontry:
+# Test the custom exception
+try:
     withdraw_money(50, 100)
 except InsufficientFundsError as error:
     print(f"Transaction Denied: {error}")
@@ -1230,7 +1232,7 @@ Casting between an array and a list is also possible, although it'll come with o
 
 ```py
 l: list[int] = [1, 2, 3, 4, 5]
-a: arr[int, 5] = arr(list)
+a: arr[int, 5] = arr(l)
 ```
 
 Items are accessed using zero-based indexing (the first item is 0). Unlike lists, indexing an `arr` out of bounds won't crash immediately. Instead, it will return a None-able type `T?`. *(See [None-ables](#none-ables-).)* It needs to be checked before using because it will throw an error if you try to unwrap something that's `None`. 
@@ -1238,7 +1240,7 @@ Items are accessed using zero-based indexing (the first item is 0). Unlike lists
 ```py
 colors = ["red", "green", "blue"]
 
-mut item: string?
+mut item: str?
 
 item = colors[0]
 if item != None:
@@ -1427,9 +1429,9 @@ When you use a type `T?` where a type `T` is expected, it will be unwrapped auto
 ```py
 try:
     i: int = get_number() + 1  # Might raise if None.
-    print(f"Result: {i)}")
+    print(f"Result: {i}")
 except TypeError as e:
-    print(f"Error: {e}"))
+    print(f"Error: {e}")
 ```
 
 If an enum or tagged union is None-able, then `None` becomes one of its variants.
@@ -1506,7 +1508,7 @@ def print_dyn(d: dyn, prefix=""):
         case bool as x if x:
             print(f"{prefix}bool: True")
         case bool:
-            print("f"{prefix}bool: False")
+            print(f"{prefix}bool: False")
         case int as i:
             print(f"{prefix}int: {i}")
         case float as f:
@@ -1518,12 +1520,12 @@ def print_dyn(d: dyn, prefix=""):
         case str as s:
             print(f"{prefix}str: {s}")
         case list as l:
-            print("{prefix}list:")
+            print(f"{prefix}list:")
             next_prefix = "* " if len(prefix) == 0 else "  " + prefix
             for item in l:
                 print_dyn(item, next_prefix)
-        cass dict as d:
-            print("{prefix}dict:")
+        case dict as d:
+            print(f"{prefix}dict:")
             next_prefix = "* " if len(prefix) == 0 else "  " + prefix
             key_prefix = next_prefix + "(key) "
             val_prefix = next_prefix + "(val) "
@@ -1531,7 +1533,7 @@ def print_dyn(d: dyn, prefix=""):
                 print_dyn(key, key_prefix)
                 print_dyn(val, val_prefix)
         case tuple as t:
-            print("{prefix}tup:")
+            print(f"{prefix}tup:")
             next_prefix = "* " if len(prefix) == 0 else "  " + prefix
             for item in t:
                 print_dyn(item, next_prefix)
