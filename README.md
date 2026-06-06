@@ -56,7 +56,9 @@ class Stack[T]:
 
 mut stack = Stack[int]()
 stack.push(42)
-print(stack.pop())  # 42
+item = stack.pop()
+if item != None:
+    print(str(item))  # 42
 ```
 
 ## Example: Bank Account
