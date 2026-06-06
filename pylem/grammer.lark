@@ -1,0 +1,11 @@
+%import common (WS, NUMBER, STRING, CNAME)
+%ignore WS
+
+start: statement*
+
+statement: assignment | print_stmt | ...
+
+assignment: (mut)? NAME "=" expr
+print_stmt: "print" "(" expr ")"
+
+expr: ...
