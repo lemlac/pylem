@@ -739,7 +739,7 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 6. __[Dictionaries](#dictionaries-dict)__
 7. __[Tuples](#tuples)__
 8. __[None-ables](#none-ables-)__
-9. __[Pointers](#pointers-)__
+9. __[Pointers](#pointers-ptr)__
 
 _[Types](#types)_
 
@@ -933,7 +933,7 @@ l: list[int] = [1, 2, 3, 4, 5]
 a: arr[int, 5] = arr(list)
 ```
 
-Items are accessed using zero-based indexing (the first item is 0). Indexing an array or list will return a None-able type `T?`. *(See [None-ables](#none-ables-).)* It needs to be checked before using. Indexing out of bounds won't crash immediately, but it will crash if you try to unwrap something that's `None`. 
+Items are accessed using zero-based indexing (the first item is 0). Indexing a `list` out of bounds will still throw an `IndexError`, but `arr` arrays won't. Indexing an `arr` will return a None-able type `T?`. *(See [None-ables](#none-ables-).)* It needs to be checked before using. Indexing an `arr` out of bounds won't crash immediately, but it will crash if you try to unwrap something that's `None`. The reason is that `arr` arrays are pointers, so they use the same mechanic as dereferencing a pointer. *(See [Pointers](#pointers-ptr).)*
 
 ```py
 colors = ["red", "green", "blue"]
@@ -1033,7 +1033,33 @@ match payload:
 
 _[Built-in Types](#built-in-types)_
 
-#### Pointers (`*`)
+#### Pointers (`ptr`)
+
+Pointers are type `ptr[T]` (immutable) and `mutptr[T]` (mutable). You can get the reference to something with the function `ref`. The prefix `*` operator will dereference a pointer. A `mutptr` must point to a reference declared with `mut`.
+
+```py
+mut x = 0
+xPtr: mutptr[int] = ref(x)
+*xPtr = 1
+x  # Value: 1
+```
+
+Safe pointers use a None-able type `ptr[T?]`/`mutptr[T?]`. If a pointer can't be guaranteed to not be NULL, then it must use a safe pointer type. Checking for `None` before dereferencing will coerce it to a raw pointer that can be dereferenced. Otherwise, dereferencing it will return a None-able type `T?`.
+
+```py
+def check_ptr(p: ptr[int?]):
+    n: int? = *p     # Dereference to `int?`
+    if n != None:
+        print(f"n is {n}")
+    if p != Nome:
+        n: int = *p  # Safe to derefence
+        print(f"*p is {n}")
+
+i = 1
+check_ptr(ref(i))
+# Print: "n is 1"
+# Print: "*p is 1"
+```
 
 _[Built-in Types](#built-in-types)_
 
