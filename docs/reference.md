@@ -1408,7 +1408,7 @@ else:
 
 Internally, what's happening is that the value becomes a tagged union with 2 variants: *`Some` value* or `None`. *(See [`enum union`](#enum-union).)* When you enter a block where it's guaranteed not to be `None`, then it's automatically unwrapped inside that block.
 
-You can kind of think of it as doing something like this under the hood:
+A simplified version of what it's doing under the hood might look something like this:
 
 ```py
 enum union OptionInt:
@@ -1671,10 +1671,6 @@ u.int          # Value: 1
 u.int          # Value: 0x01000000 = 16777216
 ```
 
-_[Custom Types](#custom-types)_
-
-#### `enum union`
-
 Unions can be tagged with an enum to create **tagged unions.** To do this, create an `enum` and then extend it with a `union`. Each member name in the union must match with each varient of the enum. If a variant has no data, assign its type as `void`. Instantiate it by passing in its tag first and then assign the member for that tag if it has data. The size of a tagged union is the size of its enum component and the size of its union component combined.
 
 ```py
@@ -1712,6 +1708,10 @@ match payload:
     case Empty:
         print("Payload is empty")
 ```
+
+_[Custom Types](#custom-types)_
+
+#### `enum union`
 
 A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together to create a **true sum type** and will allow you to instantiate it with each member as a variant. Varients without data are empty and set to `void`.
 
