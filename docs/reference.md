@@ -728,6 +728,62 @@ def handle_api_response(response):
 print(handle_api_response({"status": "fail", "error": "Timeout"})) # Output: Error occurred: Timeout
 ```
 
+#### Pattern Fallback
+
+If a pattern can't be **guaranteed** for any reason, then you must have a **fallback:**
+
+- __Optional binding:__ `Pattern as x?` — wraps `x` in type None-able `T?`
+
+You can have multiple patterns match to one case. If any of the patterns destructure with a variable, the same variable name and type must be in all patterns. If not, omit `as` or use a wildcard `(_)` in each pattern.
+
+```py
+match choice;
+    case First:
+        print("First")
+    case Second as val | Third as {val}:  # `val` must be in all patterns
+        print("Second or Third, val={val}")
+```
+
+```py
+# `First` doesn't have any values, so destructuring must be disabled.
+match choice:
+    case First | Second | Third:
+        print("First, Second, or Third")
+```
+
+```py
+# Fallback, `val` is converted to question type `T?`:
+match choice:
+    case First | Second as val? | Third as {val}?:
+        print("First, Second, or Third: {val ?? "None"}")
+```
+
+```py
+match choice:
+    case First | Second as val? | Third as {val}?:
+        val = val ?? "None"   # Defaults to "None" for the rest of the block
+        print("First, Second, or Third: {val}")
+```
+
+#### `fallthrough`
+
+Proceeds to the next case, which must not destructure new values, unless fallbacks are used. Any case that doesn't have `fallthrough` will break the `match`. This reverses the standard `switch` schematic but allows you to still opt into it where necessary. 
+
+```py
+match choice:
+    case First:
+        print("First")
+        fallthrough
+    case Second as x?:  # `?` in pattern wraps the variable in a None-able type
+        if x != None:
+            print("Definitely Second: {x}")
+    # Implicit break.
+    case _:
+        print("No match")
+```
+
+`fallthrough` only goes to the next case. If the next case doesn't have a `fallthrough` in it too, then it will break. It's a syntax error if you call `fallthrough` on the last case in the `match` block.
+
 _[Control Flow](#control-flow)_
 
 ### `try` / `except`
@@ -1610,17 +1666,11 @@ The 35 reserved words in Python are also reserved in Pylem:
 
 There are also new reserved words unique to Pylem:
 
-- [`block`](#block), [`case`](#match--case), [`const`](#constants), [`enum`](#enum), [`match`](#match--case), [`mut`](#mutability), [`struct`](#struct), [`union`](#union)
+- [`block`](#block), [`case`](#match--case), [`const`](#constants), [`enum`](#enum), [`fallthrough`](#fallthrough), [`match`](#match--case), [`mut`](#mutability), [`struct`](#struct), [`union`](#union)
 
 ---
 
 *This document captures the current state of the Pylem design. The language is still evolving.*
 
 _[Top](#pylem-reference)_
-
-
-
-
-
-
 
