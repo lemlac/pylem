@@ -816,7 +816,7 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 2. __[Numbers](#numbers)__
 3. __[Characters](#characters-chr)__
 4. __[Strings](#strings-str)__
-5. __[Arrays / Lists](#arrays-arr--lists-list)__
+5. __[Arrays](#arrays-arr--list)__
 6. __[Dictionaries](#dictionaries-dict)__
 7. __[Tuples](#tuples)__
 8. __[None-ables](#none-ables-)__
@@ -936,9 +936,9 @@ print(word[0:3])  # Outputs: Ana
 
 _[Built-in Types](#built-in-types)_
 
-#### Arrays (`arr`) / Lists (`list`)
+#### Arrays (`arr` / `list`)
 
-Array types are split between the familiar and dynamic lists from Python `list[T]` and the more low-level, static C-style arrays `arr[T, N]`. *(Skip to [Arrays](#arrays-arr) if you want to see the `arr` type unique to Pylem.)*
+Array types are split between the familiar and dynamic lists from Python `list[T]` and the more low-level, static C-style arrays `arr[T, N]`. *(Skip to [Arrays](#static-arrays-arr) if you want to see the `arr` type unique to Pylem.)*
 
 ##### Lists (`list`)
 
@@ -994,11 +994,11 @@ inventory.remove("mouse")  # ['laptop', 'monitor', 'keyboard']
 # Remove and return the last itemlast_item = inventory.pop()  # 'keyboard' (inventory is now ['laptop', 'monitor'])
 ```
 
-##### Arrays (`arr`)
+##### Static Arrays (`arr`)
 
-Arrays don't have as many bells and whistles as lists. They're designed to be a static and low-level data type for where performance is critical.
+Static arrays don't have as many bells and whistles as lists. They're designed to be a low-level data type for where performance is critical.
 
-Arrays are declared like lists but in contexts where an `arr` type is expected, similar to `chr`. You can also use the constructor `arr()` on an array literal which will compile to a static array with no overhead or casting.
+Static arrays are declared like lists but in contexts where an `arr` type is expected, similar to `chr`. You can also use the constructor `arr()` on an array literal which will compile to a static array with no overhead or casting.
 
 ```py
 chr_arr: arr[chr, 5] = ['h',"e",'l',"l",'o']
