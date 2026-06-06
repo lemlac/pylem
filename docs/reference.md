@@ -1500,31 +1500,29 @@ _[Built-in Types](#built-in-types)_
 
 Pylem is statically typed, but Python is famous for being dynamically typed. Sometimes, it's hard to go from dynamic to static.
 
-The dynamic type `dyn` is an API to access Python's dynamic typing from within Pylem. This works as a tagged union where each tag is a basic type: `bool`, `int`, `float`, `long`, `chr`, `str`, `list`, `dict`, `tuple`, and `None`. If the type has a subtype, then it's also set to `dyn`. 
+The dynamic type `dyn` is an API to access Python's dynamic typing from within Pylem. This works as a tagged union where each tag is a basic type: `Bool`, `Int`, `Float`, `Complex`, `Str`, `List`, `Dict`, `Tuple`, and `None`. Each of these are variants of `dyn` like `dyn.Bool`, `dyn.None`, etc. If the type has a subtype, then it's also set to `dyn`. 
 
 ```py
 def print_dyn(d: dyn, prefix=""):
     match d:
-        case bool as x if x:
+        case Bool as x if x:
             print(f"{prefix}bool: True")
-        case bool:
+        case Bool:
             print(f"{prefix}bool: False")
-        case int as i:
+        case Int as i:
             print(f"{prefix}int: {i}")
-        case float as f:
+        case Float as f:
             print(f"{prefix}float: {f}")
-        case long as l:
-            print(f"{prefix}long: {l}")
-        case chr as c:
-            print(f"{prefix}chr: {c}")
-        case str as s:
+        case Complex as c:
+            print(f"{prefix}long: {c}")
+        case Str as s:
             print(f"{prefix}str: {s}")
-        case list as l:
+        case List as l:
             print(f"{prefix}list:")
             next_prefix = "* " if len(prefix) == 0 else "  " + prefix
             for item in l:
                 print_dyn(item, next_prefix)
-        case dict as d:
+        case Dict as d:
             print(f"{prefix}dict:")
             next_prefix = "* " if len(prefix) == 0 else "  " + prefix
             key_prefix = next_prefix + "(key) "
@@ -1532,7 +1530,7 @@ def print_dyn(d: dyn, prefix=""):
             for key, val in d.items():
                 print_dyn(key, key_prefix)
                 print_dyn(val, val_prefix)
-        case tuple as t:
+        case Tuple as t:
             print(f"{prefix}tup:")
             next_prefix = "* " if len(prefix) == 0 else "  " + prefix
             for item in t:
