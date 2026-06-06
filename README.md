@@ -62,6 +62,10 @@ print(stack.pop())  # 42
 ## Example: Bank Account
 
 ```py
+struct BankAccount:
+    owner: str
+    balance: int
+
 class BankAccount:
     def __init__(mut self, owner: str, balance: int = 0):
         self.owner = owner
