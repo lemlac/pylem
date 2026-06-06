@@ -1477,21 +1477,27 @@ xPtr: mutptr[int] = ref(x)
 x  # Value: 1
 ```
 
-Safe pointers use a None-able type `ptr[T?]`/`mutptr[T?]`. If a pointer can't be guaranteed to not be NULL, then it must use a safe pointer type. Checking for `None` before dereferencing will coerce it to a raw pointer that can be dereferenced. Otherwise, dereferencing it will return a None-able type `T?`.
+Safety pointers use a None-able type `ptr?`/`mutptr?`. If a pointer can't be guaranteed to not be NULL, then it must use a safety pointer type. Checking for `None` before dereferencing will coerce it to a raw pointer that can be dereferenced safely. Otherwise, dereferencing it might raise an error at run-time.
 
 ```py
-def check_ptr(p: ptr[int?]):
-    n: int? = *p     # Dereference to `int?`
-    if n != None:
-        print(f"n is {n}")
-    if p != Nome:
+def check_ptr(p: ptr[int]?):
+    if p != None:
         n: int = *p  # Safe to derefence
         print(f"*p is {n}")
 
 i = 1
 check_ptr(ref(i))
-# Print: "n is 1"
 # Print: "*p is 1"
+```
+
+Note that a safety pointer `ptr[T]?` is related to but not quite the same as a `ptr[T?]` or in other words *a non-null pointer to a value that might be `None`.* A `ptr[T?]` can be safely dereferenced at any time, but its value is still wrapped in a `T?` that needs to be checked for `None`. However, you can dereference it to check for `None` and it will also coerse to a `ptr[T]` type just like a safety pointer.
+
+```py
+x: int? = get_number()
+p: ptr[int?] = ref(x)      # Non-null pointer to an optional int
+
+if *p != Nome:             # Check the value instead of the pointer
+    print(f"*p is {*p}")   # p is a ptr[int] here
 ```
 
 _[Built-in Types](#built-in-types)_
@@ -1539,7 +1545,7 @@ def print_dyn(d: dyn, prefix=""):
             print(f"{prefix}None")
 ```
 
-Since `dyn` already has `None` as one of its variants, its question type is redundant. If you type something as `dyn?`, the question mark gets absorbed and ignored.
+Since `dyn` already has `None` as one of its variants, its question type is redundant. If you type something as `dyn?`, the question mark will just be dropped and ignored.
 
 _[Built-in Types](#built-in-types)_
 
