@@ -962,7 +962,7 @@ You can use single or double quotes interchangeably to define a standard text st
 * Double quotes: `name = "Pylem programming"`
 * Quotes inside quotes: Use double quotes if you need a literal single quote inside, or vice versa.
 
-```
+```py
 quote = "It's a beautiful day"  # No escaping needed
 ```
 
@@ -971,15 +971,18 @@ There's also a specialized string types for multiline layouts, formatting, or wo
 * Multiline strings: Created using three single or double quotes, preserving line breaks.
 
 ```py
-multiline = """This is a string
+multiline = """
+This is a string
 that spans multiple
-lines."""
+lines.
+"""
 ```
 
 * F-Strings (Formatted strings): Prefixed with `f` to embed variables directly inside the text.
 
 ```py
-age = 25status = f"I am {age} years old."
+age = 25
+status = f"I am {age} years old."
 ```
 
 * Raw strings: Prefixed with `r` to treat backslashes as literal characters instead of escape characters (great for Windows file paths).
