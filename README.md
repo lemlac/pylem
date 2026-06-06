@@ -104,7 +104,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) or open an issue.
 
 ## License
 
-[MIT / Apache 2.0 / etc. — choose one]
+[MIT License](LICENSE)
 
 ---
 
