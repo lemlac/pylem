@@ -1248,7 +1248,7 @@ if item != None:
 
 item = colors[-1]
 if item != None:
-    print(item)  # Won't print because arrays can't be reversed index with negative numbers.
+    print(item)  # Won't print because `arr` arrays can't be reversed index with negative numbers.
 
 item = colors[len(colors)-1]  # Do this instead
 if item != None:
@@ -1497,7 +1497,7 @@ x: int? = get_number()
 p: ptr[int?] = ref(x)      # Non-null pointer to an optional int
 
 if *p != Nome:             # Check the value instead of the pointer
-    print(f"*p is {*p}")   # p is a ptr[int] here
+    print(f"*p is {*p}")   # *p will automatically unwrap to an int here.
 ```
 
 _[Built-in Types](#built-in-types)_
