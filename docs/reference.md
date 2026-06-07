@@ -1021,15 +1021,29 @@ b = int(9.99)  # Result: 9
 c = complex(3)  # Result: (3+0j)
 ```
 
-__The size of `int`__ borrows the same dynamic sizing as the standard `int` in Python. For more low-level integer types, see the next section.
+__The size of `int`/`float`/`complex`__ is fixed. Unlike in Python, `int` doesn't expand to fit any arbitrary size. 
 
 ```py
 import sys
 
-print(sys.getsizeof(int(0)))          # Output: 28 bytes
-print(sys.getsizeof(int(1)))          # Output: 28 bytes
-print(sys.getsizeof(int(2)**30))      # Output: 32 bytes (Grows as value expands)
-print(sys.getsizeof(int(2)**1000))    # Output: 168 bytes
+print(sys.getsizeof(0))          # Output: 4 bytes
+print(sys.getsizeof(1))          # Output: 4 bytes
+print(sys.getsizeof(3.14))       # Output: 8 bytes
+print(sys.getsizeof(1+2j))       # Output: 16 bytes (2 floats)
+```
+
+To use Python's native number objects, import them from the `python` module. Number literals will use those types instead of Pylem's numbers.
+
+```py
+from python import int, float, complex
+import sys
+
+print(sys.getsizeof(0))          # Output: 28 bytes
+print(sys.getsizeof(1))          # Output: 28 bytes
+print(sys.getsizeof(3.14))       # Output: 28 bytes
+print(sys.getsizeof(1+2j))       # Output: 28 bytes
+print(sys.getsizeof(2**30))      # Output: 32 bytes (Grows as value expands)
+print(sys.getsizeof(2**1000))    # Output: 168 bytes
 ```
 
 ##### Sized Number Types
