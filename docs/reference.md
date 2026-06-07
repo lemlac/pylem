@@ -1801,7 +1801,145 @@ _[Custom Types](#custom-types)_
 
 ## Operators
 
-*TBD*
+The same operators in Python are also in Pylem:
+
+| Precedence | Operator | Description | Associativity |
+|---:|:---|:---|:---|
+| (Highest) __1__ | `(Expressions...)`, `[Expressions...]`, `{Key: Value...}`, `{Expressions...}` | Binding or parenthesized expression, list display, dictionary display, set display | Left-to-right |
+| __2__ | `x[index]`, `x[index:index]`, `x(arguments...)`, `x.attribute` | Subscription (indexing), slicing, function call, attribute reference | Left-to-right |
+| __3__ | `await x` | Await expression | N/A |
+| __4__ | `**` | Exponentiation (power) | Right-to-left |
+| __5__ | `+x`, `-x`, `~x` | Unary positive, unary negative, bitwise NOT | Right-to-left |
+| __6__ | `*`, `@`, `/`, `//`, `%` | Multiplication, matrix multiplication, division, floor division, remainder/modulo | Left-to-right |
+| __7__ | `+`, `-` | Addition and subtraction | Left-to-right |
+| __8__ | `<<`, `>>` | Bitwise left and right shifts | Left-to-right |
+| __9__ | `&` | Bitwise AND | Left-to-right |
+| __10__ | `^` | Bitwise XOR | Left-to-right |
+| __11__ | `\|` | Bitwise OR | Left-to-right |
+| __12__ | `in`, `not in`, `is`, `is not`, `<`, `<=`, `>`, `>=`, `!=`, `==` | Comparisons, including membership tests and identity tests | Left-to-right (Chained) |
+| __13__ | `not x` | Boolean / Logical NOT | Left-to-right |
+| __14__ | `and` | Boolean / Logical AND | Left-to-right |
+| __15__ | `or` | Boolean / Logical OR | Left-to-right |
+| __16__ | `if` – `else` | Conditional expression (Ternary operator) | Right-to-left |
+| __17__ | `lambda` | Lambda expression | N/A |
+| (Lowest) __18__ | `:=` | Assignment expression (Walrus operator) | Right-to-left |
+
+#### Compound Assignment Operators
+
+| Operator | Name | Example | Equivalent To |
+|:---:|:---|:---|:---|
+| `+=` | Addition assignment | `x += 3` | `x = x + 3` |
+| `-=` | Subtraction assignment | `x -= 3` | `x = x - 3` |
+| `*=` | Multiplication assignment | `x *= 3` | `x = x * 3` |
+| `/=` | Division assignment | `x /= 3` | `x = x / 3` |
+| `//=` | Floor division assignment | x //= 3 | x = x // 3 |
+| `%=` | Modulus assignment | x %= 3 | x = x % 3 |
+| `**=` | Exponentiation assignment | x **= 3 | x = x ** 3 |
+| `&=` | Bitwise AND assignment | x &= 3 | x = x & 3 |
+| `\|=` | Bitwise OR assignment | `x \|= 3` | `x = x \| 3` |
+| `^=` | Bitwise XOR assignment | `x ^= 3` | `x = x ^ 3` |
+| `>>=` | Bitwise right shift assignment | `x >>= 3` | `x = x >> 3` |
+| `<<=` | Bitwise left shift assignment | `x <<= 3` | `x = x << 3` |
+| `:=` | Walrus operator (Assignment expression) | `if (n := len(a)) > 10:` | *Assigns and returns value* |
+
+#### Operator Overloading
+
+__Comparison Operators__
+
+These methods handle equality and inequality operations. They typically return `True` or `False`.
+
+* `__lt__(self, other)`: Less than (`<`)
+* `__le__(self, other)`: Less than or equal to (`<=`)
+* `__eq__(self, other)`: Equal to (`==`)
+* `__ne__(self, other)`: Not equal to (`!=`)
+* `__gt__(self, other)`: Greater than (`>`)
+* `__ge__(self, other)`: Greater than or equal to (`>=`)
+
+__Arithmetic Operators:__
+
+*These methods alter standard mathematical calculations.*
+
+* `__add__(self, other)`: Addition (`+`)
+* `__sub__(self, other)`: Subtraction (`-`)
+* `__mul__(self, other)`: Multiplication (`*`)
+* `__matmul__(self, other)`: Matrix multiplication (`@`)
+* `__truediv__(self, other)`: True division (`/`)
+* `__floordiv__(self, other)`: Floor division (`//`)
+* `__mod__(self, other)`: Modulo/Remainder (`%`)
+* `__divmod__(self, other)`: Combined division and modulo (`divmod()`)
+* `__pow__(self, other[, modulo])`: Exponentiation (`**`)
+
+__Reflected (Right-Hand) Arithmetic Operators:__
+
+*Fallback to right-hand variants if the left operand does not support the corresponding operation.*
+
+* `__radd__(self, other)`: Right addition (`+`)
+* `__rsub__(self, other)`: Right subtraction (`-`)
+* `__rmul__(self, other)`: Right multiplication (`*`)
+* `__rmatmul__(self, other)`: Right matrix multiplication (`@`)
+* `__rtruediv__(self, other)`: Right true division (`/`)
+* `__rfloordiv__(self, other)`: Right floor division (`//`)
+* `__rmod__(self, other)`: Right modulo (`%`)
+* `__rdivmod__(self, other)`: Right division and modulo (`divmod()`)
+* `__rpow__(self, other)`: Right exponentiation (`**`)
+
+__In-Place (Assignment) Operators:__
+
+*These methods govern compound assignment symbols like `+=` and `*=`.*
+
+* `__iadd__(mut self, other)`: In-place addition (`+=`)
+* `__isub__(mut self, other)`: In-place subtraction (`-=`)
+* `__imul__(mut self, other)`: In-place multiplication (`*=`)
+* `__imatmul__(mut self, other)`: In-place matrix multiplication (`@=`)
+* `__itruediv__(mut self, other)`: In-place true division (`/=`)
+* `__ifloordiv__(mut self, other)`: In-place floor division (`//=`)
+* `__imod__(mut self, other)`: In-place modulo (`%=`)
+* `__ipow__(mut self, other)`: In-place exponentiation (`**=`)
+
+__Bitwise Operators:__
+
+*These handle binary bit manipulation and logical bit masking operations.*
+
+* `__lshift__(self, other)`: Bitwise left shift (`<<`)
+* `__rshift__(self, other)`: Bitwise right shift (`>>`)
+* `__and__(self, other)`: Bitwise AND (`&`)
+* `__xor__(self, other)`: Bitwise XOR (`^`)
+* `__or__(self, other)`: Bitwise OR (`|`)
+
+__Reflected Bitwise:__
+
+* `__rlshift__(self, other)`: Right bitwise left shift (`<<`)
+* `__rrshift__(self, other)`: Right bitwise right shift (`>>`)
+* `__rand__(self, other)`: Right bitwise AND (`&`)
+* `__rxor__(self, other)`: Right bitwise XOR (`^`)
+* `__ror__(self, other)`: Right bitwise OR (`|`)
+
+__In-Place Bitwise:__
+
+* `__ilshift__(mut self, other)`: In-place left shift (`<<=`)
+* `__irshift__(mut self, other)`: In-place right shift (`>>=`)
+* `__iand__(mut self, other)`: In-place AND (`&=`)
+* `__ixor__(mut self, other)`: In-place XOR (`^=`)
+* `__ior__(mut self, other)`: In-place OR (`|=`)
+
+__Unary Operators:__
+
+*These operators process only one single object operand.*
+
+* `__neg__(self)`: Unary negation (`-obj`)
+* `__pos__(self)`: Unary plus (`+obj`)
+* `__abs__(self)`: Absolute value (`abs(obj)`)
+* `__invert__(self)`: Bitwise inversion (`~obj`)
+
+__Container Operators:__
+
+These overload syntax patterns natively used with dictionaries, lists, sets, and tuples.
+
+* `__len__(self)`: Returns collection size (`len(obj)`)
+* `__getitem__(self, key)`: Indexing and slicing access (`obj[key]`)
+* `__setitem__(self, key, value)`: Indexing assignment (`obj[key] = value`)
+* `__delitem__(self, key)`: Deleting items (`del obj[key]`)
+* `__contains__(self, item)`: Membership testing (`item in obj`)
 
 [TOC](#table-of-contents)
 
