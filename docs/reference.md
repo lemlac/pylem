@@ -1876,18 +1876,18 @@ The same operators in Python are also in Pylem. For operators unique to Pylem, s
 
 | Operator | Name | Example | Equivalent To |
 |:---:|:---|:---|:---|
-| `+=` | Addition assignment | `x += 3` | `x = x + 3` |
-| `-=` | Subtraction assignment | `x -= 3` | `x = x - 3` |
-| `*=` | Multiplication assignment | `x *= 3` | `x = x * 3` |
-| `/=` | Division assignment | `x /= 3` | `x = x / 3` |
-| `//=` | Floor division assignment | x //= 3 | x = x // 3 |
-| `%=` | Modulus assignment | x %= 3 | x = x % 3 |
-| `**=` | Exponentiation assignment | x **= 3 | x = x ** 3 |
-| `&=` | Bitwise AND assignment | x &= 3 | x = x & 3 |
-| `\|=` | Bitwise OR assignment | `x \|= 3` | `x = x \| 3` |
-| `^=` | Bitwise XOR assignment | `x ^= 3` | `x = x ^ 3` |
-| `>>=` | Bitwise right shift assignment | `x >>= 3` | `x = x >> 3` |
-| `<<=` | Bitwise left shift assignment | `x <<= 3` | `x = x << 3` |
+| `+=` | Addition assignment | `x += 3` | `x := x + 3` |
+| `-=` | Subtraction assignment | `x -= 3` | `x := x - 3` |
+| `*=` | Multiplication assignment | `x *= 3` | `x := x * 3` |
+| `/=` | Division assignment | `x /= 3` | `x := x / 3` |
+| `//=` | Floor division assignment | `x //= 3` | `x := x // 3` |
+| `%=` | Modulus assignment | `x %= 3` | `x := x % 3` |
+| `**=` | Exponentiation assignment | `x **= 3` | `x := x ** 3` |
+| `&=` | Bitwise AND assignment | `x &= 3` | `x := x & 3` |
+| `\|=` | Bitwise OR assignment | `x \|= 3` | `x := x \| 3` |
+| `^=` | Bitwise XOR assignment | `x ^= 3` | `x := x ^ 3` |
+| `>>=` | Bitwise right shift assignment | `x >>= 3` | `x := x >> 3` |
+| `<<=` | Bitwise left shift assignment | `x <<= 3` | `x := x << 3` |
 | `:=` | Walrus operator (Assignment expression) | `if (n := len(a)) > 10:` | *Assigns and returns value* |
 
 #### Operator Overloading
