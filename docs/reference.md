@@ -1793,7 +1793,40 @@ _[Custom Types](#custom-types)_
 
 ## Generics
 
-*TBD*
+Generics allow you to write reusable code (functions or classes) that can operate on multiple data types while keeping static type safety. 
+
+Use brackets to declare a type variable placeholder (like `[T]`), then use `T` for arguments and return types.
+
+```py
+# The [T] syntax automatically creates a type variable
+def get_first_element[T](items: list[T]) -> T:
+    return items[0]
+# Type checkers automatically infer the type based on the input
+number = get_first_element([1, 2, 3])      # Inferred as int
+text = get_first_element(["a", "b", "c"])  # Inferred as str
+```
+
+You can create flexible data structures like a Box or Stack that can hold any type.
+
+```py
+class Box[T]:
+    def __init__(self, content: T):
+        self.content: T = content
+
+    def get_content(self) -> T:
+        return self.content
+# Instantiate with specific types
+int_box = Box[int](123)
+str_box = Box[str]("Hello")
+```
+
+If you want a generic function to only accept specific types, you can pass them directly inside the bracket declaration.
+
+```
+# T can only be an int or a float
+def add_numbers[T: (int, float)](a: T, b: T) -> T:
+    return a + b
+```
 
 [TOC](#table-of-contents)
 
@@ -1801,7 +1834,7 @@ _[Custom Types](#custom-types)_
 
 ## Operators
 
-The same operators in Python are also in Pylem:
+The same operators in Python are also in Pylem. For operators unique to Pylem, see [Unique Operators](#unique-operators).
 
 | Precedence | Operator | Description | Associativity |
 |---:|:---|:---|:---|
@@ -1940,6 +1973,10 @@ These overload syntax patterns natively used with dictionaries, lists, sets, and
 * `__setitem__(self, key, value)`: Indexing assignment (`obj[key] = value`)
 * `__delitem__(self, key)`: Deleting items (`del obj[key]`)
 * `__contains__(self, item)`: Membership testing (`item in obj`)
+
+## Unique Operators
+
+*TBD*
 
 [TOC](#table-of-contents)
 
