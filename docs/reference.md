@@ -382,6 +382,8 @@ MAX(5, 10)    # Result: 10
 MAX(7, 3)     # Result: 7
 ```
 
+*For more on that, see [Compile-time Functions](#compile-time-functions).*
+
 [TOC](#table-of-contents)
 
 ---
@@ -2035,7 +2037,7 @@ _[Advanced](#advanced)_
 
 ---
 
-### Compile Time Functions
+### Compile-time Functions
 
 *TBD*
 
