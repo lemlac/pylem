@@ -19,13 +19,13 @@ Python is unmatched for productivity, but it struggles when you need…
 
 Pylem solves this by offering:
 
-- **Python‑like syntax** with strong static types  
-- **Immutable‑by‑default semantics** for safer reasoning  
-- **Sized integers/floats** (`i32`, `f64`, …)  
-- **Static arrays** (`arr[T, N]`) and low‑level data layouts  
-- **`struct`, `enum`, `union`** for systems‑style modeling  
-- **Compile‑time functions** and `const` evaluation  
-- **Function overloading** and powerful type inference  
+- **Python‑like syntax** with strong static types
+- **Immutable‑by‑default semantics** for safer reasoning
+- **Sized integers/floats** (`i32`, `f64`, …)
+- **Static arrays** (`arr[T, N]`) and low‑level data layouts
+- **`struct`, `enum`, `union`** for systems‑style modeling
+- **Compile‑time functions** and `const` evaluation
+- **Function overloading** and powerful type inference
 - **One codebase** that can be **interpreted or AOT‑compiled**
 
 Pylem is designed to feel familiar to Python developers while giving you the performance headroom of a lower‑level language.
@@ -34,14 +34,14 @@ Pylem is designed to feel familiar to Python developers while giving you the per
 
 ## 🧠 Key Features
 
-- **Python‑like syntax**: f‑strings, comprehensions, `def`, `match`, exceptions  
-- **Mutability control**: immutable by default; opt‑in `mut`  
-- **Performance types**: `i32`, `f64`, `arr[T, N]`, `chr`, optionals `T?`  
-- **Generics**: `list[T]`, `struct Vec[T]`, `def process[T](x: T)`  
-- **Compile‑time programming**: `const` values, CT‑evaluated functions  
-- **Function overloading** with strong inference  
-- **Advanced control flow**: labeled blocks, guarded `match`, explicit `fallthrough`  
-- **Unified execution model**: interpret during development, compile for speed  
+- **Python‑like syntax**: f‑strings, comprehensions, `def`, `match`, exceptions
+- **Mutability control**: immutable by default; opt‑in `mut`
+- **Performance types**: `i32`, `f64`, `arr[T, N]`, `chr`, optionals `T?`
+- **Generics**: `list[T]`, `struct Vec[T]`, `def process[T](x: T)`
+- **Compile‑time programming**: `const` values, CT‑evaluated functions
+- **Function overloading** with strong inference
+- **Advanced control flow**: labeled blocks, guarded `match`, explicit `fallthrough`
+- **Unified execution model**: interpret during development, compile for speed
 
 ---
 
@@ -139,9 +139,9 @@ Pylem is in early development. See the [`docs/`](docs/) folder and repository is
 
 Pylem is inspired by:
 
-- **Python** — clarity and ergonomics  
-- **Rust/C** — control, safety, predictable performance  
-- **Mojo** — unifying high‑level and low‑level code  
+- **Python** — clarity and ergonomics
+- **Rust/C** — control, safety, predictable performance
+- **Mojo** — unifying high‑level and low‑level code
 
 The goal is a language that feels like Python but scales to systems programming without rewriting your codebase.
 
@@ -149,12 +149,12 @@ The goal is a language that feels like Python but scales to systems programming 
 
 ## 🗺️ Roadmap
 
-- [ ] Core interpreter  
-- [ ] Standard library (collections, numerics, etc.)  
-- [ ] Generics + traits  
-- [ ] LLVM‑based compiler backend  
-- [ ] Python & C FFI  
-- [ ] Tooling: formatter, LSP, package manager  
+- [ ] Core interpreter
+- [ ] Standard library (collections, numerics, etc.)
+- [ ] Generics + interface classes
+- [ ] LLVM‑based compiler backend
+- [ ] Python & C FFI
+- [ ] Tooling: formatter, LSP, package manager
 
 ---
 
