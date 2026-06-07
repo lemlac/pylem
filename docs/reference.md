@@ -1838,7 +1838,7 @@ In addition to types, generics can also be constants. Overloaded functions and c
 struct Array[T, const N: usize]:
     data: arr[T, N]
 
-class Array[T, N]:
+class Array[T, N]:   # `const` constraint inherited from struct declaration
     def __init__(mut self, data: arr[T, N]):
         self.data = data
 
