@@ -1809,10 +1809,12 @@ text = get_first_element(["a", "b", "c"])  # Inferred as str
 You can create flexible data structures like a Box or Stack that can hold any type.
 
 ```py
-class Box[T]:
-    def __init__(self, content: T):
-        self.content: T = content
+struct Box[T]:
+    content: T
 
+class Box[T]:
+    def __init__(mut self, content: T):
+        self.content: T = content
     def get_content(self) -> T:
         return self.content
 # Instantiate with specific types
@@ -1826,6 +1828,19 @@ If you want a generic function to only accept specific types, you can pass them 
 # T can only be an int or a float
 def add_numbers[T: (int, float)](a: T, b: T) -> T:
     return a + b
+```
+
+In addition to types, genetics can also be constants.
+
+```py
+struct Array[T, N]:
+    data: arr[T, N]
+
+class Array[T, N]:
+    def __init__(mut self, data: arr[T, N]):
+        self.data = data
+
+a = Array([1, 2, 3])  # Array[int, 3] inferred
 ```
 
 [TOC](#table-of-contents)
