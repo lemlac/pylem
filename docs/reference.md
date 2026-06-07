@@ -1830,10 +1830,10 @@ def add_numbers[T: (int, float)](a: T, b: T) -> T:
     return a + b
 ```
 
-In addition to types, genetics can also be constants.
+In addition to types, genetics can also be constants. Overloaded functions and classes will use the same constraints, so you only need to declare them once.
 
 ```py
-struct Array[T, N]:
+struct Array[T, const N: usize]:
     data: arr[T, N]
 
 class Array[T, N]:
