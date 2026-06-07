@@ -1,29 +1,51 @@
 # Pylem
 
-**The primordial Python** — A Python-like programming language that bridges rapid development and high-performance systems code. See the [reference](docs/reference.md) doc for details.
+**The primordial Python — a Python‑shaped language for high‑performance systems code.**
 
-## Why Pylem?
+Pylem blends Python’s clarity with the control, predictability, and speed of a systems language. It keeps the ergonomics you love while adding the tools Python has always lacked: immutability by default, sized numeric types, static arrays, structs, enums, compile‑time evaluation, and a unified interpreter/LLVM‑style compilation pipeline.
 
-Python excels at productivity but falls short for performance-critical workloads. This often leads to the **two-language problem** — mixing Python with C, Rust, or Cython, which adds complexity, FFI overhead, and mental context-switching.
+Pylem aims to eliminate the **two‑language problem** — the constant need to mix Python with C, Rust, or Cython for performance‑critical work. Write expressive code first, optimize later, without switching languages.
 
-**Pylem** solves this by offering familiar Python syntax with opt-in strictness, performance features, and the ability to interpret *or* compile the same code.
+---
 
-The name comes from **"ylem"** — the hypothetical primordial substance from which all matter in the universe was formed (**Py** + **ylem**). Pylem is designed as the foundational building block for high-performance code that still feels like Python. 🌌
+## 🚀 Why Pylem?
 
-## Key Features
+Python is unmatched for productivity, but it struggles when you need…
 
-- **Python-like syntax**: f-strings, list comprehensions, `def`, `match`/`case`, `try`/`except`, and more.
-- **Mutability control**: Variables are immutable by default. Use the `mut` keyword when needed.
-- **Performance types**: Sized integers/floats (`i32`, `f64`), static arrays `arr[T, N]`, `struct`, `enum`, `union`, `chr`, optionals `T?`, and more.
-- **Generics**: Python-style square bracket notation (e.g. `list[T]`, `struct Vec[T]`, `def process[T](x: T)`).
-- **Compile-time programming**: `const` values and compile-time evaluable functions.
-- **Flexible blocks & lambdas**: Multi-line lambdas supported via a dual whitespace + bracket system.
-- **Function overloading** + strong type inference.
-- **Advanced control flow**: Labeled `block`s, rich `match` with guards and explicit `fallthrough`, labeled `break`/`continue`.
+- *Predictable performance*
+- *Static guarantees*
+- *To avoid C/Rust extensions*
+- *To compile code without rewriting it*
 
-Pylem is in early development. It aims to support both fast interpretation and AOT compilation.
+Pylem solves this by offering:
 
-## Quick Start
+- **Python‑like syntax** with strong static types  
+- **Immutable‑by‑default semantics** for safer reasoning  
+- **Sized integers/floats** (`i32`, `f64`, …)  
+- **Static arrays** (`arr[T, N]`) and low‑level data layouts  
+- **`struct`, `enum`, `union`** for systems‑style modeling  
+- **Compile‑time functions** and `const` evaluation  
+- **Function overloading** and powerful type inference  
+- **One codebase** that can be **interpreted or AOT‑compiled**
+
+Pylem is designed to feel familiar to Python developers while giving you the performance headroom of a lower‑level language.
+
+---
+
+## 🧠 Key Features
+
+- **Python‑like syntax**: f‑strings, comprehensions, `def`, `match`, exceptions  
+- **Mutability control**: immutable by default; opt‑in `mut`  
+- **Performance types**: `i32`, `f64`, `arr[T, N]`, `chr`, optionals `T?`  
+- **Generics**: `list[T]`, `struct Vec[T]`, `def process[T](x: T)`  
+- **Compile‑time programming**: `const` values, CT‑evaluated functions  
+- **Function overloading** with strong inference  
+- **Advanced control flow**: labeled blocks, guarded `match`, explicit `fallthrough`  
+- **Unified execution model**: interpret during development, compile for speed  
+
+---
+
+## 🧪 Quick Start
 
 ```py
 print("Hello, Pylem!")
@@ -36,7 +58,9 @@ counter += 1
 print(str(counter))  # 1
 ```
 
-## Example: Generic Stack
+---
+
+## 📦 Example: Generic Stack
 
 ```py
 struct Stack[T]:
@@ -61,7 +85,9 @@ if item != None:
     print(str(item))  # 42
 ```
 
-## Example: Bank Account
+---
+
+## 💰 Example: Bank Account
 
 ```py
 struct BankAccount:
@@ -81,39 +107,65 @@ acc = BankAccount("Alex", 100)
 print(acc.deposit(50))
 ```
 
-## Documentation
+---
 
-- **[Full Language Reference](docs/reference.md)** — Complete syntax, semantics, and examples.
-- The reference highlights notable differences from Python.
+## 🔍 How Pylem Differs from Python
 
-## Installation / Building
+| Concept | Python | Pylem |
+|--------|--------|--------|
+| Mutability | Everything mutable | Immutable by default; explicit `mut` |
+| Types | Dynamic | Static + sized + inferred |
+| Overloading | No | Yes |
+| Arrays | Lists only | Static arrays + lists |
+| Compilation | Optional via Cython | Built‑in interpreter + AOT |
+| Low‑level data | Not exposed | `struct`, `enum`, `union` |
 
-Currently a work-in-progress. See the `docs/` folder and repository issues for the latest status and build instructions.
+---
 
-## Philosophy
+## 📚 Documentation
 
-Pylem prioritizes **familiarity for Python developers** while adding the tools needed for systems-level performance. It draws inspiration from Python (ergonomics), Rust/C (control & safety), and projects like Mojo (unifying high-level and low-level code).
+- **Full Language Reference** — [`docs/reference.md`](docs/reference.md)
+- Additional examples and design notes in [`docs/`](docs/)
 
-## Roadmap
+---
 
-- [ ] Working interpreter for core features
-- [ ] Rich standard library (fast collections, numerics, etc.)
-- [ ] Generics implementation and traits
-- [ ] Compiler backend (LLVM or similar)
-- [ ] Python & C FFI / interop
-- [ ] Tooling: formatter, LSP, package manager
+## 🛠️ Installation / Building
 
-## Contributing
+Pylem is in early development. See the [`docs/`](docs/) folder and repository issues for build instructions and current status.
 
-Early-stage contributions are very welcome — whether it's code, documentation, examples, or design discussion.
+---
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) or open an issue.
+## 🧬 Philosophy
 
-## License
+Pylem is inspired by:
 
-[MIT License](LICENSE)
+- **Python** — clarity and ergonomics  
+- **Rust/C** — control, safety, predictable performance  
+- **Mojo** — unifying high‑level and low‑level code  
+
+The goal is a language that feels like Python but scales to systems programming without rewriting your codebase.
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Core interpreter  
+- [ ] Standard library (collections, numerics, etc.)  
+- [ ] Generics + traits  
+- [ ] LLVM‑based compiler backend  
+- [ ] Python & C FFI  
+- [ ] Tooling: formatter, LSP, package manager  
+
+---
+
+## 🤝 Contributing
+
+Contributions of all kinds are welcome — code, docs, examples, or design discussion.  
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) or open an issue.
 
 ---
 
 **From the primordial substance of code.**  
-Questions, ideas, or feedback? Feel free to open an issue!
+Questions or ideas? Open an issue!
+
+[MIT License](LICENSE)
