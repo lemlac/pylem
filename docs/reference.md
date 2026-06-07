@@ -902,7 +902,8 @@ The `return` statement is used inside a function to exit it and pass a value bac
 ```py
 def add_numbers(a, b):
     return a + b  # Sends the sum back to the caller
-# Call the function and store the result in a variabletotal = add_numbers(5, 3)
+# Call the function and store the result in a variable
+total = add_numbers(5, 3)
 
 print(total)  # Output: 8
 ```
@@ -919,7 +920,8 @@ def get_user_profile():
     name = "Alice"
     age = 30
     return name, age  # Returns a tuple: ("Alice", 30)
-# Unpack the two returned values into separate variablesuser_name, user_age = get_user_profile()
+# Unpack the two returned values into separate variables
+user_name, user_age = get_user_profile()
 
 print(user_name)  # Output: Alice
 print(user_age)   # Output: 30
@@ -1496,7 +1498,7 @@ Note that a safety pointer `ptr[T]?` is related to but not quite the same as a `
 x: int? = get_number()
 p: ptr[int?] = ref(x)      # Non-null pointer to an optional int
 
-if *p != Nome:             # Check the value instead of the pointer
+if *p != None:             # Check the value instead of the pointer
     print(f"*p is {*p}")   # *p will automatically unwrap to an int here.
 ```
 
