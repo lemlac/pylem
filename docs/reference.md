@@ -1828,17 +1828,17 @@ If you want a generic function to only accept specific types, you can pass them 
 
 ```py
 # T can only be an int or a float
-def add_numbers[T: (int, float)](a: T, b: T) -> T:
+def add_numbers[type T: (int, float)](a: T, b: T) -> T:
     return a + b
 ```
 
 In addition to types, generics can also be constants. Overloaded functions and classes will use the same constraints, so you only need to declare them once.
 
 ```py
-struct Array[T, const N: usize]:
+struct Array[type T, const N: usize]:
     data: arr[T, N]
 
-class Array[T, N]:   # `const` constraint inherited from struct declaration
+class Array[T, N]:   # `type`/`const` constraint inherited from struct declaration
     def __init__(mut self, data: arr[T, N]):
         self.data = data
 
