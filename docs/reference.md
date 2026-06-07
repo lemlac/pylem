@@ -132,7 +132,6 @@ calculate_and_report(
 4. __[Constants](#constants)__
 5. __[Control Flow](#control-flow)__
 6. __[Types](#types)__
-7. __[Generics](#generics)__
 8. __[Operators](#operators)__
 9. __[Advanced](#advanced)__
 10. __[Reserved Words](#reserved-words)__
@@ -1793,62 +1792,6 @@ _[Custom Types](#custom-types)_
 
 ---
 
-## Generics
-
-Generics allow you to write reusable code (functions or classes) that can operate on multiple data types while keeping static type safety. 
-
-Use brackets to declare a type variable placeholder (like `[T]`), then use `T` for arguments and return types.
-
-```py
-# The [T] syntax automatically creates a type variable
-def get_first_element[T](items: list[T]) -> T:
-    return items[0]
-# Type checkers automatically infer the type based on the input
-number = get_first_element([1, 2, 3])      # Inferred as int
-text = get_first_element(["a", "b", "c"])  # Inferred as str
-```
-
-You can create flexible data structures like a Box or Stack that can hold any type.
-
-```py
-struct Box[T]:
-    content: T
-
-class Box[T]:
-    def __init__(mut self, content: T):
-        self.content: T = content
-    def get_content(self) -> T:
-        return self.content
-# Instantiate with specific types
-int_box = Box[int](123)
-str_box = Box[str]("Hello")
-```
-
-If you want a generic function to only accept specific types, you can pass them directly inside the bracket declaration.
-
-```py
-# T can only be an int or a float
-def add_numbers[type T: (int, float)](a: T, b: T) -> T:
-    return a + b
-```
-
-In addition to types, generics can also be constants. Overloaded functions and classes will use the same constraints, so you only need to declare them once.
-
-```py
-struct Array[type T, const N: usize]:
-    data: arr[T, N]
-
-class Array[T, N]:   # `type`/`const` constraint inherited from struct declaration
-    def __init__(mut self, data: arr[T, N]):
-        self.data = data
-
-a = Array([1, 2, 3])  # Array[int, 3] inferred
-```
-
-[TOC](#table-of-contents)
-
----
-
 ## Operators
 
 The same operators in Python are also in Pylem. For operators unique to Pylem, see [Unique Operators](#unique-operators).
@@ -1993,7 +1936,7 @@ These overload syntax patterns natively used with dictionaries, lists, sets, and
 
 _[Operators](#operators)_
 
-## Unique Operators
+### Unique Operators
 
 *TBD*
 
@@ -2002,6 +1945,86 @@ _[Operators](#operators)_
 ---
 
 ## Advanced
+
+1. __[Generics](#generics)__
+2. __[Compile-time Functions](#compile-time-functions)__
+3. __[Decorators](#decorators)__
+
+[TOC](#table-of-contents)
+
+---
+
+### Generics
+
+Generics allow you to write reusable code (functions or classes) that can operate on multiple data types while keeping static type safety. 
+
+Use brackets to declare a type variable placeholder (like `[T]`), then use `T` for arguments and return types.
+
+```py
+# The [T] syntax automatically creates a type variable
+def get_first_element[T](items: list[T]) -> T:
+    return items[0]
+# Type checkers automatically infer the type based on the input
+number = get_first_element([1, 2, 3])      # Inferred as int
+text = get_first_element(["a", "b", "c"])  # Inferred as str
+```
+
+You can create flexible data structures like a Box or Stack that can hold any type.
+
+```py
+struct Box[T]:
+    content: T
+
+class Box[T]:
+    def __init__(mut self, content: T):
+        self.content: T = content
+    def get_content(self) -> T:
+        return self.content
+# Instantiate with specific types
+int_box = Box[int](123)
+str_box = Box[str]("Hello")
+```
+
+If you want a generic function to only accept specific types, you can pass them directly inside the bracket declaration.
+
+```py
+# T can only be an int or a float
+def add_numbers[type T: (int, float)](a: T, b: T) -> T:
+    return a + b
+```
+
+In addition to types, generics can also be constants. Overloaded functions and classes will use the same constraints, so you only need to declare them once.
+
+```py
+struct Array[type T, const N: usize]:
+    data: arr[T, N]
+
+class Array[T, N]:   # `type`/`const` constraint inherited from struct declaration
+    def __init__(mut self, data: arr[T, N]):
+        self.data = data
+
+a = Array([1, 2, 3])  # Array[int, 3] inferred
+```
+
+_[Advanced](#advanced)_
+
+---
+
+### Compile Time Functions
+
+*TBD*
+
+_[Advanced](#advanced)_
+
+---
+
+### Decorators
+
+*TBD*
+
+_[Advanced](#advanced)_
+
+---
 
 *TBD*
 
