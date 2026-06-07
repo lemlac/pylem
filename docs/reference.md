@@ -1824,7 +1824,7 @@ str_box = Box[str]("Hello")
 
 If you want a generic function to only accept specific types, you can pass them directly inside the bracket declaration.
 
-```
+```py
 # T can only be an int or a float
 def add_numbers[T: (int, float)](a: T, b: T) -> T:
     return a + b
@@ -1988,6 +1988,8 @@ These overload syntax patterns natively used with dictionaries, lists, sets, and
 * `__setitem__(self, key, value)`: Indexing assignment (`obj[key] = value`)
 * `__delitem__(self, key)`: Deleting items (`del obj[key]`)
 * `__contains__(self, item)`: Membership testing (`item in obj`)
+
+_[Operators](#operators)_
 
 ## Unique Operators
 
