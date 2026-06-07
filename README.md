@@ -33,7 +33,7 @@ print(f"Hello, {name}!")
 
 mut counter = 0
 counter += 1
-print(counter)  # 1
+print(str(counter))  # 1
 ```
 
 ## Example: Generic Stack
