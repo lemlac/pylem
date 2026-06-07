@@ -1021,6 +1021,17 @@ b = int(9.99)  # Result: 9
 c = complex(3)  # Result: (3+0j)
 ```
 
+__The size of `int`__ borrows the same dynamic sizing as the standard `int` in Python. For more low-level integer types, see the next section.
+
+```py
+import sys
+
+print(sys.getsizeof(int(0)))          # Output: 28 bytes
+print(sys.getsizeof(int(1)))          # Output: 28 bytes
+print(sys.getsizeof(int(2)**30))      # Output: 32 bytes (Grows as value expands)
+print(sys.getsizeof(int(2)**1000))    # Output: 168 bytes
+```
+
 ##### Sized Number Types
 
 In addition to Python's number types, Pylem includes size specific variants of integers (signed or unsigned) and floating-point numbers to give you more control.
