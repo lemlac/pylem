@@ -2140,7 +2140,7 @@ _[Operators](#operators)_
 1. __[Generics](#generics)__
 2. __[Compile-time Functions](#compile-time-functions)__
 3. __[Decorators](#decorators)__
-4. __[Optional Parameters](#optional-parameters)__
+4. __[Parameters](#parameters)__
 
 [TOC](#table-of-contents)
 
@@ -2218,7 +2218,7 @@ _[Advanced](#advanced)_
 
 ---
 
-### Optional Parameters
+### Parameters
 
 *TBD*
 
