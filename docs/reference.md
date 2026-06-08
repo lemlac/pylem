@@ -1971,6 +1971,48 @@ The same operators in Python are also in Pylem. For operators unique to Pylem, s
 | __17__ | `lambda` | Lambda expression | N/A |
 | (Lowest) __18__ | `:=` | Assignment expression (Walrus operator) | Right-to-left |
 
+You can chain any comparison operator together, including relational, equality, identity, and membership operators:
+
+* Relational: `<`, `>`, `<=`, `>=`
+* Equality: `==`, `!=`
+* Identity: `is`, `is not`
+* Membership: `in`, `not in`
+
+```py
+# 1. Standard Range Check
+age = 25
+if 18 <= age < 65:
+    print("Eligible for standard adult ticket")
+# 2. Chained Equality Check
+x = y = z = 100
+if x == y == z:
+    print("All three variables are exactly equal")
+# 3. Mixing Different Operators (Arbitrary Chaining)
+score = 85
+if 0 < score <= 100 != 50:
+    print("Valid score and it is not a tie benchmark")
+```
+
+Adjacent elements are evaluated individually. Writing `a > b < c` translates strictly to `(a > b) and (b < c)`. It does not imply or verify any mathematical relationship between `a` and `c`.
+
+Because `is` and `in` are technically comparison operators, chaining them with equality can produce highly unexpected bugs.
+
+```py
+# ❌ INCORRECT LOGIC
+status = [True, False]
+if True in status == True:
+    print("This will NOT print!")
+
+# Why? Python translates it to: (True in status) and (status == True)
+# "True in status" evaluates to True.
+# "status == True" evaluates to False (a list is not a boolean).
+# True and False results in False.
+
+#  CORRECT LOGIC
+if (True in status) == True:
+    print("This prints as expected")
+```
+
 #### Compound Assignment Operators
 
 | Operator | Name | Example | Equivalent To |
@@ -1991,9 +2033,7 @@ The same operators in Python are also in Pylem. For operators unique to Pylem, s
 
 #### Operator Overloading
 
-__Comparison Operators__
-
-These methods handle equality and inequality operations. They typically return `True` or `False`.
+__Comparison Operators:__ *These methods handle equality and inequality operations. They typically return `True` or `False`.*
 
 * `__lt__(self, other)`: Less than (`<`)
 * `__le__(self, other)`: Less than or equal to (`<=`)
@@ -2002,9 +2042,7 @@ These methods handle equality and inequality operations. They typically return `
 * `__gt__(self, other)`: Greater than (`>`)
 * `__ge__(self, other)`: Greater than or equal to (`>=`)
 
-__Arithmetic Operators:__
-
-*These methods alter standard mathematical calculations.*
+__Arithmetic Operators:__ *These methods alter standard mathematical calculations.*
 
 * `__add__(self, other)`: Addition (`+`)
 * `__sub__(self, other)`: Subtraction (`-`)
@@ -2016,9 +2054,7 @@ __Arithmetic Operators:__
 * `__divmod__(self, other)`: Combined division and modulo (`divmod()`)
 * `__pow__(self, other[, modulo])`: Exponentiation (`**`)
 
-__Reflected (Right-Hand) Arithmetic Operators:__
-
-*Fallback to right-hand variants if the left operand does not support the corresponding operation.*
+__Reflected (Right-Hand) Arithmetic Operators:__ *Fallback to right-hand variants if the left operand does not support the corresponding operation.*
 
 * `__radd__(self, other)`: Right addition (`+`)
 * `__rsub__(self, other)`: Right subtraction (`-`)
@@ -2030,9 +2066,7 @@ __Reflected (Right-Hand) Arithmetic Operators:__
 * `__rdivmod__(self, other)`: Right division and modulo (`divmod()`)
 * `__rpow__(self, other)`: Right exponentiation (`**`)
 
-__In-Place (Assignment) Operators:__
-
-*These methods govern compound assignment symbols like `+=` and `*=`.*
+__In-Place (Assignment) Operators:__ *These methods govern compound assignment symbols like `+=` and `*=`.*
 
 * `__iadd__(mut self, other)`: In-place addition (`+=`)
 * `__isub__(mut self, other)`: In-place subtraction (`-=`)
@@ -2043,9 +2077,7 @@ __In-Place (Assignment) Operators:__
 * `__imod__(mut self, other)`: In-place modulo (`%=`)
 * `__ipow__(mut self, other)`: In-place exponentiation (`**=`)
 
-__Bitwise Operators:__
-
-*These handle binary bit manipulation and logical bit masking operations.*
+__Bitwise Operators:__ *These handle binary bit manipulation and logical bit masking operations.*
 
 * `__lshift__(self, other)`: Bitwise left shift (`<<`)
 * `__rshift__(self, other)`: Bitwise right shift (`>>`)
@@ -2069,18 +2101,14 @@ __In-Place Bitwise:__
 * `__ixor__(mut self, other)`: In-place XOR (`^=`)
 * `__ior__(mut self, other)`: In-place OR (`|=`)
 
-__Unary Operators:__
-
-*These operators process only one single object operand.*
+__Unary Operators:__ *These operators process only one single object operand.*
 
 * `__neg__(self)`: Unary negation (`-obj`)
 * `__pos__(self)`: Unary plus (`+obj`)
 * `__abs__(self)`: Absolute value (`abs(obj)`)
 * `__invert__(self)`: Bitwise inversion (`~obj`)
 
-__Container Operators:__
-
-These overload syntax patterns natively used with dictionaries, lists, sets, and tuples.
+__Container Operators:__ *These overload syntax patterns natively used with dictionaries, lists, sets, and tuples.*
 
 * `__len__(self)`: Returns collection size (`len(obj)`)
 * `__getitem__(self, key)`: Indexing and slicing access (`obj[key]`)
@@ -2208,5 +2236,3 @@ There are also new reserved words unique to Pylem:
 *This document captures the current state of the Pylem design. The language is still evolving.*
 
 _[Top](#pylem-reference)_
-
-
