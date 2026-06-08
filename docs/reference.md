@@ -1221,7 +1221,8 @@ users: list[dict[str, str]] = [
 There are several built-in methods to change list content dynamically like in Python:
 
 ```py
-# Start with a listinventory = ["laptop", "mouse"]
+# Start with a list
+inventory = ["laptop", "mouse"]
 # Add an item to the end
 inventory.append("keyboard")  # ['laptop', 'mouse', 'keyboard']
 # Insert an item at a specific index
