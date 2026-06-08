@@ -1940,6 +1940,15 @@ my_account = BankAccount("Alex", 100)
 print(f"{my_account.owner} has ${my_account.balance}")
 ```
 
+__Dunder *(double underscore)* Methods:__
+
+* `__init__(self, ...)`: Initializes a newly created instance of a class.
+* `__new__(cls, ...)`: The true constructor that allocates memory for the new object, running right before __init__.
+* `__del__(self)`: The destructor method triggered when an object is about to be garbage collected.
+* `__str__(self)`: Defines user-friendly, readable text for `str()`.
+* `__repr__(self)`: Returns an explicit, unambiguous string meant for debugging and logging.
+* `__add__(self, other)` etc.: *See [Operator Overloading](#operator-overloading).*
+
 _[Custom Types](#custom-types)_
 
 [TOC](#table-of-contents)
