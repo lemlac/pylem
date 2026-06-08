@@ -1834,9 +1834,9 @@ enum union NetworkResponse:
     # App is fetching data
     Loading
     # Payload is a custom data struct
-    Success(UserProfile)
+    Success: UserProfile
     # Payload contains error details
-    Failure { code: u32, message: str }
+    Failure: { code: u32, message: str }
 
 def render_ui(response: NetworkResponse):
     match response:
@@ -1862,12 +1862,12 @@ enum FilePermission:
     ReadWrite
 
 enum union Node:
-    File { 
+    File: { 
         name: str, 
         size_kb: u64, 
         perms: FilePermission
     }
-    Directory { 
+    Directory: { 
         name: str, 
         item_count: u32 
     }
@@ -1879,7 +1879,7 @@ def inspect_node(node: Node):
             match perms:
                 case ReadOnly: print("Read Only")
                 case ReadWrite: print("Read & Write")
-        case Directory { name, item_count }:
+        case Directory as { name, item_count }:
             print(f"Directory: {name} containing {item_count} items.")
 
 my_file = Node.File(
