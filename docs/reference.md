@@ -1653,6 +1653,22 @@ match dir:
         print("Go right!")
 ```
 
+```py
+# Define the enum
+enum TrafficLight:
+    Red
+    Yellow
+    Green
+
+# Instantiate a variant using the period (.) syntax
+current_light = TrafficLight.Green
+# Read the value using a match expression
+match current_light:
+    case Red:    print("Stop!")
+    case Yellow: print("Slow down!")
+    case Green:  print("Go!")
+```
+
 To attach data to an enum, use `enum union`:
 
 ```py
@@ -1752,9 +1768,7 @@ enum union MyTaggedUnion:
 a = MyTaggedUnion.First
 b = MyTaggedUnion.Second(2)
 c = MyTaggedUnion.Third(val=3)
-```
 
-```py
 match a:
     case First:
         print("first!")
@@ -1762,6 +1776,118 @@ match a:
         print(f"second! {val}")
     case Third as x:
         print(f"third! {x.val}")
+```
+
+```py
+enum union WebEvent:
+    PageLoad
+    KeyPress: chr
+    Paste: str
+    Click: { x: i64, y: i64 }
+
+# Create an instance of a variant with structured data
+click_event = WebEvent.Click(x=40, y=120)
+
+# Destructure data inside the match statement to read the payload
+match click_event:
+    case PageLoad:
+        print("Page loaded successfully.")
+    case KeyPress as c:
+        print(f"Pressed key: {c}")
+    case Paste as text:
+        print(f"Pasted text: {text}")
+    case Click as { x, y }:
+        print(f"Clicked at coordinates x: {x}, y: {y}")
+```
+
+```py
+enum union Command:
+    # No data needed
+    Undo
+    # Struct-like: explicit, named fields
+    MoveTo: { x: i32, y: i32 }
+    # Tuple-like: single value
+    Write: str
+    # Tuple-like: anonymous color data (R, G, B)
+    ChangeColor: u8, u8, u8
+
+def execute(command: Command):
+    match command:
+        case Undo: print("Reverting last action.")
+        case MoveTo as { x, y }: print(f"Moving cursor to ({x}, {y}).")
+        case Write as text: print("Writing text to buffer: \"{text}\"")
+        case ChangeColor as r, g, b: print(f"Color changed to RGB({r}, {g}, {b})")
+
+action = Command.ChangeColor(255, 0, 128)
+execute(action)
+```
+
+```py
+# A custom struct used inside the enum variant payload
+struct UserProfile:
+    username: str
+    avatar_url: str
+
+enum union NetworkResponse:
+    # App is waiting
+    Idle
+    # App is fetching data
+    Loading
+    # Payload is a custom data struct
+    Success(UserProfile)
+    # Payload contains error details
+    Failure { code: u32, message: str }
+
+def render_ui(response: NetworkResponse):
+    match response:
+        case Idle:
+            print("Welcome! Click the button to load your profile.")
+        case Loading:
+            print("Fetching data from server... Please wait.")
+        case Success as profile:
+            print(f"Profile loaded! User: {profile.username}, Avatar: {profile.avatar_url}")
+        case Failure as { code, message }:
+            println!(f"Error {code}: Data fetch failed. Reason: {message}")
+
+current_state = NetworkResponse.Failure(
+    code = 404, 
+    message = "Not Found"
+)
+render_ui(current_state)
+```
+
+```py
+enum FilePermission:
+    ReadOnly
+    ReadWrite
+
+enum union Node:
+    File { 
+        name: str, 
+        size_kb: u64, 
+        perms: FilePermission
+    }
+    Directory { 
+        name: str, 
+        item_count: u32 
+    }
+
+def inspect_node(node: Node):
+    match node:
+        case File as { name, size_kb, perms }:
+            print(f"File: {name} ({size_kb} KB) - Permission: ")
+            match perms:
+                case ReadOnly: print("Read Only")
+                case ReadWrite: print("Read & Write")
+        case Directory { name, item_count }:
+            print(f"Directory: {name} containing {item_count} items.")
+
+my_file = Node.File(
+    name = "config.toml",
+    size_kb = 4,
+    perms = FilePermission.ReadWrite
+)
+inspect_node(my_file)
 ```
 
 _[Custom Types](#custom-types)_
@@ -2081,4 +2207,5 @@ There are also new reserved words unique to Pylem:
 *This document captures the current state of the Pylem design. The language is still evolving.*
 
 _[Top](#pylem-reference)_
+
 
