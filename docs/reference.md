@@ -2141,6 +2141,7 @@ _[Operators](#operators)_
 2. __[Compile-time Functions](#compile-time-functions)__
 3. __[Decorators](#decorators)__
 4. __[Parameters](#parameters)__
+5. __[Iterators & Asynchronous Functions](#iterators--asynchronous-functions)__
 
 [TOC](#table-of-contents)
 
@@ -2219,6 +2220,14 @@ _[Advanced](#advanced)_
 ---
 
 ### Parameters
+
+*TBD*
+
+_[Advanced](#advanced)_
+
+---
+
+### Iterators & Asynchronous Functions
 
 *TBD*
 
