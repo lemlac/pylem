@@ -2152,10 +2152,10 @@ Pylem includes some new operators that are not found in Python.
 
 When accessing something from a pointer type `ptr`/`mutptr`, dereferencing with `.*` isn't necessary. Assuming `p` is a pointer, then:
 
-- `p.member == p.*.member`
-- `p[index] == p.*[index]`
-- `p[index:index] == p.*[index:index]`
-- `p(arguments...) == p.*(arguments...)`
+- `p.member` → `p.*.member`
+- `p[index]` → `p.*[index]`
+- `p[index:index]` → `p.*[index:index]`
+- `p(arguments...)` → `p.*(arguments...)`
 
 Or if `p` is a nullable pointer type `ptr?`/`mutptr?`, then:
 
