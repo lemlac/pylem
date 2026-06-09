@@ -2681,7 +2681,7 @@ When a function has several optional parameters, you can use keyword arguments t
 
 ```py
 def make_coffee(size, milk="Whole", sugar=0, ice=False):
-    summary = f"Size: {size}, Milk: {milk}, Sugar: {sugar} spoons"
+    mut summary = f"Size: {size}, Milk: {milk}, Sugar: {sugar} spoons"
     if ice:
         summary += ", Iced"
     return summary
