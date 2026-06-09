@@ -2313,15 +2313,24 @@ _[Operators](#operators)_
 
 ## Advanced
 
-1. __[Generics](#generics)__
-2. __[Compile-time Functions](#compile-time-functions)__
-3. __[Named Return Values](#named-return-values)__
-4. __[Parameters](#parameters)__
-5. __[Iterators & Asynchronous Functions](#iterators--asynchronous-functions)__
-6. __[Decorators](#decorators)__
-7. __[Importing & Modules](#importing--modules)__
+1. __[Slices](#slices)__
+2. __[Generics](#generics)__
+3. __[Compile-time Functions](#compile-time-functions)__
+4. __[Named Return Values](#named-return-values)__
+5. __[Parameters](#parameters)__
+6. __[Iterators & Asynchronous Functions](#iterators--asynchronous-functions)__
+7. __[Decorators](#decorators)__
+8. __[Importing & Modules](#importing--modules)__
 
 [TOC](#table-of-contents)
+
+---
+
+### Slices
+
+*TBD*
+
+_[Advanced](#advanced)_
 
 ---
 
