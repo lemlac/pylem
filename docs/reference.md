@@ -2336,7 +2336,8 @@ _[Operators](#operators)_
 5. __[Parameters](#parameters)__
 6. __[Iterators & Asynchronous Functions](#iterators--asynchronous-functions)__
 7. __[Decorators](#decorators)__
-8. __[Importing & Modules](#importing--modules)__
+8. __[Memory Allocation](#memory-allocation)__
+9. __[Importing & Modules](#importing--modules)__
 
 [TOC](#table-of-contents)
 
@@ -2344,7 +2345,111 @@ _[Operators](#operators)_
 
 ### Slices
 
-*TBD*
+A slice is a reference to part of a sequenced type such as arrays, lists, and tuples. Slicing an array in Pylem works differently than slicing a list in Python. 
+
+#### Slicing Lists
+
+```py
+numbers: list = [0, 10, 20, 30, 40, 50]
+
+# 1. Standard slice (indices 1, 2, 3)
+print(str(numbers[1:4]))    # Output: [10, 20, 30]
+
+# 2. Omit start (defaults to 0)
+print(str(numbers[:3]))     # Output: [0, 10, 20]
+
+# 3. Omit stop (goes to the end)
+print(str(numbers[3:]))     # Output: [30, 40, 50]
+
+# 4. Copy the entire list
+print(str(numbers[:]))      # Output: [0, 10, 20, 30, 40, 50]
+```
+
+You can count backward from the end of the sequence using negative numbers. `-1` represents the last item, `-2` the second to last, and so on.
+
+```py
+letters: list[chr] = ['a', 'b', 'c', 'd', 'e']
+
+# Slice the last two elements
+print(str(letters[-2:]))    # Output: ['d', 'e']
+
+# Slice from index 1 up to (but excluding) the last element
+print(str(letters[1:-1]))   # Output: ['b', 'c', 'd']
+```
+
+The step argument controls how Python skips through the sequence.
+
+```py
+numbers: list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# Get every second element
+print(str(numbers[::2]))    # Output: [0, 2, 4, 6, 8]
+
+# Reverse a sequence (negative step)
+print(str(numbers[::-1]))   # Output: [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+```
+
+Unlike standard indexing with a list (e.g., `numbers[100]`), which throws an `IndexError`, slicing handles out-of-bounds indices gracefully by capping them at the start or end of the sequence.
+
+```py
+my_list: list = [1, 2, 3]
+print(str(my_list[1:100]))  # Output: [2, 3] (No crash!)
+```
+
+For lists, `a[:]` creates a new list object containing references to the original items. Modifying the list structure of the copy won't affect the original list. However, if the items inside are mutable objects (like nested lists), changes to those objects will reflect in both.
+
+#### Slicing Arrays
+
+By default, Python slices implicitly allocate memory and copy data. In a compiled language, this behavior introduces unacceptable hidden performance costs.
+
+* Python: Slicing a list (my_list[1:4]) creates a brand-new list object and copies references to those items.
+* Pylem: Slicing must return a view or a borrowed reference to the existing memory, It should be a two-word fat pointer (a data pointer and a length).
+
+If a developer wants a copy in Pylem, they must explicitly ask for it to prevent hidden allocations.
+
+```py
+# --- Python Behavior ---
+nums = [1, 2, 3, 4
+]sub = nums[1:3]    # Allocates a new list [2, 3]
+sub[0] = 99         # Modifies 'sub', 'nums' remains [1, 2, 3, 4]
+
+# --- Pylem Behavior ---
+nums = [1, 2, 3, 4]
+sub = nums[1:3]     # ZERO allocation. 'sub' is a fat pointer pointing into 'nums'.
+sub[0] = 99         # 'nums' becomes [1, 99, 3, 4] because it's a view!
+
+# Explicit copying required for old Python behavior:
+sub_copy = nums[1:3].copy() 
+```
+
+Slices must be strongly typed at compile time. Pylem needs to distinguish between an owned collection (like a Vector or Array) and a borrowed slice view.
+
+```py
+# Pylem type signatures (Conceptual syntax matching Python type hints)
+def calculate_sum(data: slice[int]) -> int:
+    # 'data' does not own memory; it's a lightweight view accepting 
+    # fixed arrays, dynamic lists, or other sub-slices of ints.
+    return sum(data)
+```
+
+A standard fat pointer (ptr + len) requires elements to be strictly contiguous in memory. To remain zero-allocation, Pylem should disallow the step argument in standard slices. Alternatively, a non-contiguous slice would require a third word (a stride parameter), turning it into a 3-word fat pointer. To maximize optimization like C/Rust, Pylem should separate this into a distinct type: `StridedSlice[T]`.
+
+Because Pylem compiles down to native machine code without a heavy runtime or garbage collector, it faces the "dangling pointer" problem. If the original list is freed, the slice view becomes invalid.
+
+Pylem must implement one of two strategies:
+
+   1. Rust Approach (Lifetimes): The compiler tracks the slice and throws a compile-time error if the original collection is dropped or modified while the slice view is active.
+   2. C++ Approach (Trivially Unsafe): The compiler allows it, but it becomes undefined behavior if the developer mismanages memory. To fit a modern compiled language, option 1 is highly preferred.
+
+If a developer slices a fixed-size array using literals known at compile time, Pylem can optimize the slice into a fixed-size stack array view rather than a dynamic slice.
+
+```py
+# Pylem can optimize this at compile time
+fixed_array: arr[int, 10] = [0] * 10
+sub_view: arr[int, 3] = fixed_array[2:5] # Size (3) is known to the compiler
+```
+
+This silent capping requires branching logic (`if`/`else` checks) at runtime, which slows down execution loops. Pylem should treat out-of-bounds slicing as a runtime panic or a compiler optimization boundary to achieve C-like speeds.
 
 _[Advanced](#advanced)_
 
@@ -2554,6 +2659,14 @@ _[Advanced](#advanced)_
 ---
 
 ### Decorators
+
+*TBD*
+
+_[Advanced](#advanced)_
+
+---
+
+### Memory Allocation
 
 *TBD*
 
