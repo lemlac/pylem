@@ -2418,9 +2418,9 @@ You can use variable declarations, loops, and conditional statements too.
 
 ```py
 # Multi-statement
-constexpr sum_of_squares(n: int) -> int:
-    sum = 0   # Local variables are allowed
-	mut i = 1
+const sum_of_squares(n: int) -> int:
+    sum = 0      # Local variables are allowed
+	mut i = 1    # Can be mutable
     while i < n:
         sum += (i * i)
 		i += 1
