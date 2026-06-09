@@ -2159,10 +2159,12 @@ When accessing something from a pointer type `ptr`/`mutptr`, dereferencing with 
 
 Or if `p` is a nullable pointer type `ptr?`/`mutptr?`, then:
 
-- `p?.member == p?.*?.member`
-- `p?[index] == p?.*?[index]`
-- `p?[index:index] == p?.*?[index:index]`
-- `p?(arguments...) == p?.*?(arguments...)`
+- `p?.member` → `p?.*?.member`
+- `p?[index]` → `p?.*?[index]`
+- `p?[index:index]` → `p?.*?[index:index]`
+- `p?(arguments...)` → `p?.*?(arguments...)`
+
+Even if you have nested pointers, these operators will automatically dereference each one — for example, if `p` is `ptr[ptr[T]]`, then `p.member` will mean `p.*.*.member`, etc..
 
 ### Overlapping Operators
 
