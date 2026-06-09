@@ -1719,9 +1719,9 @@ The dynamic type `dyn` is an API to access Python's dynamic typing from within P
 ```py
 def print_dyn(d: dyn, prefix=""):
     match d:
-        case Bool as x if x:
+        case Bool as b if b:
             print(f"{prefix}bool: True")
-        case Bool:
+        case Bool as b if not b:
             print(f"{prefix}bool: False")
         case Int as i:
             print(f"{prefix}int: {i}")
