@@ -1090,6 +1090,45 @@ print(f"Final Score: {incrementScore(5)}")
 # Output: Final Score: 20
 ```
 
+`defer` makes it possible to do things that are possible in C but not Python without needing to implement `goto`.
+
+```c
+// Source - https://stackoverflow.com/a/245761
+// Posted by Greg Rogers, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-06-09, License - CC BY-SA 3.0
+
+void foo()
+{
+    if (!doA())
+        goto exit;
+    if (!doB())
+        goto cleanupA;
+    if (!doC())
+        goto cleanupB;
+
+    /* everything has succeeded */
+    return;
+
+cleanupB:
+    undoB();
+cleanupA:
+    undoA();
+exit:
+    return;
+}
+```
+
+```py
+def foo():
+    if !doA():
+        return
+    if !doB():
+        defer undoA()
+    if !doC():
+        defer undoB()
+	# everything has succeeded
+```
+
 _[Control Flow](#control-flow)_
 
 [TOC](#table-of-contents)
