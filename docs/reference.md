@@ -397,7 +397,9 @@ MAX(7, 3)     # Result: 7
 5. __[`break`/`continue`](#break--continue)__
 6. __[`match`/`case`](#match--case)__
 7. __[`try`/`except`](#try--except)__
+7. __[`with`](#with)__
 8. __[`return`](#return)__
+9. __[`defer`](#defer)__
 
 [TOC](#table-of-contents)
 
@@ -896,6 +898,59 @@ except InsufficientFundsError as error:
 
 _[Control Flow](#control-flow)_
 
+### `with`
+
+The `with` statement is used for automatic resource management. It ensures that resources like files, locks, or database connections are properly cleaned up and closed after use, even if your code encounters an error or crashes.
+
+This is the most common use case. The file automatically closes when code leaves the with block, eliminating the need to call `file.close()` manually.
+
+```py
+# Example 1: Writing to a file
+with open("example.txt", "w") as file:
+    file.write("Hello, Python!")
+# Example 2: Reading from a file
+with open("example.txt", "r") as file:
+    content = file.read()
+    print(content)
+```
+
+You can manage multiple resources simultaneously by separating them with commas. This is ideal for tasks like copying data from one file to another.
+
+```py
+# Copying content from a source file to a destination file
+with open("source.txt", "r") as source, open("destination.txt", "w") as dest:
+    dest.write(source.read())
+```
+
+The with block simplifies thread synchronization. It automatically acquires the lock when entering the block and releases it when exiting.
+
+```py
+import threading
+lock = threading.Lock()
+with lock:
+    # The lock is automatically acquired here
+    print("This code is thread-safe!")
+    # The lock is automatically released here
+```
+
+Objects that work with a with statement are called context managers. You can create your own by using a class with `__enter__()` and `__exit__()` methods. *(See [Dunder Methods](#dunder-methods).)*
+
+```py
+class DatabaseConnection:
+    def __enter__(self):
+        print("Connecting to the database...")
+        return "Connection_Object"
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print("Closing the database connection safely.")
+        # Returning True would swallow exceptions; returning None/False propagates them
+
+# Using the custom context manager
+with DatabaseConnection() as db:
+    print(f"Executing queries using: {db}")
+```
+
+_[Control Flow](#control-flow)_
+
 ### `return`
 
 The `return` statement is used inside a function to exit it and pass a value back to the place where the function was called.
@@ -926,6 +981,113 @@ user_name, user_age = get_user_profile()
 
 print(user_name)  # Output: Alice
 print(user_age)   # Output: 30
+```
+
+__Named Return Values__ allow you to declare variable names for your return types directly in the function signature. The return value can be set using a variable by declaring the return type with `as` after it. These are always mutable, so no `mut` is needed. If a function returns multiple return values, each can be declared with `as`. When you name your return values, you can use a **naked return** (a `return` statement without explicit arguments). The compiler automatically returns the current values of those variables.
+
+```py
+# sum and product are initialized to 0 automatically
+def calculate(a: int, b: int) -> int as sum, int as product:
+	sum = a + b
+	product = a * b
+	return # Naked return: automatically returns sum and product
+
+s, p = calculate(3, 5)
+print(f"Sum: {s}, Product: {p}") 
+# Output: Sum: 8, Product: 15
+```
+
+```py
+def get_coordinates() -> float as lat, float as lng float64:
+	lat = 35.9606
+	lng = -83.9207
+	# You can still return explicitly if you prefer over naked returns
+	return lat, lng 
+
+latitude, longitude = getCoordinates()
+print("Lat: {latitude}, Lng: {longitude}")
+```
+
+_[Control Flow](#control-flow)_
+
+### `defer`
+
+The `defer` keyword delays the execution of a function until the surrounding function returns. It is commonly used for resource cleanup, unlocking files, and managing application panics. It has some overlap with the `with` block but aimed to make it easier to transition from C code where a `goto` statement might be used for the same purpose. 
+
+A deferred function call is pushed onto a stack. The program executes everything else in the function first, then runs the deferred code at the very end.
+
+```py
+def defer_example_print():
+    # This is scheduled to run last
+    defer print("Goodbye") 
+    print("Hello")
+
+defer_example_print()
+# Output:
+# "Hello"
+# "Goodbye"
+```
+
+__Unlocking Mutexes (Concurrency):__ When writing concurrent code with shared resources, you must unlock your mutexes. Putting `defer mu.unlock()` right after `mu.lock()` prevents unexpected deadlocks if your function returns unexpectedly.
+
+```py
+from sync import Mutex
+
+struct Counter:
+	mu: Mutex
+	value: int
+
+class Counter:
+    increment(mut self):
+    	self.mu.lock()
+    	defer self.mu.unlock() # Guaranteed to unlock when increment() finishes
+    	self.value += 1
+```
+
+__Multiple Defers (LIFO Order):__ If you use multiple `defer` statements in a single function, they'll be execute in *Last-In, First-Out* (LIFO) order (a stack structure).
+
+```py
+def defer_example_lifo():
+    defer print("First Defer Statement")
+    defer print("Second Defer Statement")
+    defer print("Third Defer Statement")
+    print("Main logic runs here")
+
+defer_example_lifo()
+# Output:
+# "Main logic runs here"
+# "Third Defer Statement"
+# "Second Defer Statement"
+# "First Defer Statement"
+```
+
+__Immediate Argument Evaluation:__ A common point of confusion is when arguments inside a defer statement are calculated. Arguments are evaluated immediately when the `defer` line is reached, not when the function finally runs.
+
+```py
+def defer_evaluation_example():
+	mut x = 10
+	# x is evaluated to 10 right here
+	defer print(f"Value in defer: {x}") 
+	x := 20
+	print(f"Value in main: {x}")
+
+defer_evaluation_example()
+# Output:
+# "Value in main: 20"
+# "Value in defer: 10"
+```
+
+__Modifying Returns:__ A major specialized use case for named return values is interacting with a `defer` block. Because the named parameters are scoped to the entire function, a deferred closure can intercept and change the final values right before they reach the caller.
+
+```py
+def increment_score(base: int) -> int as final_score:
+	# Evaluated last, right before the function exits
+	defer final_score += 5
+	finalScore = base + 10
+	return # Sets finalScore to 15, then defer runs and adds 5
+
+print(f"Final Score: {incrementScore(5)}")
+# Output: Final Score: 20
 ```
 
 _[Control Flow](#control-flow)_
@@ -1940,13 +2102,16 @@ my_account = BankAccount("Alex", 100)
 print(f"{my_account.owner} has ${my_account.balance}")
 ```
 
-__Dunder *(double underscore)* Methods:__
+#### Dunder Methods
+
+__Dunder *(shourt for "double underscore")* Methods__ are special methods marked with 2 underscores (`__`) before and after the name of the method.
 
 * `__init__(self, ...)`: Initializes a newly created instance of a class.
 * `__new__(cls, ...)`: The true constructor that allocates memory for the new object, running right before __init__.
 * `__del__(self)`: The destructor method triggered when an object is about to be garbage collected.
 * `__str__(self)`: Defines user-friendly, readable text for `str()`.
 * `__repr__(self)`: Returns an explicit, unambiguous string meant for debugging and logging.
+* `__enter__(self)`/`__exit__(self, ...)`: Define the behavior of the object when used in a [`with`](#with) block.
 * `__add__(self, other)` etc.: *See [Operator Overloading](#operator-overloading).*
 
 _[Custom Types](#custom-types)_
@@ -2041,6 +2206,8 @@ if (True in status) == True:
 | `:=` | Walrus operator (Assignment expression) | `if (n := len(a)) > 10:` | *Assigns and returns value* |
 
 #### Operator Overloading
+
+Operator overloading is defined using __[dunder methods](#dunder-methods).__
 
 __Comparison Operators:__ *These methods handle equality and inequality operations. They typically return `True` or `False`.*
 
@@ -2247,7 +2414,7 @@ The 35 reserved words in Python are also reserved in Pylem:
 
 There are also new reserved words unique to Pylem:
 
-- [`block`](#block), [`case`](#match--case), [`const`](#constants), [`enum`](#enum), [`fallthrough`](#fallthrough), [`match`](#match--case), [`mut`](#mutability), [`struct`](#struct), [`type`](#type), [`union`](#union)
+- [`block`](#block), [`case`](#match--case), [`const`](#constants), [`defer`](#defer), [`enum`](#enum), [`fallthrough`](#fallthrough), [`match`](#match--case), [`mut`](#mutability), [`struct`](#struct), [`type`](#type), [`union`](#union)
 
 ---
 
