@@ -132,9 +132,9 @@ calculate_and_report(
 4. __[Constants](#constants)__
 5. __[Control Flow](#control-flow)__
 6. __[Types](#types)__
-8. __[Operators](#operators)__
-9. __[Advanced](#advanced)__
-10. __[Reserved Words](#reserved-words)__
+7. __[Operators](#operators)__
+8. __[Advanced](#advanced)__
+9. __[Reserved Words](#reserved-words)__
 
 _[Top](#pylem-reference)_
 
@@ -397,9 +397,9 @@ MAX(7, 3)     # Result: 7
 5. __[`break`/`continue`](#break--continue)__
 6. __[`match`/`case`](#match--case)__
 7. __[`try`/`except`](#try--except)__
-7. __[`with`](#with)__
-8. __[`return`](#return)__
-9. __[`defer`](#defer)__
+8. __[`with`](#with)__
+9. __[`return`](#return)__
+10. __[`defer`](#defer)__
 
 [TOC](#table-of-contents)
 
@@ -1033,11 +1033,11 @@ exit:
 
 ```py
 def foo():
-    if !doA():
+    if not doA():
         return
-    if !doB():
+    if not doB():
         defer undoA()
-    if !doC():
+    if not doC():
         defer undoB()
 	# everything has succeeded
 ```
@@ -2011,7 +2011,7 @@ def render_ui(response: NetworkResponse):
         case Success as profile:
             print(f"Profile loaded! User: {profile.username}, Avatar: {profile.avatar_url}")
         case Failure as { code, message }:
-            println!(f"Error {code}: Data fetch failed. Reason: {message}")
+            print(f"Error {code}: Data fetch failed. Reason: {message}")
 
 current_state = NetworkResponse.Failure(
     code = 404, 
@@ -2429,14 +2429,14 @@ You can use variable declarations, loops, and conditional statements too.
 # Multi-statement
 const sum_of_squares(n: int) -> int:
     sum = 0      # Local variables are allowed
-	mut i = 1    # Can be mutable
+    mut i = 1    # Can be mutable
     while i < n:
         sum += (i * i)
-		i += 1
+        i += 1
     return sum
 
 const result: int = sum_of_squares(4)    # 1 + 4 + 9 + 16 = 30
-print(f"Sum of squares: {result}"
+print(f"Sum of squares: {result}")
 ```
 
 __Const Structs and Methods:__ You can make constructors and member functions `const`. This lets you build and query complete objects entirely during the compilation phase.
@@ -2448,7 +2448,7 @@ struct Point:
 
 class Point:
     # Const constructor allows compile-time object initialization
-    const __init__(self, start_x: double, start_y: double):
+    const __init__(mut self, start_x: float, start_y: float):
 		self.x = start_x
 		self.y = start_y
 
@@ -2497,8 +2497,8 @@ def get_coordinates() -> float as lat, float as lng:
 	# You can still return explicitly if you prefer over naked returns
 	return lat, lng 
 
-latitude, longitude = getCoordinates()
-print("Lat: {latitude}, Lng: {longitude}")
+latitude, longitude = get_coordinates()
+print(f"Lat: {latitude}, Lng: {longitude}")
 ```
 
 __Modifying Returns:__ A major specialized use case for named return values is interacting with `defer`. Because the named parameters are scoped to the entire function, a deferred closure can intercept and change the final values right before they reach the caller.
@@ -2507,10 +2507,10 @@ __Modifying Returns:__ A major specialized use case for named return values is i
 def increment_score(base: int) -> int as final_score:
 	# Evaluated last, right before the function exits
 	defer final_score += 5
-	finalScore = base + 10
+	final_score = base + 10
 	return # Sets finalScore to 15, then defer runs and adds 5
 
-print(f"Final Score: {incrementScore(5)}")
+print(f"Final Score: {increment_score(5)}")
 # Output: Final Score: 20
 ```
 
