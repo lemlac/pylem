@@ -2161,7 +2161,19 @@ _[Custom Types](#custom-types)_
 
 ## Operators
 
-The same operators in Python are also in Pylem. For operators unique to Pylem, see [Unique Operators](#unique-operators).
+### Unique Operators
+
+Pylem includes some new operators that are not found in Python.
+
+| Operator | Description | Precedence | Associativity |
+|:---|:---|---:|:---|
+| `x?[index]`, `x?[index:index]`, `x?(arguments...)`, `x?.attribute` | Safe subscription (indexing), slicing, function call, and attribute reference to a question type `T?`; wraps in a type `T?`; returns `None` if `x` is `None` | 2 | Left-to-right |
+| `*x` | Dereference a pointer | 5 | Right-to-left |
+| `??` | `None`-coalessing | 17 | Left-to-right |
+
+### Overlapping Operators
+
+The same operators in Python are also in Pylem.
 
 | Precedence | Operator | Description | Associativity |
 |---:|:---|:---|:---|
@@ -2332,10 +2344,6 @@ __Container Operators:__ *These overload syntax patterns natively used with dict
 * `__contains__(self, item)`: Membership testing (`item in obj`)
 
 _[Operators](#operators)_
-
-### Unique Operators
-
-*TBD*
 
 [TOC](#table-of-contents)
 
