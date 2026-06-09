@@ -2315,10 +2315,11 @@ _[Operators](#operators)_
 
 1. __[Generics](#generics)__
 2. __[Compile-time Functions](#compile-time-functions)__
-4. __[Named Return Values](#named-return-values)__
+3. __[Named Return Values](#named-return-values)__
 4. __[Parameters](#parameters)__
 5. __[Iterators & Asynchronous Functions](#iterators--asynchronous-functions)__
-3. __[Decorators](#decorators)__
+6. __[Decorators](#decorators)__
+7. __[Importing & Modules](#importing--modules)__
 
 [TOC](#table-of-contents)
 
@@ -2525,6 +2526,14 @@ _[Advanced](#advanced)_
 ---
 
 ### Decorators
+
+*TBD*
+
+_[Advanced](#advanced)_
+
+---
+
+### Importing & Modules
 
 *TBD*
 
