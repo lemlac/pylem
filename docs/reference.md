@@ -1091,6 +1091,22 @@ defer_evaluation_example()
 # "Value in defer: 10"
 ```
 
+__`defer` blocks:__ Instead of a function call, add a colon (`defer:`). This is a more generic approach that behaves closer to C's `goto`.
+
+```py
+defer:
+    final_score += 5
+
+defer:
+    undoB()
+    undoA()
+```
+
+- **`defer f(x)`** — function call form, arguments evaluated immediately
+- **`defer: block`** — block form, everything evaluated at return time, no ambiguity
+
+Since real cleanup often involves multiple statements, the block form maps naturally to the C `goto` cleanup pattern.
+
 _[Control Flow](#control-flow)_
 
 [TOC](#table-of-contents)
@@ -2386,6 +2402,8 @@ class Array[T, N]:   # `type`/`const` constraint inherited from struct declarati
 a = Array([1, 2, 3])  # Array[int, 3] inferred
 ```
 
+`type` before a generic parameter is only needed when you're setting constraints or giving it a default value to distinguish it from a `const` parameter. Each can be inferred based on usage inside the generic function or type.
+
 _[Advanced](#advanced)_
 
 ---
@@ -2506,7 +2524,8 @@ __Modifying Returns:__ A major specialized use case for named return values is i
 ```py
 def increment_score(base: int) -> int as final_score:
 	# Evaluated last, right before the function exits
-	defer final_score += 5
+	defer:
+        final_score += 5
 	final_score = base + 10
 	return # Sets finalScore to 15, then defer runs and adds 5
 
