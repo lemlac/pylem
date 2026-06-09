@@ -2644,7 +2644,90 @@ _[Advanced](#advanced)_
 
 ### Parameters
 
-*TBD*
+Pylem offers similar modifers to function parameters as Python.
+
+#### Optional Parameters
+
+Make a parameter optional by assigning it a default value in the function definition. If the caller provides a value for that parameter, it uses that; if they omit it, it falls back to the default. To create an optional parameter, use the assignment operator (`=`) followed by a fallback value. Required parameters must always come before optional ones.
+
+```py
+# 'name' is required, 'punctuation' is optional with a default value
+def greet(name, punctuation="!"):
+    return f"Hello, {name}{punctuation}"
+
+# Call using only the required argument
+print(greet("Alice"))        # Output: "Hello, Alice!"
+
+# Call and overwrite the optional argument
+print(greet("Bob", "?"))     # Output: "Hello, Bob?"
+```
+
+When a function has several optional parameters, you can use keyword arguments to target specific ones without worrying about their order.
+
+```py
+def make_coffee(size, milk="Whole", sugar=0, ice=False):
+    summary = f"Size: {size}, Milk: {milk}, Sugar: {sugar} spoons"
+    if ice:
+        summary += ", Iced"
+    return summary
+# Uses all default values for the optional parameters
+print(make_coffee("Medium"))             # Output: Size: "Medium, Milk: Whole, Sugar: 0 spoons"
+# Targets only the 'ice' parameter using its keyword name
+print(make_coffee("Large", ice=True))    # Output: Size: "Large, Milk: Whole, Sugar: 0 spoons, Iced"
+```
+
+If you do not want a literal default like `0` or `""`, use `None` as a placeholder. This will set it to a type `T?` when inferred. This allows you to check whether the caller passed a value.
+
+```py
+def create_profile(username, mut bio=None):
+    if bio is None:
+        bio = "No bio provided."
+    return {"username": username, "bio": bio}
+
+print(str(create_profile("coder123")))
+# Output: "{'username': 'coder123', 'bio': 'No bio provided.'}"
+```
+
+Never use mutable objects (like lists or dictionaries) as default values. Default values only evaluated once when the function is defined, meaning all subsequent function calls share the exact same object.
+
+```py
+# ❌ INCORRECT: The list persists across calls
+def add_to_list(item, my_list=[]):
+    my_list.append(item)
+    return my_list
+
+print(add_to_list("apple"))  # Output: ['apple']
+print(add_to_list("banana")) # Output: ['apple', 'banana'] (Bug: apple stayed!)
+```
+
+```py
+# ✔️ CORRECT: Use None and instantiate the list inside the function
+def add_to_list_correct(item, mut my_list=None):
+    if my_list is None:
+        my_list = []
+    my_list.append(item)
+    return my_list
+
+print(add_to_list_correct("apple"))  # Output: ['apple']
+print(add_to_list_correct("banana")) # Output: ['banana'] (Fixed!)
+```
+
+#### Unlimited Optional Arguments (`*args` and `**kwargs`)
+If you don't know how many optional arguments a user might pass ahead of time, you can accept a variable number of positional or keyword arguments.
+
+* `*args`: Captures any extra positional arguments as a tuple.
+* `**kwargs`: Captures any extra keyword arguments as a struct or dictionary.
+
+```py
+def print_package_details(*items, **metadata):
+    print(f"Items in package: {items}")
+    print(f"Shipping info: {metadata}")
+# Pass any number of items and keyword-based metadata
+print_package_details("Shoes", "Socks", "Shirt", carrier="FedEx", fragile=False)
+# Output:
+# "Items in package: ('Shoes', 'Socks', 'Shirt')"
+# "Shipping info: {'carrier': 'FedEx', 'fragile': False}"
+```
 
 _[Advanced](#advanced)_
 
