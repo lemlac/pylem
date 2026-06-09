@@ -2482,7 +2482,7 @@ print(f"Sum: {s}, Product: {p}")
 ```
 
 ```py
-def get_coordinates() -> float as lat, float as lng float64:
+def get_coordinates() -> float as lat, float as lng:
 	lat = 35.9606
 	lng = -83.9207
 	# You can still return explicitly if you prefer over naked returns
