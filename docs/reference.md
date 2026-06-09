@@ -983,31 +983,6 @@ print(user_name)  # Output: Alice
 print(user_age)   # Output: 30
 ```
 
-__Named Return Values__ allow you to declare variable names for your return types directly in the function signature. The return value can be set using a variable by declaring the return type with `as` after it. These are always mutable, so no `mut` is needed. If a function returns multiple return values, each can be declared with `as`. When you name your return values, you can use a **naked return** (a `return` statement without explicit arguments). The compiler automatically returns the current values of those variables.
-
-```py
-# sum and product are initialized to 0 automatically
-def calculate(a: int, b: int) -> int as sum, int as product:
-	sum = a + b
-	product = a * b
-	return # Naked return: automatically returns sum and product
-
-s, p = calculate(3, 5)
-print(f"Sum: {s}, Product: {p}") 
-# Output: Sum: 8, Product: 15
-```
-
-```py
-def get_coordinates() -> float as lat, float as lng float64:
-	lat = 35.9606
-	lng = -83.9207
-	# You can still return explicitly if you prefer over naked returns
-	return lat, lng 
-
-latitude, longitude = getCoordinates()
-print("Lat: {latitude}, Lng: {longitude}")
-```
-
 _[Control Flow](#control-flow)_
 
 ### `defer`
@@ -1114,19 +1089,6 @@ defer_evaluation_example()
 # Output:
 # "Value in main: 20"
 # "Value in defer: 10"
-```
-
-__Modifying Returns:__ A major specialized use case for named return values is interacting with a `defer` block. Because the named parameters are scoped to the entire function, a deferred closure can intercept and change the final values right before they reach the caller.
-
-```py
-def increment_score(base: int) -> int as final_score:
-	# Evaluated last, right before the function exits
-	defer final_score += 5
-	finalScore = base + 10
-	return # Sets finalScore to 15, then defer runs and adds 5
-
-print(f"Final Score: {incrementScore(5)}")
-# Output: Final Score: 20
 ```
 
 _[Control Flow](#control-flow)_
@@ -2353,9 +2315,10 @@ _[Operators](#operators)_
 
 1. __[Generics](#generics)__
 2. __[Compile-time Functions](#compile-time-functions)__
-3. __[Decorators](#decorators)__
+4. __[Named Return Values](#named-return-values)__
 4. __[Parameters](#parameters)__
 5. __[Iterators & Asynchronous Functions](#iterators--asynchronous-functions)__
+3. __[Decorators](#decorators)__
 
 [TOC](#table-of-contents)
 
@@ -2419,15 +2382,127 @@ _[Advanced](#advanced)_
 
 ### Compile-time Functions
 
-*TBD*
+A `const` function is evaluated at compile time if its arguments are constant expressions. If the arguments are determined at runtime, the same function seamlessly executes as a normal runtime function.
+
+This example calculates a value at compile time. The compiler completely eliminates the runtime math and replaces the function call with the literal value `120`.
+
+```py
+# Simple const function
+const factorial(n: int) -> int:
+    return 1 if n <= 1 else n * factorial(n - 1)
+
+# Evaluated at compile time
+const compile_time_val: int = factorial(5)
+
+# Evaluated at runtime because the input depends on user interaction
+i = int(input())
+runtime_val = factorial(i) 
+
+print(f"Compile-time: {compile_time_val}")
+print(f"Runtime: {runtime_val}")
+```
+
+`const` functions are commonly used to compute parameters required by the compiler, such as the size of a raw array.
+
+```py
+const calculate_buffer_size(connections: int) -> int:
+    return connections * 1024   # 1KB buffer per connection
+
+# The compiler requires array dimensions to be known at compile time
+mut raw_buffer: arr[int, calculate_buffer_size(5)]
+print(f"Raw buffer size: {len(raw_buffer)} elements")
+```
+
+You can use variable declarations, loops, and conditional statements too.
+
+```py
+# Multi-statement
+constexpr sum_of_squares(n: int) -> int:
+    sum = 0   # Local variables are allowed
+	mut i = 1
+    while i < n:
+        sum += (i * i)
+		i += 1
+    return sum
+
+const result: int = sum_of_squares(4)    # 1 + 4 + 9 + 16 = 30
+print(f"Sum of squares: {result}"
+```
+
+__Const Structs and Methods:__ You can make constructors and member functions `const`. This lets you build and query complete objects entirely during the compilation phase.
+
+```py
+struct Point:
+    x: float
+    y: float
+
+class Point:
+    # Const constructor allows compile-time object initialization
+    const __init__(self, start_x: double, start_y: double):
+		self.x = start_x
+		self.y = start_y
+
+    # Const member function
+    const get_manhattan_distance(self) -> float:
+        return (-self.x if self.x < 0 else self.x) + (-self.y if self.y < 0 else self.y)
+
+# The entire object is instantiated and evaluated by the compiler
+const p = Point(3.5, -4.5)
+const dist: float = p.get_manhattan_distance();
+
+print(f"Manhattan Distance: {dist}")
+```
+
+__Summary of Rules for `const` Functions:__
+
+* __No Side Effects:__ They cannot modify global state or call non-`const` functions.
+* __Input-Driven Execution:__ If you pass a runtime variable as an argument, the function acts as a normal runtime function.
+* __Literal Types:__ Arguments and return types must be literal types (such as `int`, `float`, pointers, or literal structs).
+* __Enforced Evaluation:__ Simply marking a function `const` does not force the compiler to run it at compile time unless the output is assigned to a `const` variable or used in a template parameter.
 
 _[Advanced](#advanced)_
 
 ---
 
-### Decorators
+### Named Return Values
 
-*TBD*
+Named Return Values allow you to declare variable names for your return types directly in the function signature. The return value can be set using a variable by declaring the return type with `as` after it. These are always mutable, so no `mut` is needed. If a function returns multiple return values, each can be declared with `as`. When you name your return values, you can use a **naked return** (a `return` statement without explicit arguments). The compiler automatically returns the current values of those variables.
+
+```py
+# sum and product are initialized to 0 automatically
+def calculate(a: int, b: int) -> int as sum, int as product:
+	sum = a + b
+	product = a * b
+	return # Naked return: automatically returns sum and product
+
+s, p = calculate(3, 5)
+print(f"Sum: {s}, Product: {p}") 
+# Output: Sum: 8, Product: 15
+```
+
+```py
+def get_coordinates() -> float as lat, float as lng float64:
+	lat = 35.9606
+	lng = -83.9207
+	# You can still return explicitly if you prefer over naked returns
+	return lat, lng 
+
+latitude, longitude = getCoordinates()
+print("Lat: {latitude}, Lng: {longitude}")
+```
+
+__Modifying Returns:__ A major specialized use case for named return values is interacting with `defer`. Because the named parameters are scoped to the entire function, a deferred closure can intercept and change the final values right before they reach the caller.
+
+```py
+def increment_score(base: int) -> int as final_score:
+	# Evaluated last, right before the function exits
+	defer final_score += 5
+	finalScore = base + 10
+	return # Sets finalScore to 15, then defer runs and adds 5
+
+print(f"Final Score: {incrementScore(5)}")
+# Output: Final Score: 20
+```
 
 _[Advanced](#advanced)_
 
@@ -2442,6 +2517,14 @@ _[Advanced](#advanced)_
 ---
 
 ### Iterators & Asynchronous Functions
+
+*TBD*
+
+_[Advanced](#advanced)_
+
+---
+
+### Decorators
 
 *TBD*
 
