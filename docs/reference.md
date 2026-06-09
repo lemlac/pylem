@@ -501,7 +501,7 @@ cherry
 * The Colon (`:`): Signifies the start of the loop body.
 * Indentation: The indented code under the for statement defines what actions execute on every item.
 
-If you need to repeat an action a specific number of times, pair the loop with the built-in Python `range()` function: 
+If you need to repeat an action a specific number of times, pair the loop with the built-in `range()` function: 
 
 ```py
 # Generates numbers from 0 to 4
@@ -778,7 +778,7 @@ match choice:
         print("First")
         fallthrough
     case Second as x?:  # `?` in pattern wraps the variable in a None-able type
-        if x != None:
+        if x is not None:
             print("Definitely Second: {x}")
     # Implicit break.
     case _:
@@ -1451,15 +1451,15 @@ colors = ["red", "green", "blue"]
 mut item: str?
 
 item = colors[0]
-if item != None:
+if item is not None:
     print(item)   # Outputs: red
 
 item = colors[-1]
-if item != None:
+if item is not None:
     print(item)  # Won't print because `arr` arrays can't be reversed index with negative numbers.
 
 item = colors[len(colors)-1]  # Do this instead
-if item != None:
+if item is not None:
     print(item)  # Outputs: blue (negative indexing counts from the back)
 ```
 
@@ -1607,7 +1607,7 @@ In Python, it's common to set things to `None` if you haven't set it yet. This w
 ```py
 x: int? = get_number()
 
-if x != None:
+if x is not None:
     # x is safe here
     print(f"The number is {x}")
 else:
@@ -1676,12 +1676,12 @@ _[Built-in Types](#built-in-types)_
 
 #### Pointers (`ptr`)
 
-Pointers are type `ptr[T]` (immutable) and `mutptr[T]` (mutable). You can get the reference to something with the function `ref`. The prefix `*` operator will dereference a pointer. A `mutptr` must point to a reference declared with `mut`.
+Pointers are type `ptr[T]` (immutable) and `mutptr[T]` (mutable). You can get the reference to something with the function `ref`. The postfix `.*` operator will dereference a pointer. A `mutptr` must point to a reference declared with `mut`.
 
 ```py
 mut x = 0
 xPtr: mutptr[int] = ref(x)
-*xPtr = 1
+xPtr.* = 1
 x  # Value: 1
 ```
 
@@ -1689,23 +1689,23 @@ Safety pointers use a None-able type `ptr?`/`mutptr?`. If a pointer can't be gua
 
 ```py
 def check_ptr(p: ptr[int]?):
-    if p != None:
-        n: int = *p  # Safe to derefence
-        print(f"*p is {n}")
+    if p is not None:
+        n: int = p.*  # Safe to derefence
+        print(f"p.* is {n}")
 
 i = 1
 check_ptr(ref(i))
-# Print: "*p is 1"
+# Print: "p.* is 1"
 ```
 
 Note that a safety pointer `ptr[T]?` is related to but not quite the same as a `ptr[T?]` or in other words *a non-null pointer to a value that might be `None`.* A `ptr[T?]` can be safely dereferenced at any time, but its value is still wrapped in a `T?` that needs to be checked for `None`. However, you can dereference it to check for `None` and it will also coerse to a `ptr[T]` type just like a safety pointer.
 
 ```py
 x: int? = get_number()
-p: ptr[int?] = ref(x)      # Non-null pointer to an optional int
+p: ptr[int?] = ref(x)           # Non-null pointer to an optional int
 
-if *p != None:             # Check the value instead of the pointer
-    print(f"*p is {*p}")   # *p will automatically unwrap to an int here.
+if p.* is not None:             # Check the value instead of the pointer
+    print(f"p.* is {p.*}")      # p.* will automatically unwrap to an int here.
 ```
 
 _[Built-in Types](#built-in-types)_
@@ -2146,8 +2146,23 @@ Pylem includes some new operators that are not found in Python.
 | Operator | Description | Precedence | Associativity |
 |:---|:---|---:|:---|
 | `x?[index]`, `x?[index:index]`, `x?(arguments...)`, `x?.attribute` | Safe subscription (indexing), slicing, function call, and attribute reference to a question type `T?`; wraps in a type `T?`; returns `None` if `x` is `None` | 2 | Left-to-right |
-| `*x` | Dereference a pointer | 5 | Right-to-left |
-| `??` | `None`-coalessing | 17 | Left-to-right |
+| `x.*` | Dereference a pointer | 2 | Left-to-right |
+| `x?.*` | Dereference a nullable pointer: for a pointer type `ptr[T]?`/`mutptr[T]?`, returns type `T?` | 2 | Left-to-right |
+| `??` | `None`-coalessing / fallback operator | 17 | Left-to-right |
+
+When accessing something from a pointer type `ptr`/`mutptr`, dereferencing with `.*` isn't necessary. Assuming `p` is a pointer, then:
+
+- `p.member == p.*.member`
+- `p[index] == p.*[index]`
+- `p[index:index] == p.*[index:index]`
+- `p(arguments...) == p.*(arguments...)`
+
+Or if `p` is a nullable pointer type `ptr?`/`mutptr?`, then:
+
+- `p?.member == p?.*?.member`
+- `p?[index] == p?.*?[index]`
+- `p?[index:index] == p?.*?[index:index]`
+- `p?(arguments...) == p?.*?(arguments...)`
 
 ### Overlapping Operators
 
