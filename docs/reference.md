@@ -1028,6 +1028,45 @@ defer_example_print()
 # "Goodbye"
 ```
 
+`defer` makes it possible to do things that are possible in C but not Python without needing to implement `goto`.
+
+```c
+// Source - https://stackoverflow.com/a/245761
+// Posted by Greg Rogers, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-06-09, License - CC BY-SA 3.0
+
+void foo()
+{
+    if (!doA())
+        goto exit;
+    if (!doB())
+        goto cleanupA;
+    if (!doC())
+        goto cleanupB;
+
+    /* everything has succeeded */
+    return;
+
+cleanupB:
+    undoB();
+cleanupA:
+    undoA();
+exit:
+    return;
+}
+```
+
+```py
+def foo():
+    if !doA():
+        return
+    if !doB():
+        defer undoA()
+    if !doC():
+        defer undoB()
+	# everything has succeeded
+```
+
 __Unlocking Mutexes (Concurrency):__ When writing concurrent code with shared resources, you must unlock your mutexes. Putting `defer mu.unlock()` right after `mu.lock()` prevents unexpected deadlocks if your function returns unexpectedly.
 
 ```py
@@ -1088,45 +1127,6 @@ def increment_score(base: int) -> int as final_score:
 
 print(f"Final Score: {incrementScore(5)}")
 # Output: Final Score: 20
-```
-
-`defer` makes it possible to do things that are possible in C but not Python without needing to implement `goto`.
-
-```c
-// Source - https://stackoverflow.com/a/245761
-// Posted by Greg Rogers, modified by community. See post 'Timeline' for change history
-// Retrieved 2026-06-09, License - CC BY-SA 3.0
-
-void foo()
-{
-    if (!doA())
-        goto exit;
-    if (!doB())
-        goto cleanupA;
-    if (!doC())
-        goto cleanupB;
-
-    /* everything has succeeded */
-    return;
-
-cleanupB:
-    undoB();
-cleanupA:
-    undoA();
-exit:
-    return;
-}
-```
-
-```py
-def foo():
-    if !doA():
-        return
-    if !doB():
-        defer undoA()
-    if !doC():
-        defer undoB()
-	# everything has succeeded
 ```
 
 _[Control Flow](#control-flow)_
