@@ -2904,6 +2904,25 @@ __Async Core Concepts Cheat Sheet:__
 | `asyncio.run()` | The primary tool used to spin up an underlying event loop and drive a top-level coroutine. |
 | `asyncio.gather()` | Waits for multiple asyncs to finish in parallel. |
 
+Optionally, you can use `await` as a member on an async instance: `.await`. This works the same as the prefix operator version but has the same precedence as member access like `x.member`. It can be a useful alternative if you are going to chain a method on an async instance.
+
+```py
+import asyncio
+
+async def fetch_data():
+    await asyncio.sleep(1)
+    return "  Hello, Async World!  "
+
+async def main():
+    # Call the .strip() method directly on the awaited result
+    result = fetch_data().await.strip()
+    print(result)
+
+asyncio.run(main())
+```
+
+In this example, `fetch_data().await.strip()` is the same as `(await fetch_data()).strip()`.
+
 As well as `def` functions, `lanbda` functions can also use `yield` and `await`. 
 
 ```py
@@ -2958,6 +2977,8 @@ run_data_stream(lambda:
 # "[Stream Processor] Received: Connected external bank account"
 # "[Stream Processor] Stream finished."
 ```
+
+Asynchronous lambda functions are declared using `async lambda`.
 
 ```py
 import asyncio
