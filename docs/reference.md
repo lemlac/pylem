@@ -3241,7 +3241,7 @@ def subtract(a, b):
     return a - b
 
 ## ---
-## Step B: Import it into your main script (main.py) [16] 
+## Step B: Import it into your main script (main.pyl) 
 
 import calculator
 
@@ -3256,7 +3256,7 @@ When you trigger an import, Pylem checks locations in a strict priority order:
 3. `PYLEMPATH`: External folders customized by you or your environment.
 4. Standard/Third-Party Library: Core packages and tools installed via a package manager.
 
-💡 Pro Tip: Avoid naming your personal script files the same name as a popular library (like `math.py` or `random.py`), or Pylem might accidentally import your file instead of the official library, breaking your code.
+__💡 Pro Tip:__ Avoid naming your personal script files the same name as a popular library (like `math.pyl` or `random.pyl`), or Pylem might accidentally import your file instead of the official library, breaking your code.
 
 _[Advanced](#advanced)_
 
