@@ -422,9 +422,27 @@ block label:
     print("Condition failed")
 ```
 
+Can we apply this to loops? If you try to call `continue` on a block, you'll get a syntax error since `block` isn't a loop.
+
 ```py
-block outer
-for x in range(0, 100):
+block outer:
+    for x in range(0, 100):
+        for y in range(0, 100):
+            if x * y >= 100:
+               print(f"{x} * {y} == {x * y}")
+               continue outer    # SyntaxError
+            if x * y == 77:
+                print("break")
+                break outer
+```
+
+
+Here `continue` would be being applied to a `block`, not a label to a `for` loop. `block`s aren't loops, so `continue` wouldn't make any sense. The problem with ending with a colon here is that it implies it's creating a new block rather than modifying the next block. 
+
+Instead we can omit the colon (`:`) and put the loop on the same line. This indicates that we want to apply a label to the following block rather than creating a new one.
+
+```py
+block outer for x in range(0, 100):
     for y in range(0, 100):
         if x * y >= 100:
             print(f"{x} * {y} == {x * y}")
@@ -434,7 +452,19 @@ for x in range(0, 100):
             break outer
 ```
 
-When the colon is omitted, the label goes to the next non-empty line below `block` which needs to be another block type. Optionally, you can also put it on the same line like `block outer for ....`.
+When the colon is omitted, another block type is expected such as `for` or `while`. You can optionally split the label to its own line using `\` too.
+
+```py
+block outer \
+for x in range(0, 100):
+    for y in range(0, 100):
+        if x * y >= 100:
+            print(f"{x} * {y} == {x * y}")
+            continue outer
+        if x * y == 77:
+            print("break")
+            break outer
+```
 
 _[Control Flow](#control-flow)_
 
