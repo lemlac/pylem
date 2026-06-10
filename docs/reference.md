@@ -3164,10 +3164,9 @@ struct Student:
     name: str
     grade: chr
 
-mut student: ptr[Student] = alloc(Student(name="John", grade='B'))
-defer free(student)
-
+mut student: ptr[Student]? = alloc(Student(name="John", grade='B'))
 if student is not None:
+	defer free(student)
 	student.name = "John Smith"
 
 def makeStudent(name: str, grade: chr) -> ptr[Student]?:
