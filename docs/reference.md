@@ -3005,16 +3005,11 @@ import asyncio
 
 userIds = [1, 2, 3]
 
-# Simulated async fetch function
-async lambda fetch_details(id):
-    await asyncio.sleep(1)
-	f"User Profile {id}"
-
 async def get_team_data() {
 	# Passing the async function into map()
 	promise_array = map(userIds, async lambda id:
-		detail = await fetch_details(id)
-		detail
+	    await asyncio.sleep(1)
+		f"User Profile {id}"
 	)
 	# promise_array is currently [Promise, Promise, Promise]
 	results = await asyncio.gather(*promise_array)
