@@ -86,11 +86,11 @@ struct BankAccount:
     balance: int
 
 class BankAccount:
-    def __init__(mut self: ptr, owner, balance=0):
+    def __init__(mut self, owner, balance=0):
         self.owner = owner
         self.balance = balance
         
-    def deposit(mut self: ptr, amount):
+    def deposit(mut self, amount):
         self.balance += amount
         return f"${amount} deposited. New balance: ${self.balance}"
 
@@ -441,10 +441,10 @@ block outer:
 
 Here `continue` would be being applied to a `block`, not a label to a `for` loop. `block`s aren't loops, so `continue` wouldn't make any sense. The problem with ending with a colon here is that it implies it's creating a new block rather than modifying the next block. 
 
-Instead we can omit the colon (`:`) and put the loop on the same line. This indicates that we want to apply a label to the following block rather than creating a new one.
+Instead we replace the colon (`:`) with a comma (`,`) and put the loop on the same line. This indicates that we want to apply a label to the following block rather than creating a new one.
 
 ```py
-block outer for x in range(0, 100):
+block outer, for x in range(0, 100):
     for y in range(0, 100):
         if x * y >= 100:
             print(f"{x} * {y} == {x * y}")
@@ -454,10 +454,10 @@ block outer for x in range(0, 100):
             break outer
 ```
 
-When the colon is omitted, another block type is expected such as `for` or `while`. You can optionally split the label to its own line using `\` too.
+After the comma, another block type is expected such as `for` or `while`. You can optionally split the label to its own line too.
 
 ```py
-block outer \
+block outer,
 for x in range(0, 100):
     for y in range(0, 100):
         if x * y >= 100:
@@ -969,10 +969,10 @@ Objects that work with a with statement are called context managers. You can cre
 
 ```py
 class DatabaseConnection:
-    def __enter__(self: ptr):
+    def __enter__(self):
         print("Connecting to the database...")
         return "Connection_Object"
-    def __exit__(self: ptr, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         print("Closing the database connection safely.")
         # Returning True would swallow exceptions; returning None/False propagates them
 
@@ -1084,7 +1084,7 @@ struct Counter:
 	value: int
 
 class Counter:
-    increment(mut self: ptr):
+    increment(mut self):
     	self.mu.lock()
     	defer self.mu.unlock() # Guaranteed to unlock when increment() finishes
     	self.value += 1
@@ -1162,7 +1162,6 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 7. __[Tuples](#tuples)__
 8. __[None-ables](#none-ables-)__
 9. __[Pointers](#pointers-ptr)__
-10. __[Dynamic Type](#dynamic-type-dyn)__
 
 _[Types](#types)_
 
@@ -1245,19 +1244,7 @@ print(sys.getsizeof(3.14))       # Output: 8 bytes
 print(sys.getsizeof(1+2j))       # Output: 16 bytes (2 floats)
 ```
 
-To use Python's native number objects, import them from the `python` module. Number literals will use those types instead of Pylem's numbers.
-
-```py
-from python import int, float, complex
-import sys
-
-print(sys.getsizeof(0))          # Output: 28 bytes
-print(sys.getsizeof(1))          # Output: 28 bytes
-print(sys.getsizeof(3.14))       # Output: 28 bytes
-print(sys.getsizeof(1+2j))       # Output: 28 bytes
-print(sys.getsizeof(2**30))      # Output: 32 bytes (Grows as value expands)
-print(sys.getsizeof(2**1000))    # Output: 168 bytes
-```
+*To use Python's native number objects, see [Python Interoperability](#python-interoperability).*
 
 #### Sized Number Types
 
@@ -1372,13 +1359,21 @@ path = r"C:\Users\Name\Documents"
 
 Strings are immutable, meaning you cannot change them in place, but you can build new ones through operations.
 
-* Concatenation: Combining strings using the `+` operator.
+__Concatenation:__ Combining strings using the `+` operator.
 
 ```py
 full_name = "Guido" + " " + "van Rossum"
 ```
 
-* Slicing: Extracting specific parts of a string using index brackets [start:end].
+Although addition and concatenation both use the plus sign `+`, both sides must match in type to use one or the other: either both strings (`str`) or both number types (`int`, `float`, etc.).
+
+```py
+1 + "1"       # TypeError!
+1 + int("1")  # Addition:        1  +  1  =  2
+str(1) + "1"  # Concatenation:  "1" + "1" = "11"
+```
+
+__Slicing:__ Extracting specific parts of a string using index brackets [start:end].
 
 ```py
 word = "Anaconda"
@@ -1737,53 +1732,6 @@ if p.* is not None:             # Check the value instead of the pointer
 
 _[Built-in Types](#built-in-types)_
 
-### Dynamic Type (`dyn`)
-
-Pylem is statically typed, but Python is famous for being dynamically typed. Sometimes, it's hard to go from dynamic to static. To help with that, Pylem comes with a special type to handle dynamically typed data.
-
-The dynamic type `dyn` is an API to access Python's dynamic typing from within Pylem. This works as a tagged union where each tag is a basic type: `Bool`, `Int`, `Float`, `Complex`, `Str`, `List`, `Dict`, `Tuple`, and `None`. Each of these are variants of `dyn` like `dyn.Bool`, `dyn.None`, etc. If the type has a subtype, then it's also set to `dyn`. 
-
-```py
-def print_dyn(d: dyn, prefix=""):
-    match d:
-        case Bool as b if b:
-            print(f"{prefix}bool: True")
-        case Bool as b if not b:
-            print(f"{prefix}bool: False")
-        case Int as i:
-            print(f"{prefix}int: {i}")
-        case Float as f:
-            print(f"{prefix}float: {f}")
-        case Complex as c:
-            print(f"{prefix}complex: {c}")
-        case Str as s:
-            print(f"{prefix}str: {s}")
-        case List as l:
-            print(f"{prefix}list:")
-            next_prefix = "* " if len(prefix) == 0 else "  " + prefix
-            for item in l:
-                print_dyn(item, next_prefix)
-        case Dict as d:
-            print(f"{prefix}dict:")
-            next_prefix = "* " if len(prefix) == 0 else "  " + prefix
-            key_prefix = next_prefix + "(key) "
-            val_prefix = next_prefix + "(val) "
-            for key, val in d.items():
-                print_dyn(key, key_prefix)
-                print_dyn(val, val_prefix)
-        case Tuple as t:
-            print(f"{prefix}tuple:")
-            next_prefix = "* " if len(prefix) == 0 else "  " + prefix
-            for item in t:
-                print_dyn(item, next_prefix)
-        case None:
-            print(f"{prefix}None")
-```
-
-Since `dyn` already has `None` as one of its variants, its question type is redundant. If you type something as `dyn?`, the question mark will just be dropped and ignored.
-
-_[Built-in Types](#built-in-types)_
-
 ## Custom Types
 
 1. __[`type`](#type)__ — *Aliases*
@@ -2111,16 +2059,18 @@ struct BankAccount:
 
 # 2. Add methods to that layout (Works like Rust's `impl BankAccount`)
 class BankAccount:
-    def deposit(mut self: ptr, amount: int):
+    def deposit(mut self, amount: int):
         self.balance += amount
 ```
+
+__What is `self`?__ `self` a pointer (`ptr`) to the current object. Since accessing a member on a pointer auto-derefs, you can write just `self.member` instead of `self.*.member`. `mut self` uses a mutable pointer, and any method (except for dunder methods which require it) using `mut self` is only available when the object is mutable.
 
 __Interfaces:__ an interface is a class without any data. It works like `interface` or `trait` in other languages.
 
 ```py
 # Defines a contract (Works like Rust's `trait Renderable`)
 class Renderable:
-    def render(self: ptr) -> str:
+    def render(self) -> str:
         pass
 ```
 
@@ -2129,22 +2079,15 @@ Implement an interface into another class by extending it. Each `class` definiti
 ```py
 # Implement the 'Renderable' behavior specifically for 'BankAccount'
 class BankAccount(Renderable):
-    def render(self: ptr) -> str:
+    def render(self) -> str:
         return f"Account owner: {self.owner}, Balance: {self.balance}"
 ```
 
-__Types of `self`:__ By itself, `self` copies the object into the method. You can also use a pointer to self instead. `ptr` are inferred to be of the same type as the class that's being defined.
-
-- `self` – Immutable copy of the object.
-- `mut self` – Mutable (within the function) copy of the object.
-- `self: ptr` – Immutable reference of the object.
-- `mut self: ptr` – Mutable reference of the object.
-
-__Constructors:__ When a type has one or more `__init__(mut self: ptr)` methods defined, you can use that to create the type instead of the standard instantiation method. This can be overloaded to create multiple ways to initiate a type. The first argument `mut self: ptr` is an unset reference to the new object. If it's a struct, then all members need to be set. If it's an enum or union, then it must be set to one of its variants.
+__Constructors:__ When a type has one or more `__init__(mut self)` methods defined, you can use that to create the type instead of the standard instantiation method. This can be overloaded to create multiple ways to initiate a type. The first argument `mut self` is an unset reference to the new object. If it's a struct, then all members need to be set. If it's an enum or union, then it must be set to one of its variants.
 
 ```py
 class BankAccount:
-    def __init__(mut self: ptr, owner, balance=0):
+    def __init__(mut self, owner, balance=0):
         self.owner = owner
         self.balance = balance
 
@@ -2155,17 +2098,17 @@ print(f"{my_account.owner} has ${my_account.balance}")
 
 #### Dunder Methods
 
-__Dunder *(shourt for "double underscore")* Methods__ are special methods marked with 2 underscores (`__`) before and after the name of the method.
+__Dunder *(shourt for "double underscore")* Methods__ are special methods marked with 2 underscores (`__`) before and after the name of the method. If a dunder method is listed with `mut self`, then mutability is required. Otherwise, it can use either `self` or `mut self`. 
 
-* `__init__(mut self: ptr, ...)`: Initializes a newly created instance of a class.
+* `__init__(mut self, ...)`: Initializes a newly created instance of a class.
 * `__new__(cls, ...)`: The true constructor that allocates memory for the new object, running right before __init__.
 * `__del__(self)`: The destructor method triggered when an object is about to be garbage collected.
 * `__str__(self)`: Defines user-friendly, readable text for `str()`.
 * `__repr__(self)`: Returns an explicit, unambiguous string meant for debugging and logging.
 * `__enter__(self)`/`__exit__(self, ...)`: Define the behavior of the object when used in a [`with`](#with) block.
 * `__add__(self, other)` etc.: *See [Operator Overloading](#operator-overloading).*
-* `__iter__()`/`__next__()`: *See [Iterators & Asynchronous Functions](#iterators--asynchronous-functions).*
-* `__aiter__()`/`__anext__()`: *See [Asynchronous Iterators](#asynchronous-iterators).*
+* `__iter__(self)`/`__next__(self)`: *See [Iterators & Asynchronous Functions](#iterators--asynchronous-functions).*
+* `__aiter__(self)`/`__anext__(self)`: *See [Asynchronous Iterators](#asynchronous-iterators).*
 
 _[Custom Types](#custom-types)_
 
@@ -2330,14 +2273,14 @@ __Reflected (Right-Hand) Arithmetic Operators:__ *Fallback to right-hand variant
 
 __In-Place (Assignment) Operators:__ *These methods govern compound assignment symbols like `+=` and `*=`.*
 
-* `__iadd__(mut self: ptr, other)`: In-place addition (`+=`)
-* `__isub__(mut self: ptr, other)`: In-place subtraction (`-=`)
-* `__imul__(mut self: ptr, other)`: In-place multiplication (`*=`)
-* `__imatmul__(mut self: ptr, other)`: In-place matrix multiplication (`@=`)
-* `__itruediv__(mut self: ptr, other)`: In-place true division (`/=`)
-* `__ifloordiv__(mut self: ptr, other)`: In-place floor division (`//=`)
-* `__imod__(mut self: ptr, other)`: In-place modulo (`%=`)
-* `__ipow__(mut self: ptr, other)`: In-place exponentiation (`**=`)
+* `__iadd__(mut self, other)`: In-place addition (`+=`)
+* `__isub__(mut self, other)`: In-place subtraction (`-=`)
+* `__imul__(mut self, other)`: In-place multiplication (`*=`)
+* `__imatmul__(mut self, other)`: In-place matrix multiplication (`@=`)
+* `__itruediv__(mut self, other)`: In-place true division (`/=`)
+* `__ifloordiv__(mut self, other)`: In-place floor division (`//=`)
+* `__imod__(mut self, other)`: In-place modulo (`%=`)
+* `__ipow__(mut self, other)`: In-place exponentiation (`**=`)
 
 __Bitwise Operators:__ *These handle binary bit manipulation and logical bit masking operations.*
 
@@ -2357,11 +2300,11 @@ __Reflected Bitwise:__
 
 __In-Place Bitwise:__
 
-* `__ilshift__(mut self: ptr, other)`: In-place left shift (`<<=`)
-* `__irshift__(mut self: ptr, other)`: In-place right shift (`>>=`)
-* `__iand__(mut self: ptr, other)`: In-place AND (`&=`)
-* `__ixor__(mut self: ptr, other)`: In-place XOR (`^=`)
-* `__ior__(mut self: ptr, other)`: In-place OR (`|=`)
+* `__ilshift__(mut self, other)`: In-place left shift (`<<=`)
+* `__irshift__(mut self, other)`: In-place right shift (`>>=`)
+* `__iand__(mut self, other)`: In-place AND (`&=`)
+* `__ixor__(mut self, other)`: In-place XOR (`^=`)
+* `__ior__(mut self, other)`: In-place OR (`|=`)
 
 __Unary Operators:__ *These operators process only one single object operand.*
 
@@ -2535,9 +2478,9 @@ struct Box[T]:
     content: T
 
 class Box[T]:
-    def __init__(mut self: ptr, content: T):
+    def __init__(mut self, content: T):
         self.content: T = content
-    def get_content(self: ptr) -> T:
+    def get_content(self) -> T:
         return self.content
 # Instantiate with specific types
 int_box = Box[int](123)
@@ -2559,7 +2502,7 @@ struct Array[type T, const N: usize]:
     data: arr[T, N]
 
 class Array[T, N]:   # `type`/`const` constraint inherited from struct declaration
-    def __init__(mut self: ptr, data: arr[T, N]):
+    def __init__(mut self, data: arr[T, N]):
         self.data = data
 
 a = Array([1, 2, 3])  # Array[int, 3] inferred
@@ -2629,12 +2572,12 @@ struct Point:
 
 class Point:
     # Const constructor allows compile-time object initialization
-    const __init__(mut self: ptr, start_x: float, start_y: float):
+    const __init__(mut self, start_x: float, start_y: float):
 		self.x = start_x
 		self.y = start_y
 
     # Const member function
-    const get_manhattan_distance(self: ptr) -> float:
+    const get_manhattan_distance(self) -> float:
         return (-self.x if self.x < 0 else self.x) + (-self.y if self.y < 0 else self.y)
 
 # The entire object is instantiated and evaluated by the compiler
@@ -2814,14 +2757,14 @@ __Custom Class Iterators:__ You can build a custom iterator by creating a class 
 
 ```py
 class EvenNumbers:
-    def __init__(mut self: ptr, max_limit):
+    def __init__(mut self, max_limit):
         self.max_limit = max_limit
         self.current = 2
 
     def __iter__(self):
         return self
 
-    def __next__(mut self: ptr):
+    def __next__(mut self):
         if self.current <= self.max_limit:
             value = self.current
             self.current += 2
@@ -3065,13 +3008,13 @@ __Method 1: Class-Based Asynchronous Iterator__ This is the low-level method whe
 import asyncio
 
 class AsyncCounter:
-    def __init__(mut self: ptr, stop_at):
+    def __init__(mut self, stop_at):
         self.stop_at = stop_at
         self.current = 0
     def __aiter__(self):
         # Must return an object implementing __anext__
         return self
-    async def __anext__(mut self: ptr):
+    async def __anext__(mut self):
         # Simulating an asynchronous I/O operation (like an API call)
         await asyncio.sleep(0.5) 
         if self.current >= self.stop_at:
@@ -3298,7 +3241,66 @@ _[Advanced](#advanced)_
 
 ## Python Interoperability
 
-*TBD*
+This section will discuss the ways Pylem can interact with Python.
+
+To use Python's native number objects, import them from the `python` module. Number literals will use those types instead of Pylem's numbers.
+
+```py
+from python import int, float, complex
+import sys
+
+print(sys.getsizeof(0))          # Output: 28 bytes
+print(sys.getsizeof(1))          # Output: 28 bytes
+print(sys.getsizeof(3.14))       # Output: 28 bytes
+print(sys.getsizeof(1+2j))       # Output: 28 bytes
+print(sys.getsizeof(2**30))      # Output: 32 bytes (Grows as value expands)
+print(sys.getsizeof(2**1000))    # Output: 168 bytes
+```
+
+### Dynamic Type (`dyn`)
+
+Pylem is statically typed, but Python is famous for being dynamically typed. Sometimes, it's hard to go from dynamic to static. To help with that, Pylem comes with a special type to handle dynamically typed data.
+
+The dynamic type `dyn` is an API to access Python's dynamic typing from within Pylem. This works as a tagged union where each tag is a basic type: `Bool`, `Int`, `Float`, `Complex`, `Str`, `List`, `Dict`, `Tuple`, and `None`. Each of these are variants of `dyn` like `dyn.Bool`, `dyn.None`, etc. If the type has a subtype, then it's also set to `dyn`. 
+
+```py
+def print_dyn(d: dyn, prefix=""):
+    match d:
+        case Bool as b if b:
+            print(f"{prefix}bool: True")
+        case Bool as b if not b:
+            print(f"{prefix}bool: False")
+        case Int as i:
+            print(f"{prefix}int: {i}")
+        case Float as f:
+            print(f"{prefix}float: {f}")
+        case Complex as c:
+            print(f"{prefix}complex: {c}")
+        case Str as s:
+            print(f"{prefix}str: {s}")
+        case List as l:
+            print(f"{prefix}list:")
+            next_prefix = "* " if len(prefix) == 0 else "  " + prefix
+            for item in l:
+                print_dyn(item, next_prefix)
+        case Dict as d:
+            print(f"{prefix}dict:")
+            next_prefix = "* " if len(prefix) == 0 else "  " + prefix
+            key_prefix = next_prefix + "(key) "
+            val_prefix = next_prefix + "(val) "
+            for key, val in d.items():
+                print_dyn(key, key_prefix)
+                print_dyn(val, val_prefix)
+        case Tuple as t:
+            print(f"{prefix}tuple:")
+            next_prefix = "* " if len(prefix) == 0 else "  " + prefix
+            for item in t:
+                print_dyn(item, next_prefix)
+        case None:
+            print(f"{prefix}None")
+```
+
+Since `dyn` already has `None` as one of its variants, its question type is redundant. If you type something as `dyn?`, the question mark will just be dropped and ignored.
 
 _[Advanced](#advanced)_
 
