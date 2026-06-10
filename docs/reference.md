@@ -3063,7 +3063,7 @@ __Method 2: Asynchronous Generator (Recommended)__ Writing full iterator classes
 ```py
 import asyncio
 
-async lambda fetch_data_stream(limit):
+async def fetch_data_stream(limit):
     for i in range(1, limit + 1):
         # Simulating fetching a row or chunk from a database
         await asyncio.sleep(0.5) 
