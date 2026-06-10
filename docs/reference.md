@@ -2861,11 +2861,11 @@ __Running Multiple Tasks Concurrently:__ To execute tasks simultaneously instead
 import asyncio
 import time
 
-async lambda fetch_data(id, delay):
+async def fetch_data(id, delay):
     print(f"Task {id}: Fetching data...")
     await asyncio.sleep(delay)  # Simulates network lag
     print(f"Task {id}: Data received!")
-	f"Result {id}"
+	return f"Result {id}"
 
 async def main():
     start_time = time.time()
@@ -2910,9 +2910,9 @@ Optionally, you can use `await` as a member on an async instance: `.await`. This
 ```py
 import asyncio
 
-async lambda fetch_data():
+async def fetch_data():
     await asyncio.sleep(1)
-	"  Hello, Async World!  "
+	return "  Hello, Async World!  "
 
 async def main():
     # Call the .strip() method directly on the awaited result
@@ -2924,7 +2924,7 @@ asyncio.run(main())
 
 In this example, `fetch_data().await.strip()` is the same as `(await fetch_data()).strip()`.
 
-#### Iterator/Asynchronous Lambda functions
+#### Iterator/Asynchronous Lambda Functions
 
 As well as `def` functions, `lanbda` functions can also use `yield` and `await`. 
 
