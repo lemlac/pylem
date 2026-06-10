@@ -260,6 +260,8 @@ nubmer := 5  # Error: "nubmer" is undefined
 number := 5  # Fixed!
 ```
 
+There isn't a good way to *fix* this issue. The problem is just in the inherent design of Python's declaration system. You can't fix that without significantly changing from Python's core design. You can't just catch typos because `nubmer` could be any variable name. To the compiler, `nubmer` isn't a typo; it's a perfectly valid, newly declared immutable identifier. Because Python's syntax says that *any unbound name on the left side of an `=` is a new variable,* Pylem's compiler has absolutely no way to know whether you meant to modify `number` or if you legitimately wanted to spin up a brand new variable named `nubmer`. This is the trade-off for making Pylem still feel *Pythonic.*
+
 [TOC](#table-of-contents)
 
 ---
