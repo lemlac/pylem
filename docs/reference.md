@@ -2138,6 +2138,7 @@ __Dunder *(shourt for "double underscore")* Methods__ are special methods marked
 * `__enter__(self)`/`__exit__(self, ...)`: Define the behavior of the object when used in a [`with`](#with) block.
 * `__add__(self, other)` etc.: *See [Operator Overloading](#operator-overloading).*
 * `__iter__()`/`__next__()`: *See [Iterators & Asynchronous Functions](#iterators--asynchronous-functions).*
+* `__aiter__()`/`__anext__()`: *See [Asynchronous Iterators](#asynchronous-iterators).*
 
 _[Custom Types](#custom-types)_
 
@@ -2923,6 +2924,8 @@ asyncio.run(main())
 
 In this example, `fetch_data().await.strip()` is the same as `(await fetch_data()).strip()`.
 
+#### Iterator/Asynchronous Lambda functions
+
 As well as `def` functions, `lanbda` functions can also use `yield` and `await`. 
 
 ```py
@@ -3018,6 +3021,60 @@ async def get_team_data() {
 	print(results)   # Output: "['User Profile 1', 'User Profile 2', 'User Profile 3']"
 
 asyncio.run(get_team_data())
+```
+
+#### Asynchoronous Iterators
+
+An asynchronous iterator is an object that implements the `__aiter__()` and `__anext__()` dunder methods, allowing you to stream data over time using the `async` for syntax.
+
+There are two primary ways to create an asynchronous iterator: using a class-based custom protocol or using an asynchronous generator.
+
+__Method 1: Class-Based Asynchronous Iterator__ This is the low-level method where you explicitly define the async iteration protocol. The `__anext__()` method must be a coroutine (defined with `async def`) and must `raise StopAsyncIteration` when the iteration is complete.
+
+```py
+import asyncio
+
+class AsyncCounter:
+    def __init__(self: mutptr, stop_at):
+        self.stop_at = stop_at
+        self.current = 0
+    def __aiter__(self):
+        # Must return an object implementing __anext__
+        return self
+    async def __anext__(self: mutptr):
+        # Simulating an asynchronous I/O operation (like an API call)
+        await asyncio.sleep(0.5) 
+        if self.current >= self.stop_at:
+            # Signals the end of the loop
+            raise StopAsyncIteration
+        self.current += 1
+        return self.current
+
+async def main():
+    # Consume the class-based async iterator
+    async for number in AsyncCounter(3):
+        print(f"Counter item: {number}")
+
+asyncio.run(main())
+```
+
+__Method 2: Asynchronous Generator (Recommended)__ Writing full iterator classes often introduces unnecessary boilerplate. An easier, more Pythonic approach is to write an asynchronous generator. Any async function using the yield keyword automatically implements the async iterator protocol under the hood.
+
+```py
+import asyncio
+
+async def fetch_data_stream(limit):
+    for i in range(1, limit + 1):
+        # Simulating fetching a row or chunk from a database
+        await asyncio.sleep(0.5) 
+        yield f"Row {i} data"
+
+async def main():
+    # Consume the async generator iterator
+    async for row in fetch_data_stream(3):
+        print(f"Received: {row}")
+
+asyncio.run(main())
 ```
 
 _[Advanced](#advanced)_
