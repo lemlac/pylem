@@ -2130,7 +2130,7 @@ print(f"{my_account.owner} has ${my_account.balance}")
 
 __Dunder *(shourt for "double underscore")* Methods__ are special methods marked with 2 underscores (`__`) before and after the name of the method.
 
-* `__init__(self, ...)`: Initializes a newly created instance of a class.
+* `__init__(self: mutptr, ...)`: Initializes a newly created instance of a class.
 * `__new__(cls, ...)`: The true constructor that allocates memory for the new object, running right before __init__.
 * `__del__(self)`: The destructor method triggered when an object is about to be garbage collected.
 * `__str__(self)`: Defines user-friendly, readable text for `str()`.
@@ -2601,7 +2601,7 @@ class Point:
 		self.y = start_y
 
     # Const member function
-    const get_manhattan_distance(self) -> float:
+    const get_manhattan_distance(self: ptr) -> float:
         return (-self.x if self.x < 0 else self.x) + (-self.y if self.y < 0 else self.y)
 
 # The entire object is instantiated and evaluated by the compiler
