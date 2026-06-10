@@ -744,7 +744,7 @@ match choice:
     case First:
         print("First")
     case Second as val | Third as {val}:  # `val` must be in all patterns
-        print("Second or Third, val={val}")
+        print(f"Second or Third, val={val}")
 ```
 
 ```py
@@ -758,14 +758,14 @@ match choice:
 # Fallback, `val` is converted to question type `T?`:
 match choice:
     case First | Second as val? | Third as {val}?:
-        print("First, Second, or Third: {val ?? "None"}")
+        print(f"First, Second, or Third: {val ?? "None"}")
 ```
 
 ```py
 match choice:
     case First | Second as val? | Third as {val}?:
         val = val ?? "None"   # Defaults to "None" for the rest of the block
-        print("First, Second, or Third: {val}")
+        print(f"First, Second, or Third: {val}")
 ```
 
 #### `fallthrough`
@@ -1676,7 +1676,7 @@ _[Built-in Types](#built-in-types)_
 
 #### Pointers (`ptr`)
 
-Pointers are type `ptr[T]`. You can get the reference to something with the function `ref`. The postfix `.*` operator will dereference a pointer. A `mut` pointer must point to a reference declared with `mut`.
+Pointers are type `ptr[T]`. You can get the reference to something with the function `ref`. The postfix `.*` operator will dereference a pointer. A `mut` pointer must point to a reference also declared with `mut`.
 
 ```py
 mut x = 0
@@ -1685,7 +1685,7 @@ xPtr.* = 1
 x  # Value: 1
 ```
 
-Safety pointers use a None-able type `ptr?`/. If a pointer can't be guaranteed to not be NULL, then it must use a safety pointer type. Checking for `None` before dereferencing will coerce it to a raw pointer that can be dereferenced safely. Otherwise, dereferencing it might raise an error at run-time.
+Safety pointers use a None-able type `ptr?`. If a pointer can't be guaranteed to not be NULL, then it must use a safety pointer type. Checking for `None` before dereferencing will coerce it to a raw pointer that can be dereferenced safely. Otherwise, dereferencing it might raise an error at run-time.
 
 ```py
 def check_ptr(p: ptr[int]?):
@@ -1874,19 +1874,19 @@ _[Custom Types](#custom-types)_
 union SumUnion:
     int
     float
-    char
+    chr
 
 u = SumUnion(int=1)
 
-u.int     # Value is 1
-u.float   # Read binary representation of int 1 as if it were a float
-u.char    # Read binary representation of int 1 as if it were a, value is '\1'
+u.int    # Value is 1
+u.float  # Read binary representation of int 1 as if it were a float
+u.chr    # Read binary representation of int 1 as if it were a, value is '\1'
 ```
 
 This is similar to C unions where it doesn't do any conversion; it only reads whatever data is there with a different type. Unions will set overflow data to 0 so that if you set a small member and then read from a big member, you won't get undefined behavior. The zero-padding interacts with endianness in a way that's deterministic but platform-dependent. The behavior is always defined, just not always portable. 
 
 ```py
-u = SomeUnion(char='\1')   # char (1 byte), remaining bytes zeroed
+u = SomeUnion(chr='\1')   # chr (1 byte), remaining bytes zeroed
 
 # Little-endian: memory is [0x01, 0x00, 0x00, 0x00]
 u.int          # Value: 1
@@ -2175,6 +2175,8 @@ Or if `p` is a nullable pointer type `ptr?`, then:
 
 Even if you have nested pointers, these operators will automatically dereference each one — for example, if `p` is `ptr[ptr[T]]`, then `p.member` will mean `p.*.*.member`, etc..
 
+`.await` follows standard member access rules and composes with `?.` and `.*` accordingly. *See [Iterators & Asynchronous Functions](#iterators--asynchronous-functions).*
+
 ### Overlapping Operators
 
 The same operators in Python are also in Pylem.
@@ -2436,8 +2438,8 @@ If a developer wants a copy in Pylem, they must explicitly ask for it to prevent
 ```py
 # --- Python Behavior ---
 nums = [1, 2, 3, 4]
-]sub = nums[1:3]    # Allocates a new list [2, 3]
-sub[0] = 99         # Modifies 'sub', 'nums' remains [1, 2, 3, 4]
+sub = nums[1:3]    # Allocates a new list [2, 3]
+sub[0] = 99        # Modifies 'sub', 'nums' remains [1, 2, 3, 4]
 
 # --- Pylem Behavior ---
 nums = [1, 2, 3, 4]
@@ -2924,6 +2926,8 @@ asyncio.run(main())
 
 In this example, `fetch_data().await.strip()` is the same as `(await fetch_data()).strip()`.
 
+`.await` works like any member, so `?.await` and `.*.await` also work; however, use of those variants is rare since `async def` always returns an async instance, so you would need to wrap it in another function to need those other operators.
+
 #### Iterator/Asynchronous Lambda Functions
 
 As well as `def` functions, `lanbda` functions can also use `yield` and `await`. 
@@ -2938,6 +2942,7 @@ def collect_values(generator_func, limit):
         try:
             value = next(iterator)
             results.append(value)
+            i += 1
         except StopIteration:
             break
     return results
@@ -2947,7 +2952,7 @@ squares = collect_values(lambda:
     mut num = 1
     while True:
         yield num * num
-        num++
+        num += 1
 , 5)
 
 print(str(squares))
@@ -3007,10 +3012,10 @@ userIds = [1, 2, 3]
 
 async def get_team_data() {
 	# Passing the async function into map()
-	promise_array = map(userIds, async lambda id:
+	promise_array = map(async lambda id:
 	    await asyncio.sleep(1)
 		f"User Profile {id}"
-	)
+	, userIds)
 	# promise_array is currently [Promise, Promise, Promise]
 	results = await asyncio.gather(*promise_array)
 	print(results)   # Output: "['User Profile 1', 'User Profile 2', 'User Profile 3']"
