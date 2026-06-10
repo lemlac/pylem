@@ -3255,7 +3255,7 @@ print(result)  # Output: 8
 
 When you trigger an import, Pylem checks locations in a strict priority order:
 
-1. Built-in Modules: Internal core functions compiled directly into Python (e.g., `sys`).
+1. Built-in Modules: Internal core functions compiled directly into Pylem (e.g., `sys`).
 2. Current Directory: The folder where your running script lives.
 3. `PYLEMPATH`: External folders customized by you or your environment.
 4. Standard/Third-Party Library: Core packages and tools installed via a package manager.
