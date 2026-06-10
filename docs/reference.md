@@ -2130,6 +2130,7 @@ __Dunder *(shourt for "double underscore")* Methods__ are special methods marked
 * `__repr__(self)`: Returns an explicit, unambiguous string meant for debugging and logging.
 * `__enter__(self)`/`__exit__(self, ...)`: Define the behavior of the object when used in a [`with`](#with) block.
 * `__add__(self, other)` etc.: *See [Operator Overloading](#operator-overloading).*
+* `__iter__()`/`__next__()`: *See [Iterators & Asynchoronous Functions](#iterators--asynchoronous-functions).*
 
 _[Custom Types](#custom-types)_
 
@@ -2598,7 +2599,7 @@ class Point:
 
 # The entire object is instantiated and evaluated by the compiler
 const p = Point(3.5, -4.5)
-const dist: float = p.get_manhattan_distance();
+const dist: float = p.get_manhattan_distance()
 
 print(f"Manhattan Distance: {dist}")
 ```
@@ -2752,7 +2753,244 @@ _[Advanced](#advanced)_
 
 ### Iterators & Asynchronous Functions
 
-*TBD*
+An **iterator** is an object that contains a countable number of values and implements the iterator protocol. This protocol consists of two special methods: `__iter__()` (which returns the iterator object itself) and `__next__()` (which returns the next item in the sequence). When no more elements are available, `__next__()` raises a `StopIteration` exception.
+
+Collections like lists, tuples, and strings are iterables, meaning you can get an iterator from them using the built-in `iter()` function. You manually fetch items using `next()`.
+
+```py
+# Define an iterable list
+fruits = ["apple", "banana", "cherry"]
+# Get an iterator object from the list
+fruit_iterator = iter(fruits)
+# Fetch elements one by one
+print(str(next(fruit_iterator)))  # Outputs: "apple"
+print(str(next(fruit_iterator)))  # Outputs: "banana"
+print(str(next(fruit_iterator)))  # Outputs: "cherry"
+# Calling next() again will raise a StopIteration exception
+# print(str(next(fruit_iterator)))
+```
+
+__Custom Class Iterators:__ You can build a custom iterator by creating a class that implements `__iter__()` and `__next__()`.
+
+```py
+class EvenNumbers:
+    def __init__(mut self, max_limit):
+        self.max_limit = max_limit
+        self.current = 2
+
+    def __iter__(self):
+        return self
+
+    def __next__(mut self):
+        if self.current <= self.max_limit:
+            value = self.current
+            self.current += 2
+            return value
+        else:
+            raise StopIteration
+
+# Usage in a for-loop (which calls iter() and next() automatically)
+evens = EvenNumbers(6)
+for num in evens:
+    print(str(num))  # Outputs: "2", "4", "6"
+```
+
+__Generator Iterators:__ Generators are the easiest way to create iterators. Any function that uses the `yield` keyword automatically returns a generator object, which conforms to the iterator protocol.
+
+```py
+def count_down(num):
+    while num > 0:
+        yield num
+        num -= 1
+# Instantiate the generator iterator
+counter = count_down(3)
+
+print(str(next(counter)))  # Outputs: "3"
+print(str(next(counter)))  # Outputs: "2"
+print(str(next(counter)))  # Outputs: "1"
+```
+
+__Memory-Efficient File Iterators:__ File objects are natively implemented as iterators. Instead of loading a massive file completely into your RAM, the file iterator yields one line at a time.
+
+```py
+# Memory-efficient line-by-line reading
+with open("large_log.txt", "r") as file:
+    for line in file:
+        print(line.strip())
+```
+
+Like Python, Pylem provides highly optimized iterator tools via the built-in [itertools module](https://docs.python.org/3/library/itertools.html). They are perfect for memory-efficient data processing.
+
+```py
+import itertools
+# Infinite loop iterator (safely capped here with a break)
+for item in itertools.cycle(["A", "B", "C"]):
+    print(item)  # Will print "A", "B", "C", "A", "B"... endlessly
+    break        
+```
+
+Asynchronous programming in Pylem is primarily managed using the built-in [asyncio library](https://docs.python.org/3/library/asyncio.html) from Python. It relies on coroutines (defined with `async def`) and the `await` keyword to yield control back to an event loop while waiting for I/O operations to finish.
+
+This entry-level example demonstrates how to declare an asynchronous function and run it inside the event loop using [`asyncio.run()`](https://docs.python.org/3/library/asyncio-task.html).
+
+```py
+import asyncio
+
+# 1. Define an asynchronous function (coroutine)
+async def main():
+    print("Hello...")
+    # 2. Pause execution non-blockingly for 1 second
+    await asyncio.sleep(1)
+    print("...World!")
+
+# 3. Start the event loop and execute the coroutine
+asyncio.run(main())
+```
+
+__Running Multiple Tasks Concurrently:__ To execute tasks simultaneously instead of waiting sequentially, group them into modern `asyncio.TaskGroup` context managers. This allows the event loop to juggle tasks during idle periods (like network or sleep delays).
+
+```py
+import asyncio
+import time
+
+async def fetch_data(id, delay):
+    print(f"Task {id}: Fetching data...")
+    await asyncio.sleep(delay)  # Simulates network lag
+    print(f"Task {id}: Data received!")
+    return f"Result {id}"
+
+async def main():
+    start_time = time.time()
+
+    # TaskGroup manages scheduled operations together
+    async with asyncio.TaskGroup() as tg:
+        task1 = tg.create_task(fetch_data(1, 2))
+        task2 = tg.create_task(fetch_data(2, 3))
+        task3 = tg.create_task(fetch_data(3, 1))
+
+    # The block implicitly awaits all tasks before exiting
+    print(f"Results: {task1.result()}, {task2.result()}, {task3.result()}")
+    print(f"Total time elapsed: {time.time() - start_time:.2f} seconds")
+
+asyncio.run(main())
+```
+
+*Expected Output:*
+
+```
+Task 1: Fetching data...
+Task 2: Fetching data...
+Task 3: Fetching data...
+Task 3: Data received!
+Task 1: Data received!
+Task 2: Data received!
+Results: Result 1, Result 2, Result 3
+Total time elapsed: 3.01 seconds (Takes the length of the longest task, not the sum of all tasks) [7] 
+```
+
+__Async Core Concepts Cheat Sheet:__
+
+| Keyword / Tool | Purpose |
+|---|---|
+| `async def` | Declares a function as a coroutine wrapper rather than a normal synchronous function. |
+| `await` | Pauses execution of the coroutine, giving control back to the loop until the event resolves. |
+| `asyncio.run()` | The primary tool used to spin up an underlying event loop and drive a top-level coroutine. |
+| `asyncio.gather()` | Waits for multiple asyncs to finish in parallel. |
+
+As well as `def` functions, `lanbda` functions can also use `yield` and `await`. 
+
+```py
+# Utility function that consumes any generator function
+def collect_values(generator_func, limit):
+    iterator = generator_func()   # Initialize the anonymous generator
+    mut results: list = []
+    mut i = 0
+    while i < limit:
+        try:
+            value = next(iterator)
+            results.append(value)
+        except StopIteration:
+            break
+    return results
+
+# Passing an anonymous generator function inline
+squares = collect_values(lambda:
+    mut num = 1
+    while True:
+        yield num * num
+        num++
+, 5)
+
+print(str(squares))
+# Output: "[1, 4, 9, 16, 25]"
+```
+
+```py
+# Utility function that processes chunks of data dynamically
+def run_data_stream(stream_generator):
+    stream = stream_generator()
+	mut done = False
+	while not done:
+		try:
+			value = next(stream)
+            print(f"[Stream Processor] Received: {value}")
+        except StopIteration:
+            done = True
+    print("[Stream Processor] Stream finished.")
+
+# Passing an anonymous generator that acts as a mock server log stream
+run_data_stream(lambda:
+    yield "User logged in"
+    yield "Updated profile picture"
+    yield "Connected external bank account"
+)
+
+# Output:
+# "[Stream Processor] Received: User logged in"
+# "[Stream Processor] Received: Updated profile picture"
+# "[Stream Processor] Received: Connected external bank account"
+# "[Stream Processor] Stream finished."
+```
+
+```py
+import asyncio
+
+# 1. Define a function that accepts an async function as a parameter
+async def process_data(callback):
+	print("Starting process...")
+	# You must use await because callback() returns a Promise
+	data = await callback()
+	print(f"Processed user: {data["name"]}")
+
+# 2. Pass the async function as an argument
+asyncio.run(process_data(async lambda:
+    await asyncio.sleep(1)
+	return { "id": "1", "name": "Alice" }
+))
+```
+
+```py
+import asyncio
+
+userIds = [1, 2, 3]
+
+# Simulated async fetch function
+async def fetch_details(id):
+    await asyncio.sleep(1)
+	return f"User Profile {id}"
+
+async def get_team_data() {
+	# Passing the async function into map()
+	promise_array = map(userIds, async lambda id:
+		detail = await fetch_details(id)
+		detail
+	)
+	# promise_array is currently [Promise, Promise, Promise]
+	results = await asyncio.gather(*promise_array)
+	print(results)   # Output: "['User Profile 1', 'User Profile 2', 'User Profile 3']"
+
+asyncio.run(get_team_data())
+```
 
 _[Advanced](#advanced)_
 
