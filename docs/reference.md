@@ -2434,7 +2434,7 @@ If a developer wants a copy in Pylem, they must explicitly ask for it to prevent
 
 ```py
 # --- Python Behavior ---
-nums = [1, 2, 3, 4
+nums = [1, 2, 3, 4]
 ]sub = nums[1:3]    # Allocates a new list [2, 3]
 sub[0] = 99         # Modifies 'sub', 'nums' remains [1, 2, 3, 4]
 
