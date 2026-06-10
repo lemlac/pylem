@@ -1475,27 +1475,22 @@ l: list[int] = [1, 2, 3, 4, 5]
 a: arr[int, 5] = arr(l)
 ```
 
-Items are accessed using zero-based indexing (the first item is 0). Unlike lists, indexing an `arr` out of bounds won't crash immediately. Instead, it will return a None-able type `T?`. *(See [None-ables](#none-ables-).)* It needs to be checked before using because it will throw an error if you try to unwrap something that's `None`. 
+Items are accessed using zero-based indexing (the first item is `0`). Indexing an `arr` out of bounds can cause a crash, although the error can't be caught since it's doing a raw deference on a pointer like in C. Every `arr` is also a `ptr` type. If you have `a: arr`, then `a[1]` is the same as `(a + 1).*`. Because of that, negative array indexing doesn't work since that would require checking for positive or negative which adds run-time overhead on the dereference operation. 
 
 ```py
 colors = ["red", "green", "blue"]
 
-mut item: str?
+mut item: str
 
 item = colors[0]
-if item is not None:
-    print(item)   # Outputs: red
+print(item)   # Outputs: red
 
-item = colors[-1]
-if item is not None:
-    print(item)  # Won't print because `arr` arrays can't be reversed index with negative numbers.
-
+# item = colors[-1]           # Out of bounds crash
 item = colors[len(colors)-1]  # Do this instead
-if item is not None:
-    print(item)  # Outputs: blue (negative indexing counts from the back)
+print(item)   # Outputs: blue
 ```
 
-`arr` arrays are pointers, so they use the same mechanic as dereferencing a pointer. *(See [Pointers](#pointers-ptr).)*
+To keep the operation fast and lightweight, you must only index with positive integers between `0` and `len(a)-1`. Note that `len(a)` on a fixed size array is a constant expression with no run-time overhead.
 
 _[Built-in Types](#built-in-types)_
 
