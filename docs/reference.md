@@ -86,11 +86,11 @@ struct BankAccount:
     balance: int
 
 class BankAccount:
-    def __init__(mut self, owner, balance=0):
+    def __init__(self: mutptr, owner, balance=0):
         self.owner = owner
         self.balance = balance
         
-    def deposit(mut self, amount):
+    def deposit(self: mutptr, amount):
         self.balance += amount
         return f"${amount} deposited. New balance: ${self.balance}"
 
@@ -937,10 +937,10 @@ Objects that work with a with statement are called context managers. You can cre
 
 ```py
 class DatabaseConnection:
-    def __enter__(self):
+    def __enter__(self: ptr):
         print("Connecting to the database...")
         return "Connection_Object"
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self: ptr, exc_type, exc_val, exc_tb):
         print("Closing the database connection safely.")
         # Returning True would swallow exceptions; returning None/False propagates them
 
@@ -1052,7 +1052,7 @@ struct Counter:
 	value: int
 
 class Counter:
-    increment(mut self):
+    increment(self: mutptr):
     	self.mu.lock()
     	defer self.mu.unlock() # Guaranteed to unlock when increment() finishes
     	self.value += 1
@@ -2084,7 +2084,7 @@ struct BankAccount:
 
 # 2. Add methods to that layout (Works like Rust's `impl BankAccount`)
 class BankAccount:
-    def deposit(mut self, amount: int):
+    def deposit(self: mutptr, amount: int):
         self.balance += amount
 ```
 
@@ -2093,7 +2093,7 @@ __Interfaces:__ an interface is a class without any data. It works like `interfa
 ```py
 # Defines a contract (Works like Rust's `trait Renderable`)
 class Renderable:
-    def render(self) -> str:
+    def render(self: ptr) -> str:
         pass
 ```
 
@@ -2102,15 +2102,22 @@ Implement an interface into another class by extending it. Each `class` definiti
 ```py
 # Implement the 'Renderable' behavior specifically for 'BankAccount'
 class BankAccount(Renderable):
-    def render(self) -> str:
+    def render(self: ptr) -> str:
         return f"Account owner: {self.owner}, Balance: {self.balance}"
 ```
 
-__Constructors:__ When a type has one or more `__init__(mut self)` methods defined, you can use that to create the type instead of the standard instantiation method. This can be overloaded to create multiple ways to initiate a type. The first argument `mut self` is an unset reference to the new object. If it's a struct, then all members need to be set. If it's an enum or union, then it must be set to one of its variants.
+__Types of `self`:__ By itself, `self` copies the object into the method. You can also use a pointer to self instead. `ptr`/`mutptr` are inferred to be of the same type as the class that's being defined.
+
+- `self` – Immutable copy of the object.
+- `mut self` – Mutable (within the function) copy of the object.
+- `self: ptr` – Immutable reference of the object.
+- `self: mutptr` – Mutable reference of the object.
+
+__Constructors:__ When a type has one or more `__init__(self: mutptr)` methods defined, you can use that to create the type instead of the standard instantiation method. This can be overloaded to create multiple ways to initiate a type. The first argument `self: mutptr` is an unset reference to the new object. If it's a struct, then all members need to be set. If it's an enum or union, then it must be set to one of its variants.
 
 ```py
 class BankAccount:
-    def __init__(mut self, owner, balance=0):
+    def __init__(self: mutptr, owner, balance=0):
         self.owner = owner
         self.balance = balance
 
@@ -2291,14 +2298,14 @@ __Reflected (Right-Hand) Arithmetic Operators:__ *Fallback to right-hand variant
 
 __In-Place (Assignment) Operators:__ *These methods govern compound assignment symbols like `+=` and `*=`.*
 
-* `__iadd__(mut self, other)`: In-place addition (`+=`)
-* `__isub__(mut self, other)`: In-place subtraction (`-=`)
-* `__imul__(mut self, other)`: In-place multiplication (`*=`)
-* `__imatmul__(mut self, other)`: In-place matrix multiplication (`@=`)
-* `__itruediv__(mut self, other)`: In-place true division (`/=`)
-* `__ifloordiv__(mut self, other)`: In-place floor division (`//=`)
-* `__imod__(mut self, other)`: In-place modulo (`%=`)
-* `__ipow__(mut self, other)`: In-place exponentiation (`**=`)
+* `__iadd__(self: mutptr, other)`: In-place addition (`+=`)
+* `__isub__(self: mutptr, other)`: In-place subtraction (`-=`)
+* `__imul__(self: mutptr, other)`: In-place multiplication (`*=`)
+* `__imatmul__(self: mutptr, other)`: In-place matrix multiplication (`@=`)
+* `__itruediv__(self: mutptr, other)`: In-place true division (`/=`)
+* `__ifloordiv__(self: mutptr, other)`: In-place floor division (`//=`)
+* `__imod__(self: mutptr, other)`: In-place modulo (`%=`)
+* `__ipow__(self: mutptr, other)`: In-place exponentiation (`**=`)
 
 __Bitwise Operators:__ *These handle binary bit manipulation and logical bit masking operations.*
 
@@ -2318,11 +2325,11 @@ __Reflected Bitwise:__
 
 __In-Place Bitwise:__
 
-* `__ilshift__(mut self, other)`: In-place left shift (`<<=`)
-* `__irshift__(mut self, other)`: In-place right shift (`>>=`)
-* `__iand__(mut self, other)`: In-place AND (`&=`)
-* `__ixor__(mut self, other)`: In-place XOR (`^=`)
-* `__ior__(mut self, other)`: In-place OR (`|=`)
+* `__ilshift__(self: mutptr, other)`: In-place left shift (`<<=`)
+* `__irshift__(self: mutptr, other)`: In-place right shift (`>>=`)
+* `__iand__(self: mutptr, other)`: In-place AND (`&=`)
+* `__ixor__(self: mutptr, other)`: In-place XOR (`^=`)
+* `__ior__(self: mutptr, other)`: In-place OR (`|=`)
 
 __Unary Operators:__ *These operators process only one single object operand.*
 
@@ -2495,9 +2502,9 @@ struct Box[T]:
     content: T
 
 class Box[T]:
-    def __init__(mut self, content: T):
+    def __init__(self: mutptr, content: T):
         self.content: T = content
-    def get_content(self) -> T:
+    def get_content(self: ptr) -> T:
         return self.content
 # Instantiate with specific types
 int_box = Box[int](123)
@@ -2519,7 +2526,7 @@ struct Array[type T, const N: usize]:
     data: arr[T, N]
 
 class Array[T, N]:   # `type`/`const` constraint inherited from struct declaration
-    def __init__(mut self, data: arr[T, N]):
+    def __init__(self: mutptr, data: arr[T, N]):
         self.data = data
 
 a = Array([1, 2, 3])  # Array[int, 3] inferred
@@ -2589,7 +2596,7 @@ struct Point:
 
 class Point:
     # Const constructor allows compile-time object initialization
-    const __init__(mut self, start_x: float, start_y: float):
+    const __init__(self: mutptr, start_x: float, start_y: float):
 		self.x = start_x
 		self.y = start_y
 
@@ -2774,14 +2781,14 @@ __Custom Class Iterators:__ You can build a custom iterator by creating a class 
 
 ```py
 class EvenNumbers:
-    def __init__(mut self, max_limit):
+    def __init__(self: mutptr, max_limit):
         self.max_limit = max_limit
         self.current = 2
 
     def __iter__(self):
         return self
 
-    def __next__(mut self):
+    def __next__(self: mutptr):
         if self.current <= self.max_limit:
             value = self.current
             self.current += 2
