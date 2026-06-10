@@ -86,11 +86,11 @@ struct BankAccount:
     balance: int
 
 class BankAccount:
-    def __init__(self: mutptr, owner, balance=0):
+    def __init__(mut self: ptr, owner, balance=0):
         self.owner = owner
         self.balance = balance
         
-    def deposit(self: mutptr, amount):
+    def deposit(mut self: ptr, amount):
         self.balance += amount
         return f"${amount} deposited. New balance: ${self.balance}"
 
@@ -1052,7 +1052,7 @@ struct Counter:
 	value: int
 
 class Counter:
-    increment(self: mutptr):
+    increment(mut self: ptr):
     	self.mu.lock()
     	defer self.mu.unlock() # Guaranteed to unlock when increment() finishes
     	self.value += 1
@@ -1676,16 +1676,16 @@ _[Built-in Types](#built-in-types)_
 
 #### Pointers (`ptr`)
 
-Pointers are type `ptr[T]` (immutable) and `mutptr[T]` (mutable). You can get the reference to something with the function `ref`. The postfix `.*` operator will dereference a pointer. A `mutptr` must point to a reference declared with `mut`.
+Pointers are type `ptr[T]`. You can get the reference to something with the function `ref`. The postfix `.*` operator will dereference a pointer. A `mut` pointer must point to a reference declared with `mut`.
 
 ```py
 mut x = 0
-xPtr: mutptr[int] = ref(x)
+mut xPtr: ptr[int] = ref(x)
 xPtr.* = 1
 x  # Value: 1
 ```
 
-Safety pointers use a None-able type `ptr?`/`mutptr?`. If a pointer can't be guaranteed to not be NULL, then it must use a safety pointer type. Checking for `None` before dereferencing will coerce it to a raw pointer that can be dereferenced safely. Otherwise, dereferencing it might raise an error at run-time.
+Safety pointers use a None-able type `ptr?`/. If a pointer can't be guaranteed to not be NULL, then it must use a safety pointer type. Checking for `None` before dereferencing will coerce it to a raw pointer that can be dereferenced safely. Otherwise, dereferencing it might raise an error at run-time.
 
 ```py
 def check_ptr(p: ptr[int]?):
@@ -2084,7 +2084,7 @@ struct BankAccount:
 
 # 2. Add methods to that layout (Works like Rust's `impl BankAccount`)
 class BankAccount:
-    def deposit(self: mutptr, amount: int):
+    def deposit(mut self: ptr, amount: int):
         self.balance += amount
 ```
 
@@ -2106,18 +2106,18 @@ class BankAccount(Renderable):
         return f"Account owner: {self.owner}, Balance: {self.balance}"
 ```
 
-__Types of `self`:__ By itself, `self` copies the object into the method. You can also use a pointer to self instead. `ptr`/`mutptr` are inferred to be of the same type as the class that's being defined.
+__Types of `self`:__ By itself, `self` copies the object into the method. You can also use a pointer to self instead. `ptr` are inferred to be of the same type as the class that's being defined.
 
 - `self` – Immutable copy of the object.
 - `mut self` – Mutable (within the function) copy of the object.
 - `self: ptr` – Immutable reference of the object.
-- `self: mutptr` – Mutable reference of the object.
+- `mut self: ptr` – Mutable reference of the object.
 
-__Constructors:__ When a type has one or more `__init__(self: mutptr)` methods defined, you can use that to create the type instead of the standard instantiation method. This can be overloaded to create multiple ways to initiate a type. The first argument `self: mutptr` is an unset reference to the new object. If it's a struct, then all members need to be set. If it's an enum or union, then it must be set to one of its variants.
+__Constructors:__ When a type has one or more `__init__(mut self: ptr)` methods defined, you can use that to create the type instead of the standard instantiation method. This can be overloaded to create multiple ways to initiate a type. The first argument `mut self: ptr` is an unset reference to the new object. If it's a struct, then all members need to be set. If it's an enum or union, then it must be set to one of its variants.
 
 ```py
 class BankAccount:
-    def __init__(self: mutptr, owner, balance=0):
+    def __init__(mut self: ptr, owner, balance=0):
         self.owner = owner
         self.balance = balance
 
@@ -2130,7 +2130,7 @@ print(f"{my_account.owner} has ${my_account.balance}")
 
 __Dunder *(shourt for "double underscore")* Methods__ are special methods marked with 2 underscores (`__`) before and after the name of the method.
 
-* `__init__(self: mutptr, ...)`: Initializes a newly created instance of a class.
+* `__init__(mut self: ptr, ...)`: Initializes a newly created instance of a class.
 * `__new__(cls, ...)`: The true constructor that allocates memory for the new object, running right before __init__.
 * `__del__(self)`: The destructor method triggered when an object is about to be garbage collected.
 * `__str__(self)`: Defines user-friendly, readable text for `str()`.
@@ -2156,17 +2156,17 @@ Pylem includes some new operators that are not found in Python.
 |:---|:---|---:|:---|
 | `x?[index]`, `x?[index:index]`, `x?(arguments...)`, `x?.attribute` | Safe subscription (indexing), slicing, function call, and attribute reference to a question type `T?`; wraps in a type `T?`; returns `None` if `x` is `None` | 2 | Left-to-right |
 | `x.*` | Dereference a pointer | 2 | Left-to-right |
-| `x?.*` | Dereference a nullable pointer: for a pointer type `ptr[T]?`/`mutptr[T]?`, returns type `T?` | 2 | Left-to-right |
+| `x?.*` | Dereference a nullable pointer: for a pointer type `ptr[T]?`, returns type `T?` | 2 | Left-to-right |
 | `??` | `None`-coalessing / fallback operator | 17 | Left-to-right |
 
-When accessing something from a pointer type `ptr`/`mutptr`, dereferencing with `.*` isn't necessary. Assuming `p` is a pointer, then:
+When accessing something from a pointer type `ptr`, dereferencing with `.*` isn't necessary. Assuming `p` is a pointer, then:
 
 - `p.member` → `p.*.member`
 - `p[index]` → `p.*[index]`
 - `p[index:index]` → `p.*[index:index]`
 - `p(arguments...)` → `p.*(arguments...)`
 
-Or if `p` is a nullable pointer type `ptr?`/`mutptr?`, then:
+Or if `p` is a nullable pointer type `ptr?`, then:
 
 - `p?.member` → `p?.*?.member`
 - `p?[index]` → `p?.*?[index]`
@@ -2299,14 +2299,14 @@ __Reflected (Right-Hand) Arithmetic Operators:__ *Fallback to right-hand variant
 
 __In-Place (Assignment) Operators:__ *These methods govern compound assignment symbols like `+=` and `*=`.*
 
-* `__iadd__(self: mutptr, other)`: In-place addition (`+=`)
-* `__isub__(self: mutptr, other)`: In-place subtraction (`-=`)
-* `__imul__(self: mutptr, other)`: In-place multiplication (`*=`)
-* `__imatmul__(self: mutptr, other)`: In-place matrix multiplication (`@=`)
-* `__itruediv__(self: mutptr, other)`: In-place true division (`/=`)
-* `__ifloordiv__(self: mutptr, other)`: In-place floor division (`//=`)
-* `__imod__(self: mutptr, other)`: In-place modulo (`%=`)
-* `__ipow__(self: mutptr, other)`: In-place exponentiation (`**=`)
+* `__iadd__(mut self: ptr, other)`: In-place addition (`+=`)
+* `__isub__(mut self: ptr, other)`: In-place subtraction (`-=`)
+* `__imul__(mut self: ptr, other)`: In-place multiplication (`*=`)
+* `__imatmul__(mut self: ptr, other)`: In-place matrix multiplication (`@=`)
+* `__itruediv__(mut self: ptr, other)`: In-place true division (`/=`)
+* `__ifloordiv__(mut self: ptr, other)`: In-place floor division (`//=`)
+* `__imod__(mut self: ptr, other)`: In-place modulo (`%=`)
+* `__ipow__(mut self: ptr, other)`: In-place exponentiation (`**=`)
 
 __Bitwise Operators:__ *These handle binary bit manipulation and logical bit masking operations.*
 
@@ -2326,11 +2326,11 @@ __Reflected Bitwise:__
 
 __In-Place Bitwise:__
 
-* `__ilshift__(self: mutptr, other)`: In-place left shift (`<<=`)
-* `__irshift__(self: mutptr, other)`: In-place right shift (`>>=`)
-* `__iand__(self: mutptr, other)`: In-place AND (`&=`)
-* `__ixor__(self: mutptr, other)`: In-place XOR (`^=`)
-* `__ior__(self: mutptr, other)`: In-place OR (`|=`)
+* `__ilshift__(mut self: ptr, other)`: In-place left shift (`<<=`)
+* `__irshift__(mut self: ptr, other)`: In-place right shift (`>>=`)
+* `__iand__(mut self: ptr, other)`: In-place AND (`&=`)
+* `__ixor__(mut self: ptr, other)`: In-place XOR (`^=`)
+* `__ior__(mut self: ptr, other)`: In-place OR (`|=`)
 
 __Unary Operators:__ *These operators process only one single object operand.*
 
@@ -2503,7 +2503,7 @@ struct Box[T]:
     content: T
 
 class Box[T]:
-    def __init__(self: mutptr, content: T):
+    def __init__(mut self: ptr, content: T):
         self.content: T = content
     def get_content(self: ptr) -> T:
         return self.content
@@ -2527,7 +2527,7 @@ struct Array[type T, const N: usize]:
     data: arr[T, N]
 
 class Array[T, N]:   # `type`/`const` constraint inherited from struct declaration
-    def __init__(self: mutptr, data: arr[T, N]):
+    def __init__(mut self: ptr, data: arr[T, N]):
         self.data = data
 
 a = Array([1, 2, 3])  # Array[int, 3] inferred
@@ -2597,7 +2597,7 @@ struct Point:
 
 class Point:
     # Const constructor allows compile-time object initialization
-    const __init__(self: mutptr, start_x: float, start_y: float):
+    const __init__(mut self: ptr, start_x: float, start_y: float):
 		self.x = start_x
 		self.y = start_y
 
@@ -2782,14 +2782,14 @@ __Custom Class Iterators:__ You can build a custom iterator by creating a class 
 
 ```py
 class EvenNumbers:
-    def __init__(self: mutptr, max_limit):
+    def __init__(mut self: ptr, max_limit):
         self.max_limit = max_limit
         self.current = 2
 
     def __iter__(self):
         return self
 
-    def __next__(self: mutptr):
+    def __next__(mut self: ptr):
         if self.current <= self.max_limit:
             value = self.current
             self.current += 2
@@ -3030,13 +3030,13 @@ __Method 1: Class-Based Asynchronous Iterator__ This is the low-level method whe
 import asyncio
 
 class AsyncCounter:
-    def __init__(self: mutptr, stop_at):
+    def __init__(mut self: ptr, stop_at):
         self.stop_at = stop_at
         self.current = 0
     def __aiter__(self):
         # Must return an object implementing __anext__
         return self
-    async def __anext__(self: mutptr):
+    async def __anext__(mut self: ptr):
         # Simulating an asynchronous I/O operation (like an API call)
         await asyncio.sleep(0.5) 
         if self.current >= self.stop_at:
@@ -3078,7 +3078,78 @@ _[Advanced](#advanced)_
 
 ### Decorators
 
-*TBD*
+A decorator is a function that takes another function as an argument, extends its behavior without modifying it explicitly, and returns a new function. You apply decorators by placing the `@decorator_name` syntax directly above your target function definition.
+
+__Basic Decorator (No Arguments):__ This example prints a message before and after a function runs. It uses `functools.wraps` to preserve the original function's name and documentation.
+
+```py
+from functools import wraps
+
+def my_logger(func):
+    @wraps(func)
+    def wrapper():
+        print(f"--> Starting {func.__name__}")
+        func()
+        print(f"--> Finished {func.__name__}")
+    return wrapper
+
+@my_logger
+def say_hello():
+    print("Hello, World!")
+
+say_hello()
+```
+
+*Output:*
+
+```
+--> Starting say_hello
+Hello, World!
+--> Finished say_hello
+```
+
+__Decorating Functions with Arguments:__ To decorate any function regardless of its inputs, use `*args` and `**kwargs` in the inner wrapper function to dynamically collect and pass arguments.
+
+```py
+import time
+from functools import wraps
+def timer_decorator(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs) # Accepts any arguments
+        end_time = time.time()
+        print(f"{func.__name__} took {end_time - start_time:.4f} seconds")
+        return result                  # Returns the actual function result
+    return wrapper
+
+@timer_decorator
+def compute_power(base, exponent):
+    return base ** exponent
+
+print(str(compute_power(2, 100000)))
+```
+
+__Decorator Factories (Passing Arguments to the Decorator):__ If your decorator needs its own configuration parameters, you must add a third nesting level (a decorator factory) to handle the decorator's setup arguments.
+
+```py
+from functools import wraps
+def repeat(num_times):
+    def decorator_repeat(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            for _ in range(num_times):
+                result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator_repeat
+
+@repeat(num_times=3)
+def greet(name):
+    print(f"Hello {name}")
+
+greet("Alice") # Will print the greeting 3 times
+```
 
 _[Advanced](#advanced)_
 
@@ -3086,7 +3157,25 @@ _[Advanced](#advanced)_
 
 ### Memory Allocation
 
-*TBD*
+To allocate memory on the heap, use the `alloc` and `free` functions. The value passed to `alloc` will only run if it's able to allocate enough space. `alloc` returns a nullable pointer `ptr?`. Check for `None` to see if it succeeded or not. 
+
+```py
+struct Student:
+    name: str
+    grade: chr
+
+mut student: ptr[Student] = alloc(Student(name="John", grade='B'))
+defer free(student)
+
+if student is not None:
+	student.name = "John Smith"
+
+def makeStudent(name: str, grade: chr) -> ptr[Student]?:
+    return alloc(Student(name=name, grade=grade))
+```
+
+- `alloc` will check the size of the type passed to it and allocate that much space, returning a `ptr?`. If successful, it will run the expression in its parameter and return the pointer. If not, it will return `None`.
+- `free` will free the memory to a pointer.
 
 _[Advanced](#advanced)_
 
@@ -3094,7 +3183,71 @@ _[Advanced](#advanced)_
 
 ### Importing & Modules
 
-*TBD*
+Importing pulls code from outside files, libraries, or modules into your current program so you can reuse it without rewriting it. When Pylem encounters an `import` statement, it searches for the specified file, runs its code, and creates an object representing that module in your current workspace. 
+
+This approach imports the entire module. You must use a dot (`.`) prefix to access its internal variables, functions, or classes.
+
+```py
+import math
+# Access the 'pi' variable inside the math module
+print(math.pi)  # Output: 3.141592653589793
+```
+
+__Importing Specific Attributes:__ If you only need a specific function or variable, use the `from ... import ...` syntax. This lets you call the item directly without the module prefix.
+
+```py
+from random import randint
+# Call the function directly
+print(randint(1, 10))  # Output: A random number between 1 and 10
+```
+
+__Importing with an Alias:__ You can rename a module or function during the import using the `as` keyword. This is helpful for shortening long names or following industry conventions.
+
+```py
+import numpy as np
+# Use the short 'np' alias instead of typing 'numpy'
+my_array = np.array([1, 2, 3])
+```
+
+__Wildcard Import (Generally Discouraged):__ Using an asterisk `*` imports everything from a module into your local workspace.
+
+```py
+from math import *
+
+print(sqrt(16))  # Output: 4.0
+```
+
+*⚠️ Why avoid this?* It pollutes your workspace and can cause unexpected bugs if two different modules use the exact same function names. 
+
+__Importing Your Own Custom Files:__ Any Pylem source code file you create can be imported into another program as long as it is sitting in the same directory.
+
+```py
+## ---
+## Step A: Create a file named calculator.pyl
+
+def add(a, b):
+    return a + b
+
+def subtract(a, b):
+    return a - b
+
+## ---
+## Step B: Import it into your main script (main.py) [16] 
+
+import calculator
+
+result = calculator.add(5, 3)
+print(result)  # Output: 8
+```
+
+When you trigger an import, Pylem checks locations in a strict priority order:
+
+1. Built-in Modules: Internal core functions compiled directly into Python (e.g., `sys`).
+2. Current Directory: The folder where your running script lives.
+3. `PYLEMPATH`: External folders customized by you or your environment.
+4. Standard/Third-Party Library: Core packages and tools installed via a package manager.
+
+💡 Pro Tip: Avoid naming your personal script files the same name as a popular library (like `math.py` or `random.py`), or Pylem might accidentally import your file instead of the official library, breaking your code.
 
 _[Advanced](#advanced)_
 
