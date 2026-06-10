@@ -2861,11 +2861,11 @@ __Running Multiple Tasks Concurrently:__ To execute tasks simultaneously instead
 import asyncio
 import time
 
-async def fetch_data(id, delay):
+async lambda fetch_data(id, delay):
     print(f"Task {id}: Fetching data...")
     await asyncio.sleep(delay)  # Simulates network lag
     print(f"Task {id}: Data received!")
-    return f"Result {id}"
+	f"Result {id}"
 
 async def main():
     start_time = time.time()
@@ -2910,9 +2910,9 @@ Optionally, you can use `await` as a member on an async instance: `.await`. This
 ```py
 import asyncio
 
-async def fetch_data():
+async lambda fetch_data():
     await asyncio.sleep(1)
-    return "  Hello, Async World!  "
+	"  Hello, Async World!  "
 
 async def main():
     # Call the .strip() method directly on the awaited result
@@ -3006,9 +3006,9 @@ import asyncio
 userIds = [1, 2, 3]
 
 # Simulated async fetch function
-async def fetch_details(id):
+async lambda fetch_details(id):
     await asyncio.sleep(1)
-	return f"User Profile {id}"
+	f"User Profile {id}"
 
 async def get_team_data() {
 	# Passing the async function into map()
@@ -3063,7 +3063,7 @@ __Method 2: Asynchronous Generator (Recommended)__ Writing full iterator classes
 ```py
 import asyncio
 
-async def fetch_data_stream(limit):
+async lambda fetch_data_stream(limit):
     for i in range(1, limit + 1):
         # Simulating fetching a row or chunk from a database
         await asyncio.sleep(0.5) 
