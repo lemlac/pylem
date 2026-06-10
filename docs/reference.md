@@ -2130,7 +2130,7 @@ __Dunder *(shourt for "double underscore")* Methods__ are special methods marked
 * `__repr__(self)`: Returns an explicit, unambiguous string meant for debugging and logging.
 * `__enter__(self)`/`__exit__(self, ...)`: Define the behavior of the object when used in a [`with`](#with) block.
 * `__add__(self, other)` etc.: *See [Operator Overloading](#operator-overloading).*
-* `__iter__()`/`__next__()`: *See [Iterators & Asynchoronous Functions](#iterators--asynchoronous-functions).*
+* `__iter__()`/`__next__()`: *See [Iterators & Asynchronous Functions](#iterators--asynchronous-functions).*
 
 _[Custom Types](#custom-types)_
 
