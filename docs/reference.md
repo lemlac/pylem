@@ -3176,15 +3176,19 @@ if student is not None:
 
 def makeStudent(name: str, grade: chr) -> ptr[Student]?:
     return alloc(Student(name=name, grade=grade))
+```
 
+- `alloc` will check the size of the type passed to it and allocate that much space, returning a `ptr?`. If successful, it will run the expression in its parameter and return the pointer. If not, it will return `None`.
+- `free` will free the memory to a pointer.
+
+Instead of checking, you can force a pointer to not be null with `unwrap()`. This will raise an `UnwrapError` if it fails. 
+
+```py
 # Force a pointer to not be null with unwrap()
 mut student: ptr[Student] = unwrap(alloc(Student(name="John", grade='B')))
 defer free(student)
 student.name = "John Smith"
 ```
-
-- `alloc` will check the size of the type passed to it and allocate that much space, returning a `ptr?`. If successful, it will run the expression in its parameter and return the pointer. If not, it will return `None`.
-- `free` will free the memory to a pointer.
 
 _[Advanced](#advanced)_
 
