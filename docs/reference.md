@@ -1632,13 +1632,13 @@ match x:
         print("No number")
 ```
 
-When you use a type `T?` where a type `T` is expected, it will be unwrapped automatically which can raise an exception. This mimics trying to use `None` in Python on something that doesn't accept `None`.
+When you use a type `T?` where a type `T` is expected, it will be unwrapped automatically which can raise a `TypeError` exception. This mimics trying to use `None` in Python on something that doesn't accept `None`. You can also use the `unwrap()` function to force a `T?` type to unwrap, raising an `UnwrapError` if it doesn't.
 
 ```py
 try:
-    i: int = get_number() + 1  # Might raise if None.
+    i: int = unwrap(get_number())  # Might raise if None.
     print(f"Result: {i}")
-except TypeError as e:
+except UnwrapError as e:
     print(f"Error: {e}")
 ```
 
@@ -3171,6 +3171,11 @@ if student is not None:
 
 def makeStudent(name: str, grade: chr) -> ptr[Student]?:
     return alloc(Student(name=name, grade=grade))
+
+# Force a pointer to not be null with unwrap()
+mut student: ptr[Student] = unwrap(alloc(Student(name="John", grade='B')))
+defer free(student)
+student.name = "John Smith"
 ```
 
 - `alloc` will check the size of the type passed to it and allocate that much space, returning a `ptr?`. If successful, it will run the expression in its parameter and return the pointer. If not, it will return `None`.
