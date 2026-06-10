@@ -1151,7 +1151,7 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 
 [TOC](#table-of-contents)
 
-### Built-in Types
+## Built-in Types
 
 1. __[Booleans](#booleans-bool)__
 2. __[Numbers](#numbers)__
@@ -1166,7 +1166,7 @@ __[Built-in Types](#built-in-types)__ / __[Custom Types](#custom-types)__
 
 _[Types](#types)_
 
-#### Booleans (`bool`)
+### Booleans (`bool`)
 
 `bool` is a built-in enum type with its only variants being `False` and `True`. 
 
@@ -1187,7 +1187,7 @@ else:
 
 _[Built-in Types](#built-in-types)_
 
-#### Numbers
+### Numbers
 
 The three basic numbers in Python are also available in Pylem: integers (`int`), floating-point numbers (`float`), and complex numbers (`complex`). Variables automatically take on these types when you assign a numeric value to them. 
 
@@ -1259,7 +1259,7 @@ print(sys.getsizeof(2**30))      # Output: 32 bytes (Grows as value expands)
 print(sys.getsizeof(2**1000))    # Output: 168 bytes
 ```
 
-##### Sized Number Types
+#### Sized Number Types
 
 In addition to Python's number types, Pylem includes size specific variants of integers (signed or unsigned) and floating-point numbers to give you more control.
 
@@ -1297,7 +1297,7 @@ binary_val = 0b1111_0000          # Binary (Base 2) = 240
 
 _[Built-in Types](#built-in-types)_
 
-#### Characters (`chr`)
+### Characters (`chr`)
 
 Python doesn't have a built-in character type like `char` in C. By default, both single (`'`) and double (`"`) quotes will make strings in Pylem just like they do in Python. You can declare a variable as `chr` and it will expect a string literal of one character or an expression that returns a `chr`. If you set it to a string that isn't 1 character, you will get a compile-time error.
 
@@ -1331,7 +1331,7 @@ Without a `chr` context, a single-character string literal is still a `str` as n
 
 _[Built-in Types](#built-in-types)_
 
-#### Strings (`str`)
+### Strings (`str`)
 
 A string is a sequence of characters enclosed in single (`'`), double (`"`), or triple quotes (`"""`).
 
@@ -1387,13 +1387,13 @@ print(word[0:3])  # Outputs: Ana
 
 _[Built-in Types](#built-in-types)_
 
-#### Arrays (`arr` / `list`)
+### Arrays (`arr` / `list`)
 
 Array types are split between the familiar and dynamic lists from Python `list[T]` and the more low-level, static C-style arrays `arr[T, N]`. *(Skip to [`arr`](#arr) if you want to see the type unique to Pylem.)*
 
 By default, arrays in Pylem are static `arr` type. To make a dynamic array, you must eplicitly declare a `list` type.
 
-##### `list`
+#### `list`
 
 Lists are created by placing items inside square brackets `[]` in a context where a `list` is expected, separated by commas. This is similar to how `chr` characters are differentiated from `str` strings. You can either declare a type as `list` or cast an array with the `list()` constructor.
 
@@ -1454,7 +1454,7 @@ print(colors[3])   # IndexError
 print(colors[-4])  # IndexError
 ```
 
-##### `arr`
+#### `arr`
 
 Static arrays don't have as many bells and whistles as lists. They're designed to be a low-level data type for where performance is critical.
 
@@ -1494,7 +1494,7 @@ To keep the operation fast and lightweight, you must only index with positive in
 
 _[Built-in Types](#built-in-types)_
 
-#### Dictionaries (`dict`)
+### Dictionaries (`dict`)
 
 A dictionary `dict[T, U]` is a built-in data structure used to store data in `key:value` pairs, where each unique key maps to a specific value. You can define a dictionary by placing your `key:value` pairs inside curly braces `{}` and separating them with commas.
 
@@ -1567,7 +1567,7 @@ for fruit, quantity in inventory.items():
 
 _[Built-in Types](#built-in-types)_
 
-#### Tuples
+### Tuples
 
 A tuple is an ordered collection of items written with parentheses `()`. You can store multiple data types together, or even create a tuple with just a single item (which requires a trailing comma).
 
@@ -1627,7 +1627,7 @@ connections = {("New York", "London"): 5500}
 
 _[Built-in Types](#built-in-types)_
 
-#### None-ables (`?`)
+### None-ables (`?`)
 
 In Python, it's common to set things to `None` if you haven't set it yet. This works in dynamically typed languages, but Pylem is statically typed. To make this work, some values can be set to `None` if its type is declared with a question mark `T?`. This must be checked for `None` before using.
 
@@ -1701,7 +1701,7 @@ match payload:
 
 _[Built-in Types](#built-in-types)_
 
-#### Pointers (`ptr`)
+### Pointers (`ptr`)
 
 Pointers are type `ptr[T]`. You can get the reference to something with the function `ref`. The postfix `.*` operator will dereference a pointer. A `mut` pointer must point to a reference also declared with `mut`.
 
@@ -1737,7 +1737,7 @@ if p.* is not None:             # Check the value instead of the pointer
 
 _[Built-in Types](#built-in-types)_
 
-#### Dynamic Type (`dyn`)
+### Dynamic Type (`dyn`)
 
 Pylem is statically typed, but Python is famous for being dynamically typed. Sometimes, it's hard to go from dynamic to static. To help with that, Pylem comes with a special type to handle dynamically typed data.
 
@@ -1784,7 +1784,7 @@ Since `dyn` already has `None` as one of its variants, its question type is redu
 
 _[Built-in Types](#built-in-types)_
 
-### Custom Types
+## Custom Types
 
 1. __[`type`](#type)__ — *Aliases*
 2. __[`struct`](#struct)__ — *Structured Data*
@@ -1795,7 +1795,7 @@ _[Built-in Types](#built-in-types)_
 
 _[Types](#types)_
 
-#### `type`
+### `type`
 
 Creates an alias to another type.
 
@@ -1808,7 +1808,7 @@ def move_point(point: Point2D) -> Point2D:
     return (point[0] + 1.0, point[1] + 1.0)
 ```
 
-#### `struct`
+### `struct`
 
 Structs are product types—or in other words—plain data containers. They cannot extend other structs. Define a struct with the keyword `struct` and then list each member of it in the block.
 
@@ -1826,7 +1826,7 @@ myObject = MyStruct(name="Foobar", value=1)
 
 _[Custom Types](#custom-types)_
 
-#### `enum`
+### `enum`
 
 Enums contain a set of fixed values, typically 1 byte each. The size of an enum is the size of its largest variant. By default, this is a single byte if there are fewer than 256 variants, but they can also be assigned other values such as integers which can increase the size of the enum. When assigning a variant with a specific value, the variants that follow it will iterate from the previous one. Each variant must have a unique value.
 
@@ -1893,7 +1893,7 @@ c = MyTaggedUnion.Third(val=3)
 
 _[Custom Types](#custom-types)_
 
-#### `union`
+### `union`
 
 **Untagged unions** – sometimes known as *sum types* – can be defined with the keyword `union`. Define each member like a struct. If the type is omitted, then the name is the type (for example `int` means `int: int`). Unlike a struct, a union is the size of its largest member. Instantiate a union by naming one of its members in the function call as opposed to naming every member like with structs.
 
@@ -1922,7 +1922,7 @@ u.int          # Value: 1
 u.int          # Value: 0x01000000 = 16777216
 ```
 
-Unions can be tagged with an enum to create **tagged unions.** To do this, create an `enum` and then extend it with a `union`. Each member name in the union must match with each varient of the enum. If a variant has no data, assign its type as `void`. Instantiate it by passing in its tag first and then assign the member for that tag if it has data. The size of a tagged union is the size of its enum component and the size of its union component combined.
+
 
 ```py
 enum PayloadTag:
@@ -1962,9 +1962,9 @@ match payload:
 
 _[Custom Types](#custom-types)_
 
-#### `enum union`
+### `enum union`
 
-A union can be tagged with an anonymous enum by declaring it with `enum union`. This blends the concepts of enums and unions together to create a **true sum type** and will allow you to instantiate it with each member as a variant. Varients without data are empty and set to `void`.
+Unions can be tagged to create **tagged unions** by declaring it with `enum union`. This blends the concepts of enums and unions together to create a **true sum type** and will allow you to instantiate it with each member as a variant. Varients without data are empty and set to `void`.
 
 ```py
 enum union MyTaggedUnion:
@@ -2099,7 +2099,7 @@ inspect_node(my_file)
 
 _[Custom Types](#custom-types)_
 
-#### `class`
+### `class`
 
 Pylem separates data types from virtual classes. Much like `class` in Python, `class` in Pylem defines a set of methods for a type. The main difference is that the type has no data by default. Instead, you define the data structure first (for example with `struct`) and then implement the methods for that data structure under `class` with the same name. `class` in Pylem works like a combination of [`impl`](https://doc.rust-lang.org/std/keyword.impl.html) and [`trait`](https://doc.rust-lang.org/rust-by-example/trait.html) in Rust.
 
@@ -2174,6 +2174,8 @@ _[Custom Types](#custom-types)_
 ---
 
 ## Operators
+
+__[Unique Operatiors](#unique-operatiors) / [Overlapping Operators](#overlapping-operators)__
 
 ### Unique Operators
 
@@ -2393,16 +2395,17 @@ _[Operators](#operators)_
 7. __[Decorators](#decorators)__
 8. __[Memory Allocation](#memory-allocation)__
 9. __[Importing & Modules](#importing--modules)__
+10. __[Python Interoperability](#python-interoperability)__
 
 [TOC](#table-of-contents)
 
 ---
 
-### Slices
+## Slices
 
 A slice is a reference to part of a sequenced type such as arrays, lists, and tuples. Slicing an array in Pylem works differently than slicing a list in Python. 
 
-#### Slicing Lists
+### Slicing Lists
 
 ```py
 numbers: list = [0, 10, 20, 30, 40, 50]
@@ -2453,7 +2456,7 @@ print(str(my_list[1:100]))  # Output: [2, 3] (No crash!)
 
 For lists, `a[:]` creates a new list object containing references to the original items. Modifying the list structure of the copy won't affect the original list. However, if the items inside are mutable objects (like nested lists), changes to those objects will reflect in both.
 
-#### Slicing Arrays
+### Slicing Arrays
 
 By default, Python slices implicitly allocate memory and copy data. In a compiled language, this behavior introduces unacceptable hidden performance costs.
 
@@ -2510,7 +2513,7 @@ _[Advanced](#advanced)_
 
 ---
 
-### Generics
+## Generics
 
 Generics allow you to write reusable code (functions or classes) that can operate on multiple data types while keeping static type safety. 
 
@@ -2568,7 +2571,7 @@ _[Advanced](#advanced)_
 
 ---
 
-### Compile-time Functions
+## Compile-time Functions
 
 A `const` function is evaluated at compile time if its arguments are constant expressions. If the arguments are determined at runtime, the same function seamlessly executes as a normal runtime function.
 
@@ -2652,7 +2655,7 @@ _[Advanced](#advanced)_
 
 ---
 
-### Named Return Values
+## Named Return Values
 
 Named Return Values allow you to declare variable names for your return types directly in the function signature. The return value can be set using a variable by declaring the return type with `as` after it. These are always mutable, so no `mut` is needed. If a function returns multiple return values, each can be declared with `as`. When you name your return values, you can use a **naked return** (a `return` statement without explicit arguments). The compiler automatically returns the current values of those variables.
 
@@ -2697,11 +2700,11 @@ _[Advanced](#advanced)_
 
 ---
 
-### Parameters
+## Parameters
 
 Pylem offers similar modifers to function parameters as Python.
 
-#### Optional Parameters
+### Optional Parameters
 
 Make a parameter optional by assigning it a default value in the function definition. If the caller provides a value for that parameter, it uses that; if they omit it, it falls back to the default. To create an optional parameter, use the assignment operator (`=`) followed by a fallback value. Required parameters must always come before optional ones.
 
@@ -2767,7 +2770,7 @@ print(add_to_list_correct("apple"))  # Output: ['apple']
 print(add_to_list_correct("banana")) # Output: ['banana'] (Fixed!)
 ```
 
-#### Unlimited Optional Arguments (`*args` and `**kwargs`)
+### Unlimited Optional Arguments (`*args` and `**kwargs`)
 If you don't know how many optional arguments a user might pass ahead of time, you can accept a variable number of positional or keyword arguments.
 
 * `*args`: Captures any extra positional arguments as a tuple.
@@ -2788,7 +2791,7 @@ _[Advanced](#advanced)_
 
 ---
 
-### Iterators & Asynchronous Functions
+## Iterators & Asynchronous Functions
 
 An **iterator** is an object that contains a countable number of values and implements the iterator protocol. This protocol consists of two special methods: `__iter__()` (which returns the iterator object itself) and `__next__()` (which returns the next item in the sequence). When no more elements are available, `__next__()` raises a `StopIteration` exception.
 
@@ -2955,7 +2958,7 @@ In this example, `fetch_data().await.strip()` is the same as `(await fetch_data(
 
 `.await` works like any member, so `?.await` and `.*.await` also work; however, use of those variants is rare since `async def` always returns an async instance, so you would need to wrap it in another function to need those other operators.
 
-#### Iterator/Asynchronous Lambda Functions
+### Iterator/Asynchronous Lambda Functions
 
 As well as `def` functions, `lanbda` functions can also use `yield` and `await`. 
 
@@ -3050,7 +3053,7 @@ async def get_team_data() {
 asyncio.run(get_team_data())
 ```
 
-#### Asynchoronous Iterators
+### Asynchoronous Iterators
 
 An asynchronous iterator is an object that implements the `__aiter__()` and `__anext__()` dunder methods, allowing you to stream data over time using the `async` for syntax.
 
@@ -3108,7 +3111,7 @@ _[Advanced](#advanced)_
 
 ---
 
-### Decorators
+## Decorators
 
 A decorator is a function that takes another function as an argument, extends its behavior without modifying it explicitly, and returns a new function. You apply decorators by placing the `@decorator_name` syntax directly above your target function definition.
 
@@ -3187,7 +3190,7 @@ _[Advanced](#advanced)_
 
 ---
 
-### Memory Allocation
+## Memory Allocation
 
 To allocate memory on the heap, use the `alloc` and `free` functions. The value passed to `alloc` will only run if it's able to allocate enough space. `alloc` returns a nullable pointer `ptr?`. Check for `None` to see if it succeeded or not. 
 
@@ -3221,7 +3224,7 @@ _[Advanced](#advanced)_
 
 ---
 
-### Importing & Modules
+## Importing & Modules
 
 Importing pulls code from outside files, libraries, or modules into your current program so you can reuse it without rewriting it. When Pylem encounters an `import` statement, it searches for the specified file, runs its code, and creates an object representing that module in your current workspace. 
 
@@ -3288,6 +3291,14 @@ When you trigger an import, Pylem checks locations in a strict priority order:
 4. Standard/Third-Party Library: Core packages and tools installed via a package manager.
 
 __💡 Pro Tip:__ Avoid naming your personal script files the same name as a popular library (like `math.pyl` or `random.pyl`), or Pylem might accidentally import your file instead of the official library, breaking your code.
+
+_[Advanced](#advanced)_
+
+---
+
+## Python Interoperability
+
+*TBD*
 
 _[Advanced](#advanced)_
 
