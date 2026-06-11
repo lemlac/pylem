@@ -2,7 +2,9 @@
 
 *Version 0.1 (Draft)*
 
-__The Pylem programming language__ is a dialect of Python but less abstract and more low-level like C. There's a gap in the coding landscape. Projects like [*Mojo*](https://mojolang.org/), [*Cython*](https://cython.org/), and Rust's [*PyO3*](https://pyo3.rs/v0.28.3/) prove there is a massive demand for solving the *two-language problem.* Python is a widely used programming language, but its slow and not meant for performance-critical tasks. That's why many libraries use FFI with compiled code — often written in C — to overcome this limitation. But then you need to write a library in 2 or more languages. Pylem aims to fix that. Python developers won't have to abandon a familiar syntax to write performance-critical code. Pylem will be able to be interpreted and compiled, all within the same language.
+__The Pylem programming language__ is a dialect of Python but less abstract and more low-level like C. There's a gap in the coding landscape. Projects like [*Mojo*](https://mojolang.org/), [*Cython*](https://cython.org/), and Rust's [*PyO3*](https://pyo3.rs/v0.28.3/) prove there is a massive demand for solving the *two-language problem.* Python is a widely used programming language, but its slow and not meant for performance-critical tasks. That's why many libraries use FFI with compiled code — often written in C — to overcome this limitation. But then you need to write a library in 2 or more languages. Pylem aims to fix that. Python developers won't have to abandon a familiar syntax to write performance-critical code. 
+
+Pylem is not simply a statically typed version Python. Its goal is to retain much of the familiar syntax of Python but be able to be compiled to machine code. Rather than a JavaScript/TypeScript comparison, Pylem aims to be more like the [AssemblyScript](https://www.assemblyscript.org/) of Python. This may make it less approachable to novice programmers than Python on its own, but the hope is that it will be familiar enough to experienced Python developers to pick up quickly when they need the performance benefits of compiled code.
 
 Most things in Pylem will work just like in Python.
 
@@ -73,7 +75,7 @@ secret_word = "pylem"
 mut guess = ""
 
 while guess != secret_word:
-    guess = input("Enter the secret word: ").lower()
+    guess := input("Enter the secret word: ").lower()
 
 print("Access granted!")
 ```
@@ -666,9 +668,9 @@ for i in range(0, 3):
 mut x: int
 block label:
     if cond:
-        x = 5
+        x := 5
         break label
-    x = 4
+    x := 4
 
 print(f"{x}")     # Prints either "4" or "5"
 ```
@@ -1204,22 +1206,22 @@ positive_int = 105
 negative_int = -23
 large_int = 1_000_000  # You can use underscores for readability
 
-print(type(positive_int))  # Output: <class 'int'>
+print(str(type(positive_int)))  # Output: <class 'int'>
 
 # --- Floating-point numbers (float) ---
 simple_float = 3.14
 negative_float = -0.005
 scientific_float = 2.5e3  # Equivalent to 2500.0 (2.5 * 10^3)
 
-print(type(simple_float))  # Output: <class 'float'>
+print(str(type(simple_float)))  # Output: <class 'float'>
 
 # --- Complex Numbers (complex) ---
 complex_num = 4 + 5j
 pure_imaginary = 2j
 
-print(type(complex_num))  # Output: <class 'complex'>
-print(complex_num.real)  # Output: 4.0
-print(complex_num.imag)  # Output: 5.0
+print(str(type(complex_num)))  # Output: <class 'complex'>
+print(str(complex_num.real))  # Output: 4.0
+print(str(complex_num.imag))  # Output: 5.0
 ```
 
 You can convert from one number type to another using the `int()`, `float()`, and `complex()` constructor functions:
@@ -1428,7 +1430,7 @@ There are several built-in methods to change list content dynamically like in Py
 
 ```py
 # Start with a list
-inventory = ["laptop", "mouse"]
+mut inventory: list = ["laptop", "mouse"]
 # Add an item to the end
 inventory.append("keyboard")  # ['laptop', 'mouse', 'keyboard']
 # Insert an item at a specific index
@@ -1477,11 +1479,11 @@ colors = ["red", "green", "blue"]
 
 mut item: str
 
-item = colors[0]
+item := colors[0]
 print(item)   # Outputs: red
 
-# item = colors[-1]           # Out of bounds crash
-item = colors[len(colors)-1]  # Do this instead
+# item := colors[-1]           # Out of bounds crash
+item := colors[len(colors)-1]  # Do this instead
 print(item)   # Outputs: blue
 ```
 
@@ -2063,7 +2065,7 @@ class BankAccount:
         self.balance += amount
 ```
 
-__What is `self`?__ `self` a pointer (`ptr`) to the current object. Since accessing a member on a pointer auto-derefs, you can write just `self.member` instead of `self.*.member`. `mut self` uses a mutable pointer, and any method (except for dunder methods which require it) using `mut self` is only available when the object is mutable.
+__What is `self`?__ `self` a pointer (`ptr`) to the current object. Since accessing a member on a pointer auto-derefs, you can write just `self.member` instead of `self.*.member`. `mut self` uses a mutable pointer, and any method using `mut self` (except for certain dunder methods that require it) is only available when the object is mutable.
 
 __Interfaces:__ an interface is a class without any data. It works like `interface` or `trait` in other languages.
 
@@ -2682,7 +2684,7 @@ If you do not want a literal default like `0` or `""`, use `None` as a placehold
 ```py
 def create_profile(username, mut bio=None):
     if bio is None:
-        bio = "No bio provided."
+        bio := "No bio provided."
     return {"username": username, "bio": bio}
 
 print(str(create_profile("coder123")))
@@ -2705,7 +2707,7 @@ print(add_to_list("banana")) # Output: ['apple', 'banana'] (Bug: apple stayed!)
 # ✔️ CORRECT: Use None and instantiate the list inside the function
 def add_to_list_correct(item, mut my_list=None):
     if my_list is None:
-        my_list = []
+        my_list := []
     my_list.append(item)
     return my_list
 
@@ -3116,8 +3118,9 @@ def repeat(num_times):
     def decorator_repeat(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            mut result = None
             for _ in range(num_times):
-                result = func(*args, **kwargs)
+                result := func(*args, **kwargs)
             return result
         return wrapper
     return decorator_repeat
