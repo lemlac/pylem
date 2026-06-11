@@ -67,13 +67,13 @@ struct Stack[T]:
     items: list[T]
 
 class Stack[T]:
-    def __init__(self: mutptr):
+    def __init__(mut self):
         self.items = []
     
-    def push(self: mutptr, item: T):
+    def push(mut self, item: T):
         self.items.append(item)
     
-    def pop(self: mutptr) -> T?:
+    def pop(mut self) -> T?:
         if len(self.items) > 0:
             return self.items.pop()
         return None
@@ -81,7 +81,7 @@ class Stack[T]:
 mut stack = Stack[int]()
 stack.push(42)
 item = stack.pop()
-if item != None:
+if item is not None:
     print(str(item))  # 42
 ```
 
@@ -95,13 +95,13 @@ struct BankAccount:
     balance: int
 
 class BankAccount:
-    def __init__(self: mutptr, owner: str, balance: int = 0):
+    def __init__(mut self, owner: str, balance: int = 0):
         self.owner = owner
         self.balance = balance
         
-    def deposit(self: mutptr, amount: int):
+    def deposit(mut self, amount: int):
         self.balance += amount
-        return f"${amount} deposited. New balance: ${self.balance}"
+        return f"{amount} US$ deposited. New balance: {self.balance} US$"
 
 acc = BankAccount("Alex", 100)
 print(acc.deposit(50))
